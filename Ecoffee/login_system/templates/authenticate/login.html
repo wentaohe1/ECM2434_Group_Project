@@ -276,21 +276,22 @@
             <div class="brand-section">
                 <div class="logo">Ecoffee</div>
                 <ul class="nav-list">
-                    <li class="nav-item"><a href="homepage.html">Home</a></li>
+                    <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
                     <li class="nav-item"><a href="#">Dashboard</a></li>
                     <li class="nav-item"><a href="#">Camera</a></li>
                 </ul>
             </div>
         </header>
         <div class="wrapper">
-            <form action="">
+            <form action="" method="POST">
+                {% csrf_token %}
                 <h1>☕ Ecoffee</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Username" required>
+                    <input type="text" name="username" placeholder="Username" required>
                     <img class="i" src="images/user-solid-24.png">
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" name="password" placeholder="Password" required>
                     <img class="i" src="images/lock-alt-solid-24.png">
                 </div>
 
@@ -301,7 +302,7 @@
 
                 <button type="submit" class="btn">Login</button>
                 <div class="register-link">
-                    <p>Don't have an account?<a href="#"> Register</a></p>
+                    <p>Don't have an account?<a href="{% url 'register' %}"> Register</a></p>
                 </div>
             </form>
         </div>
