@@ -12,7 +12,10 @@ def login_view(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.success(request, "There was an error logging in, Try again")
+            messages.success(
+                request,
+                "There was an error logging in, Try again"
+            )
             return redirect('login')
     return render(request, 'registration/login.html')
 
@@ -33,20 +36,24 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 def register_user(request):
-    if request.method=="POST":
-        form=UserCreationForm(request.POST)
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username=form.cleaned_data['username']
-            password=form.cleaned_data['password1']
-            user=authenticate(username=username,password=password)
-            login(request,user)
-            messages.success(request,("Registration Successful"))
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            messages.success(request, "Registration Successful")
             return redirect('home')
     else:
-        form=UserCreationForm()
+        form = UserCreationForm()
 
-    return render(request, 'authenticate/register_user.html',{'form':form,})
+    return render(
+        request,
+        'authenticate/register_user.html',
+        {'form': form}
+    )
 
 def login_view(request):
     if request.method == 'POST':

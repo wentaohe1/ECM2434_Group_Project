@@ -35,11 +35,24 @@ class User(models.Model):
     cupsSaved = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
-    mostRecentShopId = models.ForeignKey(Shop, null=True, blank=True, on_delete=models.SET_NULL)
-    progression = models.IntegerField(
-        validators=[MinValueValidator(0),MaxValueValidator(100)]
+    mostRecentShopId = models.ForeignKey(
+        Shop,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
     )
-    defaultBadgeId = models.ForeignKey(Badge, null=True, blank=True, on_delete=models.SET_NULL)
+    progression = models.IntegerField(
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(100)
+        ]
+    )
+    defaultBadgeId = models.ForeignKey(
+        Badge,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
     lastActiveDateTime = models.DateTimeField(null=True, blank=True)
 
 
@@ -52,7 +65,10 @@ class UserShop(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["userId", "shopId"], name="uniqueUserShop")
+            models.UniqueConstraint(
+                fields=["userId", "shopId"],
+                name="uniqueUserShop"
+            )
         ]
 
 
@@ -64,7 +80,10 @@ class UserBadge(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["userId", "badgeId"], name="uniqueUserBadge")
+            models.UniqueConstraint(
+                fields=["userId", "badgeId"],
+                name="uniqueUserBadge"
+            )
         ]
 
 
