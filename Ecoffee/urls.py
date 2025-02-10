@@ -6,4 +6,4 @@ urlpatterns = [
     path('', include('EcoffeeBase.urls')),
     path('login/', include('login_system.urls')),
     path('register/', include('login_system.urls')),
-] 
+]
