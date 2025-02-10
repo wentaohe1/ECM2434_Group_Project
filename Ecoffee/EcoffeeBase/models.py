@@ -92,7 +92,6 @@ class YourModel(models.Model):
         max_length=255,
         help_text='Your help text here'
     )
-    
     another_field = models.IntegerField(
         default=0,
         verbose_name='Friendly Name'
