@@ -40,3 +40,4 @@ def register_user(request):
         form=UserCreationForm()
 
     return render(request, 'authenticate/register_user.html',{'form':form,})
+    
