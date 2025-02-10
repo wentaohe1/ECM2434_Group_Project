@@ -38,6 +38,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel
           pip install -r Ecoffee/requirements.txt
+          pip install flake8  # Ensure flake8 is installed
 
       - name: Run migrations
         env:
