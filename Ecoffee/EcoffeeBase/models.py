@@ -21,6 +21,9 @@ class Coffee(models.Model):
 
 class Badge(models.Model):
     badgeId = models.AutoField(primary_key=True)
+    coffeeUntilEarned = models.IntegerField(
+        validators=[MinValueValidator(0)]
+    )
     """maybe information like desc or total owned? """
 
 
@@ -31,11 +34,11 @@ class User(models.Model):
     cupsSaved = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
-    mostRecentShopId = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    mostRecentShopId = models.ForeignKey(Shop, null=True, blank=True, on_delete=models.SET_NULL)
     progression = models.IntegerField(
         validators=[MinValueValidator(0),MaxValueValidator(100)]
     )
-    defaultBadgeId = models.ForeignKey(Badge, on_delete=models.CASCADE)
+    defaultBadgeId = models.ForeignKey(Badge, null=True, blank=True, on_delete=models.SET_NULL)
     lastActiveDateTime = models.DateTimeField(null=True, blank=True)
 
 
