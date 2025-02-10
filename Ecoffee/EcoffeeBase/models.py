@@ -9,6 +9,7 @@ class Shop(models.Model):
     numberOfVisits = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
+    activeCode = models.CharField(max_length=255)
 
 
 class Coffee(models.Model):
