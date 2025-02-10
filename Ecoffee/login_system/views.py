@@ -58,4 +58,3 @@ def register_user(request):
         'authenticate/register_user.html',
         {'form': form}
     )
-
