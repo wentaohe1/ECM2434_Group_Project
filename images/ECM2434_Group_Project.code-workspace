@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "ECM2434_Group_Project",
+			"path": ".."
+		},
+		{
+			"name": "images",
+			"path": "../../../../Desktop/ecoffee/images"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "ECM2434_Group_Project"
+	}
+}
