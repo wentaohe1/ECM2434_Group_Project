@@ -35,24 +35,11 @@ class User(models.Model):
     cupsSaved = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
-    mostRecentShopId = models.ForeignKey(
-        Shop,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL
-    )
+    mostRecentShopId = models.ForeignKey(Shop, null=True, blank=True, on_delete=models.SET_NULL)
     progression = models.IntegerField(
-        validators=[
-            MinValueValidator(0),
-            MaxValueValidator(100)
-        ]
+        validators=[MinValueValidator(0),MaxValueValidator(100)]
     )
-    defaultBadgeId = models.ForeignKey(
-        Badge,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL
-    )
+    defaultBadgeId = models.ForeignKey(Badge, null=True, blank=True, on_delete=models.SET_NULL)
     lastActiveDateTime = models.DateTimeField(null=True, blank=True)
 
 
@@ -65,10 +52,7 @@ class UserShop(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(
-                fields=["userId", "shopId"],
-                name="uniqueUserShop"
-            )
+            models.UniqueConstraint(fields=["userId", "shopId"], name="uniqueUserShop")
         ]
 
 
@@ -80,19 +64,5 @@ class UserBadge(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(
-                fields=["userId", "badgeId"],
-                name="uniqueUserBadge"
-            )
+            models.UniqueConstraint(fields=["userId", "badgeId"], name="uniqueUserBadge")
         ]
-
-
-class YourModel(models.Model):
-    long_field = models.CharField(
-        max_length=255,
-        help_text='Your help text here'
-    )
-    another_field = models.IntegerField(
-        default=0,
-        verbose_name='Friendly Name'
-    )
