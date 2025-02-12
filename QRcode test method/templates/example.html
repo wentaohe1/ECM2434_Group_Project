@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>dynamic QRcode</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        #countdown {
+            font-size: 20px;
+            color: #666;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="qrcode"></div>
+    <div id="countdown">Reamining time:120 s</div>
+
+    <script>
+        const socket = io('http://localhost:5000');  // Link to WebSocket
+        let qrcodeInstance = null;
+        let countdownTimer = null;
+
+        // QRcode
+        function initQRCode(url) {
+            const container = document.getElementById('qrcode');
+            container.innerHTML = '';
+            qrcodeInstance = new QRCode(container, {
+                text: url,
+                width: 256,
+                height: 256
+            });
+        }
+
+        // Reset timer
+        function updateCountdown(endTime) {
+            clearInterval(countdownTimer);
+            
+            function tick() {
+                const now = Date.now();
+                const remaining = Math.max(0, endTime - now);
+                document.getElementById('countdown').innerHTML = 
+                    `Reamining time：${Math.round(remaining/1000)} s`;
+
+                if (remaining <= 0) {
+                    clearInterval(countdownTimer);
+                }
+            }
+            
+            tick();  // Run at once
+            countdownTimer = setInterval(tick, 1000);
+        }
+
+        // WebSocket
+        socket.on('qr_update', (params) => {
+            const dynamicUrl = `http://localhost:5000/redirect?t=${params.t}&sig=${params.sig}`;
+            
+            // REfresh QR code
+            if (!qrcodeInstance) {
+                initQRCode(dynamicUrl);
+            } else {
+                qrcodeInstance.clear();
+                qrcodeInstance.makeCode(dynamicUrl);
+            }
+
+            // Set timer
+            const expiryTime = params.t * 1000 + 120000;
+            updateCountdown(expiryTime);
+        });
+
+        // Link
+        socket.on('connect', () => {
+            console.log('Link to WebSocket is Success');
+            socket.emit('start_update');  
+        });
+    </script>
+</body>
+</html>
