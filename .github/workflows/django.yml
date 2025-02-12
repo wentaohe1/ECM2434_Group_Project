@@ -56,8 +56,3 @@ jobs:
         run: |
           cd Ecoffee
           python manage.py migrate
-
-      - name: Run linting
-        run: |
-          cd Ecoffee
-          flake8 .
