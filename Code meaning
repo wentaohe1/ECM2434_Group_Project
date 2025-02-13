@@ -3,4 +3,4 @@ starlate****
 4 digit code for shop, 4 digit for a specific coffee and 4 to uniquely identify the code.
 
 The link that should be produced by the qr code:
-http://127.0.0.1:8000/code?starlate****
+http://127.0.0.1:8000/code/?code=starlate1234
