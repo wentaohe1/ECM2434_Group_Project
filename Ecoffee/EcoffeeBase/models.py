@@ -1,6 +1,7 @@
 from django.db import models
+from django.contrib import admin
 from django.core.validators import MinValueValidator, MaxValueValidator
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Shop(models.Model):
@@ -29,7 +30,7 @@ class Badge(models.Model):
 
 
 class User(models.Model):
-    userId = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstName = models.CharField(max_length=255)
     lastName = models.CharField(max_length=255)
     cupsSaved = models.IntegerField(
@@ -44,7 +45,7 @@ class User(models.Model):
 
 
 class UserShop(models.Model):
-    userId = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     shopId = models.ForeignKey(Shop, on_delete=models.CASCADE)
     visitAmounts = models.IntegerField(
         validators=[MinValueValidator(0)]
@@ -52,17 +53,17 @@ class UserShop(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["userId", "shopId"], name="uniqueUserShop")
+            models.UniqueConstraint(fields=["user", "shopId"], name="uniqueUserShop")
         ]
 
 
 class UserBadge(models.Model):
-    userId = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     badgeId = models.ForeignKey(Badge, on_delete=models.CASCADE)
     owned = models.BooleanField(default=False)
     dateTimeObtained = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["userId", "badgeId"], name="uniqueUserBadge")
+            models.UniqueConstraint(fields=["user", "badgeId"], name="uniqueUserBadge")
         ]
