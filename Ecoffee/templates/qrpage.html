@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic QRcode</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <div id="qrcode"></div>
+    <div id="countdown">Time left：120s</div>
+
+    <script>
+        const ws = new WebSocket('ws://' + window.location.host + '/ws/qr/');
+        let qr = null;
+
+        ws.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const url = window.location.origin + '/redirect/?t=' + data.t + '&sig=' + data.sig;
+            
+            if (qr) {
+                qr.clear();
+                qr.makeCode(url);
+            } else {
+                qr = new QRCode(document.getElementById('qrcode'), {
+                    text: url,
+                    width: 256,
+                    height: 256
+                });
+            }
+
+            const endTime = data.t * 1000 + 120000;
+            setInterval(() => {
+                const remaining = Math.max(0, endTime - Date.now());
+                document.getElementById('countdown').innerHTML = 
+                    `Time left：${Math.floor(remaining / 1000)}s`;
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
