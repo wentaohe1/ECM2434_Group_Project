@@ -6,7 +6,7 @@ from django.shortcuts import render
 SECRET_KEY = b'your-secret-key'
 
 def index(request):
-    return render(request, 'Ecoffee/qrpage.html')
+    return render(request, 'templates/qrpage.html')
 
 def generate_params():
     timestamp = int(time.time() // 120) * 120
