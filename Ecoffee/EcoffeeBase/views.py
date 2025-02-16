@@ -11,7 +11,7 @@ def index(request):
     return render(request, 'qrapp/index.html')
 
 def generate_params():
-    timestamp = int(time.time() // 120) * 1200
+    timestamp = int(time.time() // 1200) * 1200
     signature = hmac.new(SECRET_KEY, str(timestamp).encode(), 'user111').hexdigest()
     return {'t': timestamp, 'sig': signature}
 
