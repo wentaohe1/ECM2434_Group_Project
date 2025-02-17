@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bb00448e-3063-4ade-aaa3-ee57c56ec177" name="Changes" comment="added queries for updating database">
+      <change beforePath="$PROJECT_DIR$/Ecoffee/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/Ecoffee/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ecoffee/requirements.txt" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2slmKImLQomqGQuXi8zHR1nIJiP" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Notification.DisplayName-DoNotAsk-Vcs Important Messages": "VCS important messages",
+    "Notification.DoNotAsk-Vcs Important Messages": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Lok's-branch",
+    "last_opened_file_path": "C:/Users/keelo/OneDrive/Documents/GitHub/ECM2434_Group_Project/Ecoffee/EcoffeeBase",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "configurable.group.appearance",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\keelo\OneDrive\Documents\GitHub\ECM2434_Group_Project\Ecoffee\EcoffeeBase" />
+      <recent name="C:\Users\keelo\IdeaProjects\untitled" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bb00448e-3063-4ade-aaa3-ee57c56ec177" name="Changes" comment="" />
+      <created>1739038469230</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739038469230</updated>
+      <workItem from="1739038470335" duration="358000" />
+      <workItem from="1739136372690" duration="5039000" />
+      <workItem from="1739198966438" duration="349000" />
+      <workItem from="1739199340670" duration="63000" />
+      <workItem from="1739199648464" duration="288000" />
+      <workItem from="1739200956435" duration="372000" />
+      <workItem from="1739205573668" duration="2275000" />
+      <workItem from="1739207890991" duration="125000" />
+      <workItem from="1739208395618" duration="946000" />
+      <workItem from="1739225210001" duration="383000" />
+      <workItem from="1739226917471" duration="1525000" />
+      <workItem from="1739376653793" duration="11200000" />
+    </task>
+    <task id="LOCAL-00001" summary="testing">
+      <option name="closed" value="true" />
+      <created>1739038549070</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739038549070</updated>
+    </task>
+    <task id="LOCAL-00002" summary="testing">
+      <option name="closed" value="true" />
+      <created>1739038603473</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739038603473</updated>
+    </task>
+    <task id="LOCAL-00003" summary="testing">
+      <option name="closed" value="true" />
+      <created>1739038668580</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1739038668580</updated>
+    </task>
+    <task id="LOCAL-00004" summary="database version 1">
+      <option name="closed" value="true" />
+      <created>1739140992221</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1739140992221</updated>
+    </task>
+    <task id="LOCAL-00005" summary="database version 1">
+      <option name="closed" value="true" />
+      <created>1739141152899</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1739141152899</updated>
+    </task>
+    <task id="LOCAL-00006" summary="bug fix">
+      <option name="closed" value="true" />
+      <created>1739199231973</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1739199231973</updated>
+    </task>
+    <task id="LOCAL-00007" summary="update on database">
+      <option name="closed" value="true" />
+      <created>1739206794219</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1739206794219</updated>
+    </task>
+    <task id="LOCAL-00008" summary="update on database">
+      <option name="closed" value="true" />
+      <created>1739207150198</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1739207150198</updated>
+    </task>
+    <task id="LOCAL-00009" summary="update on database">
+      <option name="closed" value="true" />
+      <created>1739207284023</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1739207284023</updated>
+    </task>
+    <task id="LOCAL-00010" summary="update on database">
+      <option name="closed" value="true" />
+      <created>1739208480220</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1739208480220</updated>
+    </task>
+    <task id="LOCAL-00011" summary="added queries for updating database">
+      <option name="closed" value="true" />
+      <created>1739387089290</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1739387089290</updated>
+    </task>
+    <task id="LOCAL-00012" summary="added queries for updating database">
+      <option name="closed" value="true" />
+      <created>1739387256843</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1739387256843</updated>
+    </task>
+    <task id="LOCAL-00013" summary="added queries for updating database">
+      <option name="closed" value="true" />
+      <created>1739387382581</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1739387382581</updated>
+    </task>
+    <task id="LOCAL-00014" summary="added queries for updating database">
+      <option name="closed" value="true" />
+      <created>1739387440257</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1739387440257</updated>
+    </task>
+    <task id="LOCAL-00015" summary="added queries for updating database">
+      <option name="closed" value="true" />
+      <created>1739387594488</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1739387594488</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="testing" />
+    <MESSAGE value="database version 1" />
+    <MESSAGE value="bug fix" />
+    <MESSAGE value="update on database" />
+    <MESSAGE value="added queries for updating database" />
+    <option name="LAST_COMMIT_MESSAGE" value="added queries for updating database" />
+  </component>
+</project>
