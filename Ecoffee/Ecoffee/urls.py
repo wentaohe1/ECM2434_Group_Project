@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from . import views
-from Ecoffee.views import dashboard_view
+from . import views, settings
+from Ecoffee.views import dashboard_view, get_banner_images
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
@@ -26,4 +28,9 @@ urlpatterns = [
     path('login_system/',include('login_system.urls')), 
     path('dashboard/', dashboard_view, name='dashboard'),
     path('code/',include('qr_codes.urls')),
+    path('welcome/',views.welcome,name = 'welcome'),
+    path('api/banner-images/', get_banner_images, name='banner-images'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
