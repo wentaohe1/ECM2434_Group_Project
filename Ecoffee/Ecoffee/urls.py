@@ -26,4 +26,6 @@ urlpatterns = [
     path('login_system/',include('login_system.urls')), 
     path('dashboard/', dashboard_view, name='dashboard'),
     path('code/',include('qr_codes.urls')),
+    path('add_data/',include('add_to_database.urls')),
 ]
+

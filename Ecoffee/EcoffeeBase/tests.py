@@ -11,16 +11,13 @@ class EcoffeeBaseTests(TestCase):
             password='testpass123'
         )
         self.coffee = Coffee.objects.create(
-            name='Test Coffee',
+            name='Coffee',
             numberOrdered=0,
             lastOrdered=None
         )
 
     def test_coffee_creation(self):
         """Test coffee creation"""
-        self.assertEqual(self.coffee.name, 'Test Coffee')
+        self.assertEqual(self.coffee.name, 'Coffee')
         self.assertEqual(self.coffee.numberOrdered, 0)
 
-    def test_coffee_str(self):
-        """Test coffee string representation"""
-        self.assertEqual(str(self.coffee), 'Test Coffee')

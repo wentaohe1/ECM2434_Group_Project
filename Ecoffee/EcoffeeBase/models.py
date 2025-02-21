@@ -8,7 +8,8 @@ class Shop(models.Model):
     shopId = models.AutoField(primary_key=True)
     shopName = models.CharField(max_length=255, unique=True)
     numberOfVisits = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(0)],
+        default=0
     )
     activeCode = models.CharField(max_length=255)
 
@@ -16,7 +17,8 @@ class Shop(models.Model):
 class Coffee(models.Model):
     name = models.CharField(max_length=255, unique=True)
     numberOrdered = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(0)],
+        default=0
     )
     lastOrdered = models.DateTimeField(null=True, blank=True)
 
@@ -24,7 +26,8 @@ class Coffee(models.Model):
 class Badge(models.Model):
     badgeId = models.AutoField(primary_key=True)
     coffeeUntilEarned = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(0)],
+        unique=True
     )
     """maybe information like desc or total owned? """
 

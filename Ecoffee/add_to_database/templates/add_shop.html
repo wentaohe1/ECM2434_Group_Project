@@ -1,0 +1,10 @@
+{% block content %}
+
+<h1>New Shop Form</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'EcoffeeBase.apps.EcoffeebaseConfig',
     'login_system',
     'qr_codes',
+    'add_to_database',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'login_system/templates'),
+            os.path.join(BASE_DIR, 'add_to_database/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
