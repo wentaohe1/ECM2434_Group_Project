@@ -2,52 +2,38 @@ from django.shortcuts import render,redirect
 from EcoffeeBase.models import *
 from .form import *
 
-def add_shop(request):
+def add_new_data(request):
     if request.method=='POST':
-        form=ShopForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-        else:
-            context = {
-                'shops':Shop.objects.all(),
-                'form':form
-            }
-            return render(request,'add_shop.html',context)   
-    shops=Shop.objects.all()
-    context={'shops':shops, 'form':ShopForm()}
-    return render(request,'add_shop.html',context)
+        if 'shop_form_submit' in request.POST:
+            print("here")
+            shop_form=ShopForm(request.POST)
+            if shop_form.is_valid():
+                shop_form.save()
+                return redirect('home')
+            else:
+                context = {
+                    'shop_form':shop_form,
+                    'badge_form':BadgeForm()
+                }
+                return render(request,'add_new_data.html',context)
+        elif 'badge_form_submit' in request.POST:
+            badge_form=BadgeForm(request.POST)
+            if badge_form.is_valid():
+                badge_form.save()
+                return redirect('home')
+            else:
+                context = {
+                    'shop_form':ShopForm(),
+                    'badge_form':badge_form
+                }
+                return render(request,'add_new_data.html',context)
+    else:
+        context={'badge_form':BadgeForm(), 'shop_form':ShopForm()}
+        return render(request,'add_new_data.html',context)
+            
 
-def add_coffee(request):
-    if request.method=='POST':
-        form=CoffeeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-        else:
-            context = {
-                'coffees':Coffee.objects.all(),
-                'form':form
-            }
-            return render(request,'add_coffee.html',context)
-        
-    coffees=Coffee.objects.all()
-    context={'coffees':coffees, 'form':CoffeeForm()}
-    return render(request,'add_coffee.html',context)
 
-def add_badge(request):
-    if request.method=='POST':
-        form=BadgeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-        else:
-            context = {
-                'badges':Badge.objects.all(),
-                'form':form
-            }
-            return render(request,'add_badge.html',context)
-        
-    badges=Badge.objects.all()
-    context={'badges':badges, 'form':BadgeForm()}
-    return render(request,'add_badge.html',context)
+
+
+
+
