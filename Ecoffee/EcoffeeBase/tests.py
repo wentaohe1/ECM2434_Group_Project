@@ -4,8 +4,8 @@ from .models import Coffee
 
 class EcoffeeBaseTests(TestCase):
     def setUp(self):
-        self.User = get_user_model()
-        self.test_user = self.User.objects.create_user(
+        self.CustomUser = get_user_model()
+        self.test_user = self.CustomUser.objects.create_user(
             username='testuser',
             email='test@example.com',
             password='testpass123'

@@ -21,6 +21,8 @@ class Coffee(models.Model):
         default=0
     )
     lastOrdered = models.DateTimeField(null=True, blank=True)
+    def __str__(self):
+        return self.name
 
 
 class Badge(models.Model):
@@ -32,23 +34,19 @@ class Badge(models.Model):
     """maybe information like desc or total owned? """
 
 
-class User(models.Model):
+class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    firstName = models.CharField(max_length=255)
-    lastName = models.CharField(max_length=255)
     cupsSaved = models.IntegerField(
+        default=0,
         validators=[MinValueValidator(0)]
     )
     mostRecentShopId = models.ForeignKey(Shop, null=True, blank=True, on_delete=models.SET_NULL)
-    progression = models.IntegerField(
-        validators=[MinValueValidator(0),MaxValueValidator(100)]
-    )
     defaultBadgeId = models.ForeignKey(Badge, null=True, blank=True, on_delete=models.SET_NULL)
     lastActiveDateTime = models.DateTimeField(null=True, blank=True)
 
 
 class UserShop(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     shopId = models.ForeignKey(Shop, on_delete=models.CASCADE)
     visitAmounts = models.IntegerField(
         validators=[MinValueValidator(0)]
@@ -61,7 +59,7 @@ class UserShop(models.Model):
 
 
 class UserBadge(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     badgeId = models.ForeignKey(Badge, on_delete=models.CASCADE)
     owned = models.BooleanField(default=False)
     dateTimeObtained = models.DateTimeField(null=True, blank=True)
