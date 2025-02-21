@@ -2,22 +2,34 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!--
-            @file dashboard.html
-            @author Wentao He, Bowen Peng
-            @date 21.2.2025
-            @description This is the login page for the Ecoffee application
-        -->
         <meta charset="UTF-8">
-        <meta charset="UTF-8">
-        <meta name="login" content="width=device-width, initial-scale=1.0">
-        <title>Ecoffee - Login</title>
+        <meta name="Dashboard" content="width=device-width, initial-scale=1.0">
+        <title>Camera</title>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const userMenu = document.querySelector('.user-menu');
+                const dropdown = document.querySelector('.dropdown-menu');
+    
+                userMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('show');
+                });
+    
+                document.addEventListener('click', function() {
+                    dropdown.classList.remove('show');
+                });
+    
+                dropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+        </script>
         <style>
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
-                font-family:Arial, Helvetica, sans-serif
+                font-family: 'Segoe UI', Arial, sans-serif;
             }
 
             /* top  */
@@ -184,136 +196,138 @@
                 background: linear-gradient(90deg, #3498db, #2ecc71);
                 transition: width 0.5s ease;
             }
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                background-position: center;
+
+            /* board */
+            .metrics-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+                margin: 40px 0;
             }
-            .wrapper{
-                width: 420px;
-                border-radius: 10px;
-                padding: 30px 40px;
-                border: 2px solid rgba(255, 255, 255, .2);
+
+            .metric-card {
+                background: white;
+                border-radius: 12px;
+                padding: 25px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             }
-            .wrapper h1{
-                font-size: 36px;
-                text-align: center;
+
+            .metric-title {
+                font-size: 18px;
+                color: #2c3e50;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #3498db;
             }
-            .wrapper .input-box{
-                width: 100%;
-                height: 50px;
-                margin: 30px 0;
-                color: black;
-                position: relative;
+
+            .ranking-list {
+                list-style: none;
             }
-            .input-box input{
-                width: 100%;
-                height: 100%;
-                background:white;
-                border: none;
-                outline: none;
-                border: 2px solid black;
-                border-radius: 40px;
-                font-size: 16px;
-                color: black;
-                padding: 20px 45px 20px 20px;
-            }
-            .input-box input::placeholder{
-                color: black;
-            }
-            .i {
-                position: absolute;
-                right: 10px;
-                top: 33%;
-                transform: translate(-50%);
-                width: 20px;
-                height: auto;
-            }
-            .wrapper .remember-forgot{
+
+            .ranking-item {
                 display: flex;
                 justify-content: space-between;
-                font-size: 14.5px;
-                margin: -15px 0 15px;
+                padding: 12px 0;
+                border-bottom: 1px solid #eee;
+                transition: all 0.3s ease;
             }
-            .remember-forgot label input{
-                accent-color: #fff;
-                margin-right: 3px;
-            }
-            .remember-forgot a{
-                color: black;
-                text-decoration: none;
-            }
-            .remember-forgot a:hover{
-                text-decoration: underline;
 
-            }
-            .wrapper .btn{
-                width: 100%;
-                height: 45px;
-                background: black;
-                border: none;
-                outline: none;
-                border-radius: 40px;
-                box-shadow: 0 0 10px rgba(0,0,0, .1);
-                cursor: pointer;
-                font-size: 16px;
-                color: #fff;
-                font-weight: 600;
-            }
-            .wrapper .register-link{
-                font-size: 14.5px;
-                margin-top: 20px;
+            /* Who We Are */
+            .about-section {
+                background: #f8f9fa;
+                padding: 60px 5%;
+                margin-top: 50px;
                 text-align: center;
-                margin: 20px 0 15px;
             }
-            .register-link p a{
-                color: black;
-                text-decoration: none;
-                font-weight: 600;
+
+            .section-title {
+                font-size: 28px;
+                color: #2c3e50;
+                margin-bottom: 30px;
             }
-            .register-link p a:hover{
-                text-decoration: underline;
+
+            @media (max-width: 768px) {
+                .metrics-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .stats-section {
+                    gap: 20px;
+                    flex-wrap: wrap;
+                }
+                
+                .nav-list {
+                    gap: 20px;
+                }
+                
+                .brand-section {
+                    gap: 20px;
+                }
+            }
+            /* cards CSS */
+            .cards {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-gap: 3em;
+            }
+            video {
+                height: 500px;
+                width: 80%;
+                border: 2px solid #3498db;
+                border-radius: 10px;
+                margin-top: 20px;
             }
         </style>
     </head>
     <body>
+        <!--Nav bar-->
         <header class="top-nav">
             <div class="brand-section">
                 <div class="logo">Ecoffee</div>
                 <ul class="nav-list">
                     <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
-                    {% if user.is_authenticated %}
                     <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                    {% endif %}
-                    <li class="nav-item"><a href="#">Camera</a></li>
+                    <li class="nav-item"><a href="{% url 'camera' %}">Camera</a></li>
                 </ul>
             </div>
+            <div class="stats-section">
+                <div class="stat-item">
+                    <div class="stat-title">Regular stops</div>
+                    <div class="stat-value">Starbucks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">Most Saved</div>
+                    <div class="stat-value">328 Cups</div>
+                </div>
+                <div class="user-menu">
+                    <div class="date-time">
+                        <div class="stat-value">John Doe</div>
+                        <div class="stat-title">Last active: 2h ago</div>
+                    </div>
+                    
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">Log Out</a>
+                    </div>
+                </div>
+            </div>
         </header>
-        <div class="wrapper">
-            <form action="" method="POST">
-                {% csrf_token %}
-                <h1>☕ Ecoffee</h1>
-                <div class="input-box">
-                    <input type="text" name="username" placeholder="Username" required>
-                    <img class="i" src="{% static 'images/user-solid-24.png' %}" alt="User Icon">
-                </div>
-                <div class="input-box">
-                    <input type="password" name="password" placeholder="Password" required>
-                    <img class="i" src="{% static 'images/lock-alt-solid-24.png' %}" alt="Lock Icon">
-                </div>
-
-                <div class="remember-forgot">
-                    <label><input type="checkbox">Remember me</label>
-                    <a href="#">Forgot password?</a>
-                </div>
-
-                <button type="submit" class="btn">Login</button>
-                <div class="register-link">
-                    <p>Don't have an account?<a href="{% url 'register' %}"> Register</a></p>
-                </div>
-            </form>
-        </div>
+        <main class="main-content">
+            <video id="camera-fee" autoplay></video>
+        </main>
+        <script>
+            async function startCamera() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                    document.getElementById("camera-feed").srcObject = stream;
+                } catch (error) {
+                    console.error("Error accessing camera:", error);
+                    alert("Camera access denied. Please allow camera access.");
+                }
+            }
+    
+            document.addEventListener("DOMContentLoaded", startCamera);
+        </script>
     </body>
 </html>

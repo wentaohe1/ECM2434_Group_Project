@@ -2,6 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!--
+            @file dashboard.html
+            @author Wentao He
+            @date 21.2.2025
+            @description This is the dashboard page for the Ecoffee application
+        -->
         <meta charset="UTF-8">
         <meta name="Dashboard" content="width=device-width, initial-scale=1.0">
         <title>Dashboard</title>
@@ -321,10 +327,13 @@
                 <div class="logo">Ecoffee</div>
                 <ul class="nav-list">
                     <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
+                    {% if user.is_authenticated %}
                     <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    {% endif %}
                     <li class="nav-item"><a href="#">Camera</a></li>
                 </ul>
             </div>
+            {% if user.is_authenticated %}
             <div class="stats-section">
                 <div class="stat-item">
                     <div class="stat-title">Regular stops</div>
@@ -336,17 +345,18 @@
                 </div>
                 <div class="user-menu">
                     <div class="date-time">
-                        <div class="stat-value">John Doe</div>
+                        <div class="stat-value">{{ user.username }}</div>
                         <div class="stat-title">Last active: 2h ago</div>
                     </div>
                     
                     <div class="dropdown-menu">
                         <a href="#" class="dropdown-item">Settings</a>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">Log Out</a>
+                        <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
                     </div>
                 </div>
             </div>
+            {% endif %}
         </header>
         <!--main content-->
         <main class="main-content">
