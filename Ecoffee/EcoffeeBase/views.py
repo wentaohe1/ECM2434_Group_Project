@@ -61,17 +61,4 @@ def log_visit(request):
 
     return HttpResponse("Your visit was successfully logged")
 
-@require_POST
-def Register_User(request):
-    userId = request.POST.get("userId") # assuming this is a provided username
-    firstName = request.POST.get("firstName")
-    lastName = request.POST.get("lastName")
-
-    try:
-        user = User.objects.get(userId = userId)
-    except User.DoesNotExist:
-        User.objects.create(userId = userId, firstName = firstName, lastName = lastName, cupsSaved = 0, progression = 0, lastActiveDateTime = now())
-        return HttpResponse("User successfully created")
-    else:
-        return HttpResponse("User already exists with the same ID") # maybe redirects to login page
     
