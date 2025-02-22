@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'EcoffeeBase.apps.EcoffeebaseConfig',
     'login_system',
     'qr_codes',
+    'qrsummon',
     'add_to_database',
 ]
 
@@ -56,6 +57,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Ecoffee.urls'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+    }
+}
 
 TEMPLATES = [
     {
@@ -80,6 +89,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Ecoffee.wsgi.application'
 
+ASGI_APPLICATION = "Ecoffee.asgi.application" 
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
