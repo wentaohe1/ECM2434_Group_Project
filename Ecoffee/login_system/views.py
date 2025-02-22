@@ -23,7 +23,7 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     messages.success(request,("Logout successful"))
-    return redirect('home')
+    return redirect('login')
 
 def register_user(request):
     if request.method=="POST":
