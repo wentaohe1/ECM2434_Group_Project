@@ -29,8 +29,7 @@ urlpatterns = [
     path('dashboard/', dashboard_view, name='dashboard'),
     path('code/',include('qr_codes.urls')),
     path('welcome/',views.welcome,name = 'welcome'),
-    path('api/banner-images/', get_banner_images, name='banner-images'),
+
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

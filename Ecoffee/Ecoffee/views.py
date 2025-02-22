@@ -19,15 +19,15 @@ def welcome(response):
 
 
 def get_banner_images(request):
-    images_folder = os.path.join(settings.MEDIA_ROOT, 'banner_images')
+    images_folder = os.path.join(settings.STATIC_URL, 'banner_images')
     if not os.path.exists(images_folder):
-        return JsonResponse({'images': []})  # Return empty list if folder doesn't exist
+        return JsonResponse({'images': []})
 
     images = [
-        f"{settings.MEDIA_URL}banner_images/{img}"
+        f"{settings.STATIC_URL}banner_images/{img}"
         for img in os.listdir(images_folder)
         if img.endswith(('.jpg', '.jpeg', '.png', '.gif'))
     ]
 
-    random.shuffle(images)  # Optional: Randomize the order of images
+    random.shuffle(images)
     return JsonResponse({'images': images})
