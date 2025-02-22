@@ -59,7 +59,7 @@ class UserShop(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["user", "shopId"], name="uniqueUserShop")
+                fields=["user", "shop_id"], name="unique_user_shop")
         ]
 
 
@@ -72,24 +72,18 @@ class UserBadge(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["user", "badgeId"], name="uniqueUserBadge")
+                fields=["user", "badge_id"], name="unique_user_badge")
         ]
 
 
-def create_user(first_name, last_name):
-    x = User(firstName=first_name, lastName=last_name)
-    x.save()
-    return
-
-
 def create_shop(shop_name):
-    x = Shop(shopName=shop_name)
+    x = Shop(shop_name=shop_name)
     x.save()
     return
 
 
 def create_badge(badge_name, coffee_until_earned):
-    x = Badge(badgeName=badge_name, coffeeUntilEarned=coffee_until_earned)
+    x = Badge(badge_name=badge_name, coffee_until_earned=coffee_until_earned)
     x.save()
     return
 
@@ -97,7 +91,7 @@ def create_badge(badge_name, coffee_until_earned):
 def update_progression(user_id):
     user_object = User.objects.get(user_id=user_id)
     cups_saved = user_object.cupsSaved
-    badge_objects = Badge.objects.order_by("coffeeUntilEarned")
+    badge_objects = Badge.objects.order_by("coffee_until_earned")
     last_badge_id = 0
     new_badge_id = 0
     if badge_objects.count() == 0:
@@ -105,10 +99,10 @@ def update_progression(user_id):
     for badge_object in badge_objects:
         last_badge_id = new_badge_id
         new_badge_id = badge_object
-        if last_badge_id.coffeeUntilEarned <= cups_saved and cups_saved < new_badge_id.coffeeUntilEarned:
+        if last_badge_id.coffee_until_earned <= cups_saved < new_badge_id.coffee_until_earned:
             update_badge(user_id, last_badge_id, user_object)
-            progression = (cups_saved - last_badge_id.coffeeUntilEarned) / (
-                new_badge_id.coffeeUntilEarned - last_badge_id.coffeeUntilEarned)
+            progression = (cups_saved - last_badge_id.coffee_until_earned) / (
+                new_badge_id.coffee_until_earned - last_badge_id.coffee_until_earned)
             user_object.progression = round(progression * 100)
             user_object.save()
             return
@@ -119,30 +113,30 @@ def update_progression(user_id):
 
 
 def update_badge(user_id, last_badge_id, user_object,):
-    search_result = UserBadge.objects.filter(user_id=user_id, badgeId=last_badge_id)
+    search_result = UserBadge.objects.filter(user_id=user_id, badge_id=last_badge_id)
     if not search_result.exists():
-        user_object.defaultBadgeId = last_badge_id
+        user_object.default_badge_id = last_badge_id
         current_date_time = datetime.now()
-        x = UserBadge(userId=user_id, badgeId=last_badge_id,
-                      dateTimeObtained=current_date_time)
+        x = UserBadge(user_id=user_id, badge_id=last_badge_id,
+                      date_time_obtained=current_date_time)
         x.save()
     return
 
 
 def log_visit(user_id, shop_id, coffee_name, visit_date, visit_time):
     user_object = User.objects.get(user_id=user_id)
-    user_object.cupsSaved += 1
-    user_object.mostRecentShopId = shop_id
+    user_object.cups_saved += 1
+    user_object.most_recent_shop_id = shop_id
     user_object.save()
     update_progression(user_id)
     shop_object = Shop.objects.get(shop_id=shop_id)
-    shop_object.numberOfVisits += 1
+    shop_object.number_of_visits += 1
     shop_object.save()
     coffee_object = Coffee.objects.get(name=coffee_name)
-    coffee_object.numberOrdered += 1
-    coffee_object.lastOrdered = datetime.combine(visit_date, visit_time)
+    coffee_object.number_ordered += 1
+    coffee_object.last_ordered = datetime.combine(visit_date, visit_time)
     coffee_object.save()
     user_shop_object = UserShop.objects.get(user_id=user_id, shop_id=shop_id)
-    user_shop_object.visitAmounts += 1
+    user_shop_object.visit_amounts += 1
     user_shop_object.save()
     return
