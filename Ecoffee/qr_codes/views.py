@@ -20,7 +20,6 @@ def receive_code(request):
                 #trigger for updating progression and best badge
                 update_progression(user)
                 user.lastActiveDateTime=datetime.now()
-                shop.number_of_visits += 1
                 user_shop_object = UserShop.objects.get(username=username, shop_id=shop.shop_id)
                 user_shop_object.visit_amounts += 1
                 user_shop_object.save()
