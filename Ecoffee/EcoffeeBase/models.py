@@ -14,23 +14,13 @@ class Shop(models.Model):
     activeCode = models.CharField(max_length=255)
 
 
-class Coffee(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    numberOrdered = models.IntegerField(
-        validators=[MinValueValidator(0)],
-        default=0
-    )
-    lastOrdered = models.DateTimeField(null=True, blank=True)
-    def __str__(self):
-        return self.name
-
-
 class Badge(models.Model):
     badgeId = models.AutoField(primary_key=True)
     coffeeUntilEarned = models.IntegerField(
         validators=[MinValueValidator(0)],
         unique=True
     )
+    badge_image=models.CharField(max_length=255,default='') #store link instead of actual image
     """maybe information like desc or total owned? """
 
 

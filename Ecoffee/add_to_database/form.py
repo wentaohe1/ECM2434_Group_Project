@@ -21,16 +21,6 @@ class ShopForm(forms.ModelForm):
         return shop_name
 
 
-class CoffeeForm(forms.ModelForm):
-    class Meta:
-        model=Coffee
-        fields=('name',)
-
-    def clean_name(self):
-        coffee_name=self.cleaned_data.get('name')
-        if Coffee.objects.filter(name=coffee_name).exists():
-            raise forms.ValidationError('Coffee name already exists, please choose a different one')
-        return coffee_name
 
 
 class BadgeForm(forms.ModelForm):
