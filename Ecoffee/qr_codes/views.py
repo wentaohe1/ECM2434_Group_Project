@@ -17,10 +17,10 @@ def receive_code(request):
                 user=CustomUser.objects.get(user=username)
                 user.cupsSaved+=1
                 user.mostRecentShopId=shop
-                #trigger for updating progression and best badge
-                update_progression(user)
+                #trigger for updating best badge
+                check_badge(user)
                 user.lastActiveDateTime=datetime.now()
-                user_shop_object = UserShop.objects.get(username=username, shop_id=shop.shop_id)
+                user_shop_object = UserShop.objects.get(user=username, shop_id=shop.shop_id)
                 user_shop_object.visit_amounts += 1
                 user_shop_object.save()
                 user.save()
@@ -34,7 +34,7 @@ def receive_code(request):
     except Shop.DoesNotExist:
         return redirect('home')
 
-def update_progression(user_object):
+def check_badge(user_object): # check the best badge for a user and call update badge
     cups_saved = user_object.cupsSaved
     badge_objects = Badge.objects.order_by("coffee_until_earned")
     if badge_objects.count() == 0: #no badge made yet
@@ -50,26 +50,20 @@ def update_progression(user_object):
         new_badge = badge_object
         if last_badge.coffee_until_earned <= cups_saved < new_badge.coffee_until_earned:
             update_badge(user_object, last_badge)
-            progression = (cups_saved - last_badge.coffee_until_earned) / (
-                new_badge.coffee_until_earned - last_badge.coffee_until_earned)
-            user_object.progression = round(progression * 100)
-            user_object.save()
             return
-    user_object.progression = 100
-    user_object.save()
     update_badge(user_object, new_badge)
     return
 
 
-#add a user-badge relation record if there does not exit one already
+#add a user-badge relation record if there does not exit one already, i.e. update the badges a user owns
 def update_badge(user_object, badge):
     badge_id = badge.badge_id
     username = user_object.username
-    search_result = UserBadge.objects.filter(username=username, badge_id=badge_id)
+    search_result = UserBadge.objects.filter(user=username, badge_id=badge_id)
     if not search_result.exists(): # check if the user-badge relation already exists
         user_object.default_badge_id = badge_id
         current_date_time = datetime.now()
-        x = UserBadge(username=username, badge_id=badge_id,
+        x = UserBadge(user=username, badge_id=badge_id,
                       date_time_obtained=current_date_time)
         x.save()
     return
