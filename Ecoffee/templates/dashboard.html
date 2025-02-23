@@ -1,3 +1,4 @@
+{% include 'header.html' %}
 {%load static%}
 <!DOCTYPE html>
 <html lang="en">
@@ -316,38 +317,7 @@
         </style>
     </head>
     <body>
-        <header class="top-nav">
-            <div class="brand-section">
-                <div class="logo">Ecoffee</div>
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
-                    <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                    <li class="nav-item"><a href="#">Camera</a></li>
-                </ul>
-            </div>
-            <div class="stats-section">
-                <div class="stat-item">
-                    <div class="stat-title">Regular stops</div>
-                    <div class="stat-value">Starbucks</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-title">Most Saved</div>
-                    <div class="stat-value">328 Cups</div>
-                </div>
-                <div class="user-menu">
-                    <div class="date-time">
-                        <div class="stat-value">John Doe</div>
-                        <div class="stat-title">Last active: 2h ago</div>
-                    </div>
-                    
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item">Settings</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">Log Out</a>
-                    </div>
-                </div>
-            </div>
-        </header>
+
         <!--main content-->
         <main class="main-content">
             <div class="cards">
