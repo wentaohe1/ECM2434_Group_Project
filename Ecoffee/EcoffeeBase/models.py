@@ -1,8 +1,6 @@
 from django.db import models
-from django.contrib import admin
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
-from datetime import datetime
 
 
 class Shop(models.Model):
