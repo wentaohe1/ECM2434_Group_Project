@@ -13,8 +13,9 @@ def receive_code(request):
         shop.numberOfVisits+=1
         if request.user.is_authenticated:
             try:
-                username=request.user #Updates information relevant to the users order.
-                user=CustomUser.objects.get(user=username)
+                request_user=request.user #Updates information relevant to the users order.
+                user=CustomUser.objects.get(user=request_user)
+                check_badge_progress(user)
                 user.cupsSaved+=1
                 user.mostRecentShopId=shop
                 user.lastActiveDateTime=datetime.now()
@@ -35,3 +36,8 @@ def receive_code(request):
 
 def read_shop_code(code,number_of_letters):
     return code[:number_of_letters]
+def check_badge_progress(relevant_user):
+    for badge in Badge.objects.all():
+        if relevant_user.cupsSaved>=badge.coffeeUntilEarned:
+            relevant_user.defaultBadgeId=badge
+
