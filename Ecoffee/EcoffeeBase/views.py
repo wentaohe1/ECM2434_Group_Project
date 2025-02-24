@@ -39,7 +39,7 @@ def log_visit(request):
     custom_user.last_active_date_time = now()
 
     # Updates user_shop, creating an instance if none
-    user_shop, create_new = UserShop.objects.get_or_create(user = custom_user, shop_id = shop, defaults = {'visitAmounts': 0})
+    user_shop, create_new = UserShop.objects.get_or_create(user = custom_user, shop_id = shop, defaults = {'visit_amounts': 0})
     user_shop.visit_amounts += 1
     user_shop.save()
 
