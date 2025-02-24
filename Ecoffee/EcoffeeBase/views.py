@@ -22,7 +22,7 @@ def log_visit(request):
     try:
         user = User.objects.get(username = username)
         custom_user = CustomUser.objects.get(user = user)
-        shop = Shop.objects.get(shopId = shop_id)
+        shop = Shop.objects.get(shop_id = shop_id)
     except User.DoesNotExist:
         raise Http404("404: User does not exist")
     except CustomUser.DoesNotExist:
@@ -34,28 +34,28 @@ def log_visit(request):
     shop.numberOfVisits += 1
     shop.save()
 
-    custom_user.mostRecentShopId = shop
-    custom_user.cupsSaved += 1
-    custom_user.lastActiveDateTime = now()
+    custom_user.most_recent_shop_id = shop
+    custom_user.cups_saved += 1
+    custom_user.last_active_date_time = now()
 
     # Updates user_shop, creating an instance if none
-    user_shop, create_new = UserShop.objects.get_or_create(user = custom_user, shopId = shop, defaults = {'visitAmounts': 0})
-    user_shop.visitAmounts += 1
+    user_shop, create_new = UserShop.objects.get_or_create(user = custom_user, shop_id = shop, defaults = {'visitAmounts': 0})
+    user_shop.visit_amounts += 1
     user_shop.save()
 
     for badge in Badge.objects.all():
-        if custom_user.cupsSaved >= badge.coffeeUntilEarned:
-            user_badge, create_new = UserBadge.objects.get_or_create(user = custom_user, badgeId = badge)
+        if custom_user.cups_saved >= badge.coffee_until_earned:
+            user_badge, create_new = UserBadge.objects.get_or_create(user = custom_user, badge_id = badge)
 
-            custom_user.defaultBadgeId = badge
+            custom_user.default_badge_id = badge
 
             user_badge.owned = True # Badge is only created when obtained
-            user_badge.dateTimeObtained = now()
+            user_badge.date_time_obtained = now()
             user_badge.save()
     custom_user.save()
 
     return HttpResponse("Your visit was successfully logged")
-
+    
 def home(request):
     today = now().date()
 
