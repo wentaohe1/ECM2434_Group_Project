@@ -40,4 +40,11 @@ def check_badge_progress(relevant_user):
     for badge in Badge.objects.order_by("coffee_until_earned"):
         if relevant_user.cupsSaved>=badge.coffeeUntilEarned:
             relevant_user.defaultBadgeId=badge
+            # this updates the user badges(actual implementaion in the dashbaord will be added next sprint)
+            #search_result = UserBadge.objects.filter(user=relevant_user.user, badge_id=badge)
+            #if not search_result.exists():  # check if the user-badge relation already exists
+            #    current_date_time = datetime.now()
+            #    x = UserBadge(user=relevant_user.user, badge_id=badge,
+            #                  date_time_obtained=current_date_time)
+            #    x.save()
 
