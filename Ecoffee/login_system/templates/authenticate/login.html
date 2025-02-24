@@ -1,5 +1,5 @@
-{% include 'header.html' %}
 {% load static %}
+{% include 'header.html' %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -45,11 +45,6 @@
                 align-items: center;
             }
 
-            .logo::before {
-                content: "☕";
-                margin-right: 10px;
-                font-size: 32px;
-            }
 
             .nav-list {
                 display: flex;
@@ -170,7 +165,7 @@
             .metric-procent {
                 width: 100%;
                 height: 35px;
-                
+
             }
 
             .progress-fill {
@@ -274,10 +269,11 @@
         </style>
     </head>
     <body>
+
         <div class="wrapper">
             <form action="" method="POST">
                 {% csrf_token %}
-                <h1>☕ Ecoffee</h1>
+                <h1 class = "logo"><img style = 'height: 50px;width: 50px'alt = "EcoffeeLogo" src = {% static 'images/logo.png' %}> Ecoffee</h1>
                 <div class="input-box">
                     <input type="text" name="username" placeholder="Username" required>
                     <img class="i" src="{% static 'images/user-solid-24.png' %}" alt="User Icon">

@@ -13,7 +13,7 @@ def receive_code(request):
         if request.user.is_authenticated:
             try:
                 request_user = request.user  # Updates information relevant to the users order.
-                user = CustomUser.objects.get(user=request_user)
+                user = custom_user.objects.get(user=request_user)
                 check_badge_progress(user)
                 user.cups_saved += 1
                 user.most_recent_shop_id = shop
@@ -22,7 +22,7 @@ def receive_code(request):
                 user.save()
                 shop.save()  # saves after everything is confirmed okay, changes will rollback (by default after a request has returned) if not
                 return redirect('home')
-            except CustomUser.DoesNotExist:
+            except custom_user.DoesNotExist:
                 return redirect('register')
         else:
             # user not logged in has to login/create account

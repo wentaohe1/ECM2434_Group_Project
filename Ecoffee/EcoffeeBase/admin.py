@@ -4,5 +4,5 @@ from .models import *
 
 
 admin.site.register(Shop)
-admin.site.register(CustomUser)
+admin.site.register(custom_user)
 admin.site.register(Badge)

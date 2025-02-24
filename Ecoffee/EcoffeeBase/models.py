@@ -23,7 +23,7 @@ class Badge(models.Model):
     """maybe information like desc or total owned? """
 
 
-class CustomUser(models.Model):
+class custom_user(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     cups_saved = models.IntegerField(
         default=0,
@@ -36,8 +36,8 @@ class CustomUser(models.Model):
     last_active_date_time = models.DateTimeField(null=True, blank=True)
 
 
-class UserShop(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+class user_shop(models.Model):
+    user = models.ForeignKey(custom_user, on_delete=models.CASCADE)
     shop_id = models.ForeignKey(Shop, on_delete=models.CASCADE)
     visit_amounts = models.IntegerField(
         validators=[MinValueValidator(0)]
@@ -50,8 +50,8 @@ class UserShop(models.Model):
         ]
 
 
-class UserBadge(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+class user_badge(models.Model):
+    user = models.ForeignKey(custom_user, on_delete=models.CASCADE)
     badge_id = models.ForeignKey(Badge, on_delete=models.CASCADE)
     date_time_obtained = models.DateTimeField(null=True, blank=True)
 
