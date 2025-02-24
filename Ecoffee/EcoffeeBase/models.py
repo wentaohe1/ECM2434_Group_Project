@@ -13,18 +13,6 @@ class Shop(models.Model):
     active_code = models.CharField(max_length=255)
 
 
-class Coffee(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    number_ordered = models.IntegerField(
-        validators=[MinValueValidator(0)],
-        default=0
-    )
-    last_ordered = models.DateTimeField(null=True, blank=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Badge(models.Model):
     badge_id = models.AutoField(primary_key=True)
     coffee_until_earned = models.IntegerField(
