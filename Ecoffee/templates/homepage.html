@@ -385,7 +385,7 @@
                             <td>{{ custom_user.cups_saved }} </td>
                             <td>
                                 <div class="badge-container">
-                                    <img src="{% static 'images/badge_lv1.png' %}"
+                                    <img src="{% static 'images/' %}{{ custom_user.default_badge_id.badge_image}}"
                                     alt="User Badge"
                                     style="width: 30px; height: 30px;">
                                 </div>
@@ -396,7 +396,7 @@
                 </table>
             </section>
         </section>
-        <!--coffe shops leaderboard-->
+        <!--coffee shops leaderboard-->
         <section class="table-leaderboard">
             <section class="table-header">
                 <h1>Most Sustainable Coffee Shops</h1>

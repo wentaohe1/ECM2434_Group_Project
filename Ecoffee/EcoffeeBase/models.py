@@ -27,12 +27,7 @@ class Badge(models.Model):
         validators=[MinValueValidator(0)],
         unique=True
     )
-    badge_id = models.AutoField(primary_key=True)
-    coffee_until_earned = models.IntegerField(
-        validators=[MinValueValidator(0)],
-        unique=True
-    )
-    badge_image=models.CharField(max_length=255,default='') #store link instead of actual image
+    badge_image = models.CharField(max_length=255, default='defaultbadge.png')  # store link instead of actual image
     """maybe information like desc or total owned? """
 
 
