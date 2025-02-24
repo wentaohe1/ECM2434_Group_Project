@@ -15,8 +15,8 @@ def receive_code(request):
             try:
                 request_user = request.user  # Updates information relevant to the users order.
                 user = CustomUser.objects.get(user=request_user)
-                check_badge_progress(user)
                 user.cups_saved += 1
+                check_badge_progress(user)
                 user.most_recent_shop_id = shop
                 user.last_active_date_time = datetime.now()
                 # need to run a trigger to check if the badge needs to be updated.
