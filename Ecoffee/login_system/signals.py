@@ -5,11 +5,11 @@ from EcoffeeBase.models import CustomUser
 
 
 @receiver(post_save, sender=User)
-def create_custom_user(sender, instance, created, **kwargs):
+def create_CustomUser(sender, instance, created, **kwargs):
     if created:
         CustomUser.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
-def save_custom_user(sender, instance, **kwargs):
+def save_CustomUser(sender, instance, **kwargs):
     instance.customuser.save()
