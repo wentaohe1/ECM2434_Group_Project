@@ -1,43 +1,277 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+            @file dashboard.html
+            @author Wentao He, Luke Thacker, Bowen Peng
+            @date 21.2.2025
+            @description This is the registration page for the Ecoffee application
+    -->
+    <meta charset="UTF-8">
+    <meta name="register" content="width=device-width, initial-scale=1.0">
+    <title>Ecoffee - Register</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        /* top  */
+        .top-nav {
+            width: 100%;
+            height: 80px;
+            background: #a6f3b5;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
 
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
 
+        .logo {
+            font-size: 26px;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+        }
 
+        .logo::before {
+            content: "";
+            margin-right: 10px;
+            font-size: 32px;
+        }
 
-{% block content %}
+        .nav-list {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
 
-{% if form.errors %}
-    <p>There was an error with your form...</p>
-{% endif %}
+        .nav-item a {
+            text-decoration: none;
+            color: #34495e;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
 
-    <h1>Register</h1>
-    <div class="container">
-    {% if messages %}
-      {% for message in messages %}
-        {{ message }}
-      {% endfor %}
-    {% endif %}
-    </div>
-    <br/><br/>
-        <form action="{% url 'register' %}" method="POST">
+        .nav-item a:hover {
+            color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-position: center;
+        }
+
+        .wrapper {
+            width: 420px;
+            border-radius: 10px;
+            padding: 30px 40px;
+            border: 2px solid rgba(255, 255, 255, .2);
+        }
+
+        .wrapper h1 {
+            font-size: 36px;
+            text-align: center;
+        }
+
+        .input-box {
+            width: 100%;
+            height: 50px;
+            margin: 20px 0;
+            color: black;
+            position: relative;
+        }
+
+        .input-box input {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border: none;
+            outline: none;
+            border: 2px solid black;
+            border-radius: 40px;
+            font-size: 16px;
+            color: black;
+            padding: 20px 45px 20px 20px;
+        }
+
+        .input-box input::placeholder {
+            color: black;
+        }
+
+        .i {
+            position: absolute;
+            right: 10px;
+            top: 33%;
+            transform: translate(-50%);
+            width: 20px;
+            height: auto;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            text-align: left;
+            margin-top: -10px;
+        }
+
+        .btn {
+            width: 100%;
+            height: 45px;
+            background: black;
+            border: none;
+            outline: none;
+            border-radius: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0, .1);
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .messages {
+            color: red;
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <!--Nav bar-->
+    <header class="top-nav">
+        <div class="brand-section">
+            <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="Ecoffee Logo" style="width:50px; height:50px; margin-right:10px;">
+                Ecoffee
+            </div>
+            <ul class="nav-list">
+                <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item"><a href="#">Camera</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="wrapper">
+        <h1>☕ Register</h1>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if form.errors %}
+        <div class="messages">
+            <p>There was an error with your form:</p>
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form id="registerForm" action="{% url 'register' %}" method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
 
-            <br/><br/>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="input-box">
+                <input type="text" id="username" name="username" placeholder="Please enter your username" required>
+                <img class="i" src="{% static 'images/user-solid-24.png' %}" alt="User Icon">
+            </div>
 
+            <div class="input-box">
+                <input type="password" id="password" name="password1" placeholder="Please enter your password" required>
+                <img class="i" src="{% static 'images/lock-alt-solid-24.png' %}" alt="Lock Icon">
+            </div>
+            <small id="passwordError" class="error"></small>
 
+            <div class="input-box">
+                <input type="password" id="confirmPassword" name="password2" placeholder="Please re-enter your password" required>
+                <img class="i" src="{% static 'images/lock-alt-solid-24.png' %}" alt="Lock Icon">
+            </div>
+            <small id="confirmPasswordError" class="error"></small>
 
-
-
+            <button type="submit" class="btn">Register</button>
         </form>
+    </div>
 
-    <br/><br/>
-    {% if user.is_authenticated %}
-    <!--logout nav bar link -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordField = document.getElementById("password");
+            const confirmPasswordField = document.getElementById("confirmPassword");
+            const usernameField = document.getElementById("username");
+            const passwordError = document.getElementById("passwordError");
+            const confirmPasswordError = document.getElementById("confirmPasswordError");
 
-    {% else %}
-        <!--register nav bar link -->
-    {% endif %}
+            passwordField.addEventListener("input", validatePassword);
+            confirmPasswordField.addEventListener("input", validateConfirmPassword);
 
+            function validatePassword() {
+                const password = passwordField.value;
+                const username = usernameField.value;
 
+                passwordError.textContent = ""; // Clear previous errors
 
-{%endblock%}
+                // Common password list
+                const commonPasswords = ["password", "12345678", "qwerty", "abc123", "letmein", "123123"];
+
+                if (password.length < 8) {
+                    passwordError.textContent = "Your password must contain at least 8 characters.";
+                } else if (!isNaN(password)) {
+                    passwordError.textContent = "Your password can’t be entirely numeric.";
+                } else if (commonPasswords.includes(password.toLowerCase())) {
+                    passwordError.textContent = "Your password can’t be a commonly used password.";
+                } else if (password.toLowerCase().includes(username.toLowerCase())) {
+                    passwordError.textContent = "Your password can’t be too similar to your username.";
+                }
+            }
+
+            function validateConfirmPassword() {
+                const password = passwordField.value;
+                const confirmPassword = confirmPasswordField.value;
+
+                confirmPasswordError.textContent = "";
+                if (confirmPassword !== password) {
+                    confirmPasswordError.textContent = "Passwords do not match.";
+                }
+            }
+
+            document.getElementById("registerForm").addEventListener("submit", function(event) {
+                validatePassword();
+                validateConfirmPassword();
+
+                if (passwordError.textContent || confirmPasswordError.textContent) {
+                    event.preventDefault(); // Prevent form submission if there are errors
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
