@@ -33,8 +33,6 @@ def receive_code(request):
 
 def read_shop_code(code, number_of_letters):
     return code[:number_of_letters]
-
-
 def check_badge_progress(relevant_user):
     for badge in Badge.objects.order_by("coffee_until_earned"):
         if relevant_user.cupsSaved >= badge.coffeeUntilEarned:
