@@ -5,18 +5,18 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 class Shop(models.Model):
-    shopId = models.AutoField(primary_key=True)
-    shopName = models.CharField(max_length=255, unique=True)
-    numberOfVisits = models.IntegerField(
+    shop_id = models.AutoField(primary_key=True)
+    shop_name = models.CharField(max_length=255, unique=True)
+    number_of_visits = models.IntegerField(
         validators=[MinValueValidator(0)],
         default=0
     )
-    activeCode = models.CharField(max_length=255)
+    active_code = models.CharField(max_length=255)
 
 
 class Badge(models.Model):
-    badgeId = models.AutoField(primary_key=True)
-    coffeeUntilEarned = models.IntegerField(
+    badge_id = models.AutoField(primary_key=True)
+    coffee_until_earned = models.IntegerField(
         validators=[MinValueValidator(0)],
         unique=True
     )
@@ -26,106 +26,106 @@ class Badge(models.Model):
 
 class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    cupsSaved = models.IntegerField(
+    cups_saved = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)]
     )
-    mostRecentShopId = models.ForeignKey(Shop, null=True, blank=True, on_delete=models.SET_NULL)
-    defaultBadgeId = models.ForeignKey(Badge, null=True, blank=True, on_delete=models.SET_NULL)
-    lastActiveDateTime = models.DateTimeField(null=True, blank=True)
+    most_recent_shop_id = models.ForeignKey(Shop, null=True, blank=True, on_delete=models.SET_NULL)
+    default_badge_id = models.ForeignKey(Badge, null=True, blank=True, on_delete=models.SET_NULL)
+    last_active_date_time = models.DateTimeField(null=True, blank=True)
 
 
 class UserShop(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    shopId = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    visitAmounts = models.IntegerField(
+    shop_id = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    visit_amounts = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["user", "shopId"], name="uniqueUserShop")
+            models.UniqueConstraint(fields=["user", "shop_id"], name="unique_user_shop")
         ]
 
 
 class UserBadge(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    badgeId = models.ForeignKey(Badge, on_delete=models.CASCADE)
+    badge_id = models.ForeignKey(Badge, on_delete=models.CASCADE)
     owned = models.BooleanField(default=False)
-    dateTimeObtained = models.DateTimeField(null=True, blank=True)
+    date_time_obtained = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["user", "badgeId"], name="uniqueUserBadge")
+            models.UniqueConstraint(fields=["user", "badge_id"], name="unique_user_badge")
         ]
 
 
-def createUser(firstName, lastName):
-    x = User(firstName = firstName, lastName = lastName)
+def create_user(first_name, last_name):
+    x = User(first_name = first_name, last_name = last_name)
     x.save()
     return
 
 
-def createShop(shopName):
-    x = Shop(shopName = shopName)
+def create_shop(shop_name):
+    x = Shop(shop_name = shop_name)
     x.save()
     return
 
 
-def createBadge(badgeName, coffeeUntilEarned):
-    x = Badge(badgeName = badgeName, coffeeUntilEarned = coffeeUntilEarned)
+def create_badge(badge_name, coffee_until_earned):
+    x = Badge(badge_name = badge_name, coffee_until_earned = coffee_until_earned)
     x.save()
     return
 
 
-def updateProgression(user):
-    userObject = CustomUser.objects.get(user = user)
-    cupsSaved = userObject.cupsSaved
-    badgeObjects = Badge.objects.order_by("coffeeUntilEarned")
-    lastBadgeId = 0
-    newBadgeId = 0
-    if badgeObjects.count() == 0:
+def update_progression(user):
+    user_object = CustomUser.objects.get(user = user)
+    cups_saved = user_object.cups_saved
+    badge_objects = Badge.objects.order_by("coffee_until_earned")
+    last_badge_id = 0
+    new_badge_id = 0
+    if badge_objects.count() == 0:
         return
-    for badgeObject in badgeObjects:
-        lastBadgeId = newBadgeId
-        newBadgeId = badgeObject
-        if lastBadgeId.coffeeUntilEarned <= cupsSaved and cupsSaved < newBadgeId.coffeeUntilEarned:
-            updateBadge(user, lastBadgeId, userObject)
-            progression = (cupsSaved - lastBadgeId.coffeeUntilEarned) / (
-                    newBadgeId.coffeeUntilEarned - lastBadgeId.coffeeUntilEarned)
-            userObject.progression = round(progression * 100)
-            userObject.save()
+    for badge_object in badge_objects:
+        last_badge_id = new_badge_id
+        new_badge_id = badge_object
+        if last_badge_id.coffee_until_earned <= cups_saved and cups_saved < new_badge_id.coffee_until_earned:
+            update_badge(user, last_badge_id, user_object)
+            progression = (cups_saved - last_badge_id.coffee_until_earned) / (
+                    new_badge_id.coffee_until_earned - last_badge_id.coffee_until_earned)
+            user_object.progression = round(progression * 100)
+            user_object.save()
             return
-    userObject.progression = 100
-    userObject.save()
-    updateBadge(user, newBadgeId, userObject)
+    user_object.progression = 100
+    user_object.save()
+    update_badge(user, new_badge_id, user_object)
     return
 
 
-def updateBadge(user, lastBadgeId, userObject,):
-    searchResult = UserBadge.objects.filter(user=user, badgeId=lastBadgeId)
-    if not searchResult.exists():
-        userObject.defaultBadgeId = lastBadgeId
-        currentDateTime = datetime.now()
-        x = UserBadge(user=user, badgeId=lastBadgeId, dateTimeObtained=currentDateTime)
+def update_badge(user, last_badge_id, user_object,):
+    search_result = UserBadge.objects.filter(user=user, badge_id=last_badge_id)
+    if not search_result.exists():
+        user_object.default_badge_id = last_badge_id
+        current_date_time = datetime.now()
+        x = UserBadge(user=user, badge_id=last_badge_id, dateT_time_obtained=current_date_time)
         x.save()
     return
 
 
-def logVisit(user, shopId, coffeeName, visitDate, visitTime):
-    userObject = CustomUser.objects.get(user = user)
-    userObject.cupsSaved += 1
-    userObject.mostRecentShopId = shopId
-    userObject.save()
-    updateProgression(user)
-    shopObject = Shop.objects.get(shopId = shopId)
-    shopObject.numberOfVisits += 1
-    shopObject.save()
-    coffeeObject = Coffee.objects.get(name = coffeeName)
-    coffeeObject.numberOrdered += 1
-    coffeeObject.lastOrdered = datetime.combine(visitDate,visitTime)
-    coffeeObject.save()
-    userShopObject = UserShop.objects.get(user = user, shopId = shopId)
-    userShopObject.visitAmounts += 1
-    userShopObject.save()
+def log_visit(user, shop_id, coffee_name, visit_date, visit_time):
+    user_object = CustomUser.objects.get(user = user)
+    user_object.cups_saved += 1
+    user_object.most_recent_shop_id = shop_id
+    user_object.save()
+    update_progression(user)
+    shop_object = Shop.objects.get(shopId = shopId)
+    shop_object.number_of_visits += 1
+    shop_object.save()
+    coffee_object = Coffee.objects.get(name = coffee_name)
+    coffee_object.number_ordered += 1
+    coffee_object.last_ordered = datetime.combine(visit_date,visit_time)
+    coffee_object.save()
+    user_shop_object = UserShop.objects.get(user = user, shop_id = shop_id)
+    user_shop_object.visit_amounts += 1
+    user_shop_object.save()
     return

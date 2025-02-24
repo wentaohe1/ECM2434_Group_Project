@@ -12,16 +12,16 @@ class DataBaseTests(TestCase):
     def setUp(self):
         '''Sets up a DB with test objects and a simulated POST request'''
 
-        self.shop = Shop.objects.create(shopName = 'New Shop', activeCode = '123', numberOfVisits = 0)
+        self.shop = Shop.objects.create(shop_name = 'New Shop', active_code = '123', number_of_visits = 0)
         self.user = User.objects.create_user(username = '1', password = 'password_1', first_name = 'John', last_name = 'Smith')
-        self.custom_user = CustomUser.objects.create(user = self.user, cupsSaved = 0)
+        self.custom_user = CustomUser.objects.create(user = self.user, cups_saved = 0)
 
         # Initialises badges: different thresholds enable user.defaultBadgeId testing
-        self.badge_1 = Badge.objects.create(coffeeUntilEarned = 2)
-        self.badge_2 = Badge.objects.create(coffeeUntilEarned = 3)
+        self.badge_1 = Badge.objects.create(coffee_until_earned = 2)
+        self.badge_2 = Badge.objects.create(coffee_until_earned = 3)
 
         # Simulates recieving a POST request
-        self.request = self.client.post(reverse('log_visit'), {'username': self.custom_user.user.username, 'shop_id': self.shop.shopId})
+        self.request = self.client.post(reverse('log_visit'), {'username': self.custom_user.user.username, 'shop_id': self.shop.shop_id})
 
     def test_shop_registers_visit(self):
         '''Tests log_visit updates Shop attributes to reflect user's visit'''
@@ -29,7 +29,7 @@ class DataBaseTests(TestCase):
         self.shop.refresh_from_db()
         this_shop = self.shop
 
-        self.assertEqual(this_shop.numberOfVisits, 1, 'Shop vist count should increment on visit')
+        self.assertEqual(this_shop.number_of_visits, 1, 'Shop vist count should increment on visit')
 
     def test_user_registers_visit(self):
         '''Tests log_visit updates User attributes to reflect a shop visit'''
@@ -37,25 +37,25 @@ class DataBaseTests(TestCase):
         self.custom_user.refresh_from_db()
         this_user = self.custom_user
 
-        self.assertEqual(this_user.mostRecentShopId, self.shop, 'The visited shop should be set as the user\'s most recent shop')
+        self.assertEqual(this_user.most_recent_shop_id, self.shop, 'The visited shop should be set as the user\'s most recent shop')
 
-        self.assertEqual(this_user.cupsSaved, 1, 'User\'s cups saved count should increment on visit')
+        self.assertEqual(this_user.cups_saved, 1, 'User\'s cups saved count should increment on visit')
 
-        self.assertAlmostEqual(this_user.lastActiveDateTime, now(), delta = timedelta(seconds = 1))
+        self.assertAlmostEqual(this_user.last_active_date_time, now(), delta = timedelta(seconds = 1))
 
     def test_user_shop_registers_visit(self):
         '''Tests log_visit updates UserShop attributes to reflect a user's visit'''
 
         try:
-            this_userShop = UserShop.objects.get(user = self.custom_user, shopId = self.shop)
+            this_user_shop = UserShop.objects.get(user = self.custom_user, shop_id = self.shop)
         except UserShop.DoesNotExist:
             print("UserShop instance should be created for the user - shop pair")
 
-        self.assertEqual(this_userShop.user, self.custom_user, 'The UserShop instance should reference the correct parent User')
+        self.assertEqual(this_user_shop.user, self.custom_user, 'The UserShop instance should reference the correct parent User')
 
-        self.assertEqual(this_userShop.shopId, self.shop, 'The UserShop instance should reference the correct parent Shop')
+        self.assertEqual(this_user_shop.shop_id, self.shop, 'The UserShop instance should reference the correct parent Shop')
 
-        self.assertEqual(this_userShop.visitAmounts, 1, 'UserShop vist count should increment on visit')
+        self.assertEqual(this_user_shop.visit_amounts, 1, 'UserShop vist count should increment on visit')
 
     def test_user_badge_registers_visit(self):
         '''Tests log_visit updates UserBadge attributes to reflect a user's visit'''
@@ -70,18 +70,18 @@ class DataBaseTests(TestCase):
         this_user = self.custom_user
 
         try:
-            user_badge = UserBadge.objects.get(badgeId = this_badge, user = this_user)
+            user_badge = UserBadge.objects.get(badge_id = this_badge, user = this_user)
         except UserBadge.DoesNotExist:
             print("UserBadge instance should be created for the user - badge pair")
 
         # Tests user fields updated
-        self.assertEqual(this_user.defaultBadgeId, this_badge, 'Initial earned badge should be set as the User\'s default badge')
+        self.assertEqual(this_user.default_badge_id, this_badge, 'Initial earned badge should be set as the User\'s default badge')
 
         # Tests user_badge fields updated
         self.assertEqual(user_badge.owned, True, 'Badge ownership status should be True once earned')
 
         # Tests that badge was earned almost 'now'
-        self.assertAlmostEqual(user_badge.dateTimeObtained, now(), delta = timedelta(seconds = 1))
+        self.assertAlmostEqual(user_badge.date_time_obtained, now(), delta = timedelta(seconds = 1))
 
 
     def test_user_default_badge_updates_when_new_badge_won(self):
@@ -96,4 +96,4 @@ class DataBaseTests(TestCase):
         badge_2 = self.badge_2
         this_user = self.custom_user
 
-        self.assertEqual(this_user.defaultBadgeId, badge_2, 'The User\'s default badge should reference the earned badge with the highest coffee requirement')
+        self.assertEqual(this_user.default_badge_id, badge_2, 'The User\'s default badge should reference the earned badge with the highest coffee requirement')
