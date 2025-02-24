@@ -31,7 +31,7 @@ def log_visit(request):
         raise Http404("404: Shop does not exist")
     
     # Updates object fields based on visit
-    shop.numberOfVisits += 1
+    shop.number_of_visits += 1
     shop.save()
 
     custom_user.most_recent_shop_id = shop
