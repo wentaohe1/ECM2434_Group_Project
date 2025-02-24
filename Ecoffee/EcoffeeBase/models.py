@@ -24,6 +24,8 @@ class Badge(models.Model):
     """maybe information like desc or total owned? """
 
 
+
+
 class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     cupsSaved = models.IntegerField(
@@ -112,6 +114,8 @@ def updateBadge(userId, lastBadgeId, userObject,):
     return
 
 
+
+
 def logVisit(userId, shopId, coffeeName, visitDate, visitTime):
     userObject = User.objects.get(userId = userId)
     userObject.cupsSaved += 1
@@ -121,10 +125,7 @@ def logVisit(userId, shopId, coffeeName, visitDate, visitTime):
     shopObject = Shop.objects.get(shopId = shopId)
     shopObject.numberOfVisits += 1
     shopObject.save()
-    coffeeObject = Coffee.objects.get(name = coffeeName)
-    coffeeObject.numberOrdered += 1
-    coffeeObject.lastOrdered = datetime.combine(visitDate,visitTime)
-    coffeeObject.save()
+
     userShopObject = UserShop.objects.get(userId = userId, shopId = shopId)
     userShopObject.visitAmounts += 1
     userShopObject.save()

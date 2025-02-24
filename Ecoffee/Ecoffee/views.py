@@ -33,9 +33,13 @@ def dashboard_view(request):
     if request.user.is_authenticated:
         request_user=CustomUser.objects.get(user=request.user)
         coffees_saved=request_user.cupsSaved
-        user_badge='images/'+str(request_user.defaultBadgeId.badge_image)
-        next_badge=get_next_badge(request_user)
-        if next_badge!=None:
+        if request_user.defaultBadgeId!=None:
+            user_badge='images/'+str(request_user.defaultBadgeId.badge_image)
+            next_badge=get_next_badge(request_user)
+        else:
+            user_badge=''
+            next_badge = ''
+        if next_badge!=None and user_badge!='':
             coffees_to_next_badge=int(next_badge.coffeeUntilEarned)-int(request_user.defaultBadgeId.coffeeUntilEarned)
             progress=round(coffees_to_next_badge/int(next_badge.coffeeUntilEarned)*100)
         else:
@@ -61,3 +65,5 @@ def get_next_badge(request_user):
     for badge in ordered_badges:
         if badge.coffeeUntilEarned>current_badge.coffeeUntilEarned:
             return badge
+def welcome(request):
+    return render(request, 'welcome.html')
