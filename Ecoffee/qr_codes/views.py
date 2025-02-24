@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from EcoffeeBase.models import *
 from datetime import datetime
@@ -7,67 +7,43 @@ from datetime import datetime
 def receive_code(request):
     code = str(request.GET.get('code', 'No code provided'))
     try:
-        #find part of the code which is relavent to the shop
-        shop_code=read_shop_code(code,4)#for now, first 4 letters, allows for expansion later.
-        shop=Shop.objects.get(active_code=int(shop_code))
-        shop.numberOfVisits+=1
+        # find part of the code which is relavent to the shop
+        shop_code = read_shop_code(code, 4)  # for now, first 4 letters, allows for expansion later.
+        shop = Shop.objects.get(activeCode=int(shop_code))
+        shop.numberOfVisits += 1
         if request.user.is_authenticated:
             try:
-                username=request.user #Updates information relevant to the users order.
-                user=CustomUser.objects.get(user=username)
-                user.cupsSaved+=1
-                user.mostRecentShopId=shop
-                #trigger for updating best badge
-                check_badge(user)
-                user.lastActiveDateTime=datetime.now()
-                user_shop_object = UserShop.objects.get(user=username, shop_id=shop.shop_id)
-                user_shop_object.visit_amounts += 1
-                user_shop_object.save()
+                request_user = request.user  # Updates information relevant to the users order.
+                user = CustomUser.objects.get(user=request_user)
+                check_badge_progress(user)
+                user.cupsSaved += 1
+                user.mostRecentShopId = shop
+                user.lastActiveDateTime = datetime.now()
+                # need to run a trigger to check if the badge needs to be updated.
                 user.save()
-                shop.save() #saves after everything is confirmed okay, changes will rollback (by default after a request has returned) if not
+                shop.save()  # saves after everything is confirmed okay, changes will rollback (by default after a request has returned) if not
                 return redirect('home')
             except CustomUser.DoesNotExist:
                 return redirect('register')
         else:
-            #user not logged in has to login/create account
+            # user not logged in has to login/create account
             return redirect('login')
     except Shop.DoesNotExist:
         return redirect('home')
 
-def check_badge(user_object): # check the best badge for a user and call update badge
-    cups_saved = user_object.cupsSaved
-    badge_objects = Badge.objects.order_by("coffee_until_earned")
-    if badge_objects.count() == 0: #no badge made yet
-        return
-    if badge_objects.first().coffee_until_earned > cups_saved: #user do not have enough cup daved for first badge
-        return
-    if badge_objects.first().coffee_until_earned <= cups_saved < badge_objects[1].cofee_until_earned: # user can only get first badge
-        update_badge(user_object, badge_objects.first())
-        return
-    new_badge = badge_objects.first()
-    for badge_object in badge_objects[1:]: # check if the user can get which badge form the second one onward
-        last_badge = new_badge
-        new_badge = badge_object
-        if last_badge.coffee_until_earned <= cups_saved < new_badge.coffee_until_earned:
-            update_badge(user_object, last_badge)
-            return
-    update_badge(user_object, new_badge)
-    return
 
-
-#add a user-badge relation record if there does not exit one already, i.e. update the badges a user owns
-def update_badge(user_object, badge):
-    badge_id = badge.badge_id
-    username = user_object.username
-    search_result = UserBadge.objects.filter(user=username, badge_id=badge_id)
-    if not search_result.exists(): # check if the user-badge relation already exists
-        user_object.default_badge_id = badge_id
-        current_date_time = datetime.now()
-        x = UserBadge(user=username, badge_id=badge_id,
-                      date_time_obtained=current_date_time)
-        x.save()
-    return
-
-
-def read_shop_code(code,number_of_letters):
+def read_shop_code(code, number_of_letters):
     return code[:number_of_letters]
+
+
+def check_badge_progress(relevant_user):
+    for badge in Badge.objects.order_by("coffee_until_earned"):
+        if relevant_user.cupsSaved >= badge.coffeeUntilEarned:
+            relevant_user.defaultBadgeId = badge
+            # this updates the user badges(actual implementaion in the dashbaord will be added next sprint)
+            # search_result = UserBadge.objects.filter(user=relevant_user.user, badge_id=badge)
+            # if not search_result.exists():  # check if the user-badge relation already exists
+            #    current_date_time = datetime.now()
+            #    x = UserBadge(user=relevant_user.user, badge_id=badge,
+            #                  date_time_obtained=current_date_time)
+            #    x.save()
