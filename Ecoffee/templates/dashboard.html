@@ -74,7 +74,7 @@
             }
 
             .logo::before {
-                content: "☕";
+                content: "";
                 margin-right: 10px;
                 font-size: 32px;
             }
@@ -324,7 +324,10 @@
     <body>
         <header class="top-nav">
             <div class="brand-section">
-                <div class="logo">Ecoffee</div>
+                <div class="logo">
+                    <img src="{% static 'images/logo.png' %}" alt="Ecoffee Logo" style="width:50px; height:50px; margin-right:10px;">
+                    Ecoffee
+                </div>
                 <ul class="nav-list">
                     <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
                     {% if user.is_authenticated %}
