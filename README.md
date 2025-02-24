@@ -5,15 +5,17 @@ Basic instructions for setting up the app locally.
 
 1. **Clone the repository**
 ```bash
-git clone [repository-url]
-cd Ecoffee
+git clone https://github.com/wentaohe1/ECM2434_Group_Project.git
+cd ECM2434_Group_Project
 ```
 
 2. **Create and activate a virtual environment**
 ```bash
 python -m venv venv
+
 # On Windows
 venv\Scripts\activate
+
 # On macOS/Linux
 source venv/bin/activate
 ```
@@ -25,7 +27,10 @@ pip install django psycopg2-binary
 
 4. **Apply database migrations**
 ```bash
+# make migrations
 python manage.py makemigrations
+
+# apply migrations
 python manage.py migrate
 ```
 
@@ -50,6 +55,11 @@ python manage.py runserver
 To test the basic functionalities (login, registration, basic gamification), you can use:
 
 ~~~
+# test all
+python manage.py test
+
+# test specific app
 python manage.py test login_system
 python manage.py test EcoffeeBase
+python manage.py test qr_codes
 ~~~

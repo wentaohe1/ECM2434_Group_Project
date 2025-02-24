@@ -1,0 +1,42 @@
+{% load static %}
+<header class="top-nav">
+      <div class="brand-section">
+         <div class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="Ecoffee Logo" style="width:50px; height:50px; margin-right:10px;">
+            <a style = 'color: inherit;text-decoration: none' href = {% url 'welcome' %}> Ecoffee</a>
+         </div>
+         <ul class="nav-list">
+            <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            {% if user.is_authenticated %}
+            <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+            <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+         </ul>
+      </div>
+<div class="stats-section">
+            {% if user.is_authenticated %}
+            <div class="stat-item">
+                <div class="stat-title">Cups saved by you</div>
+                <div class="stat-value">{{ personal_cups_saved }}</div>
+            </div>
+            {% endif %}
+            <div class="user-menu">
+                {% if user.is_authenticated %}
+                <div class="date-time">
+                    <div class="stat-value">{{ user.username }}</div>
+                    <div class="stat-title">Last active: 2h ago</div>
+                </div>
+                {% endif %}
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Settings</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
+                </div>
+            </div>
+        </div>
+   </header>
+<main>{%  block content %}{% endblock content %}</main>
+
+

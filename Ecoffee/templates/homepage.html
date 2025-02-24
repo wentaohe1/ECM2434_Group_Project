@@ -1,3 +1,5 @@
+{% include 'header.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,11 +63,6 @@
             align-items: center;
         }
 
-        .logo::before {
-            content: "☕";
-            margin-right: 10px;
-            font-size: 32px;
-        }
 
         .nav-list {
             display: flex;
@@ -190,7 +187,6 @@
         }
 
         .progress-fill {
-            width: 65%;
             height: 100%;
             background: linear-gradient(90deg, #3498db, #2ecc71);
             transition: width 0.5s ease;
@@ -211,7 +207,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
-        .metric-title {
+        .metric-title, .table-header h1 {
             font-size: 18px;
             color: #2c3e50;
             margin-bottom: 15px;
@@ -263,82 +259,195 @@
                 gap: 20px;
             }
         }
+        /* Leaderboard styling */
+        td img {
+            width: 36px;
+            height: 36px;
+            margin-right: .5rem;
+            vertical-align: middle;
+            box-shadow: 0 .2rem .5rem #0005;
+            border-radius: 30px;
+
+        }
+        table {
+            width: 100%;
+        }
+        table, th, td {
+            padding: 1rem;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .table-header {
+            width: 100%;
+            max-height: 89%;
+            background-color: #fffb;
+            padding-left: 5px;
+            
+        }
+        .table-leaderboard {
+            width: 90vw;
+            height: 90%;
+            background-color: #fffb;
+            backdrop-filter: blur(7px);
+            padding-top: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .table-body {
+            width: 100%;
+            max-height: calc(89% - .8rem);
+            background-color: #fffb;
+            margin: .8rem auto;
+            border-radius: .6rem;
+            overflow: auto;
+        }
+        .table-body::-webkit-scrollbar{
+            width: 0.5rem;
+            height: 0.5rem;
+        }
+        .table-body::-webkit-scrollbar-thumb{
+            border-radius: .5rem;
+            background-color: #0004;
+            visibility: hidden;
+        }
+        .table-body:hover::-webkit-scrollbar-thumb{
+            visibility: visible;
+        }
+        thead th{
+            position: sticky;
+            top: 0;
+            Left: 0;
+            background-color: #a6f3b5;
+        }
+        tbody tr:nth-child(even){
+            background-color: #0000000b;
+        }
+        tbody tr:hover {
+            background-color: #fff6;
+        }
+        /* badge CSS */
+        .badge-container {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .badge-container img{
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
-    <header class="top-nav">
-        <div class="brand-section">
-            <div class="logo">Ecoffee</div>
-            <ul class="nav-list">
-                <li class="nav-item"><a href="#">Home</a></li>
-                <li class="nav-item"><a href="#">Dashboard</a></li>
-                <li class="nav-item"><a href="#">Camera</a></li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
-            
-                {% else %}
-                    <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-            
-            </ul>
-        </div>
-
-        <div class="stats-section">
-            <div class="stat-item">
-                <div class="stat-title">Regular stops</div>
-                <div class="stat-value">Starbucks</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-title">Most Saved</div>
-                <div class="stat-value">328 Cups</div>
-            </div>
-            <div class="user-menu">
-                <div class="date-time">
-                    <div class="stat-value">John Doe</div>
-                    <div class="stat-title">Last active: 2h ago</div>
-                </div>
-                
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Settings</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">Log Out</a>
-                </div>
-            </div>
-        </div>
-    </header>
 
     <main class="main-content">
+        {% if user.is_authenticated %}
+        <h1>Welcome back {{ user.username }}!</h1>
+        {%endif%}
         <!-- process bar -->
         <div class="progress-section">
             <h3 class="metric-title">Progress</h3>
-            <h4 class="metric-procent">65%</h4>
+            <h4 class="metric-procent">{{ total_cups_saved }} cups saved today</h4>
             <div class="progress-bar">
-                <div class="progress-fill"></div>
+                <div class="progress-fill" style="width: {{ total_cups_saved|default:0 }}%;">
             </div>
         </div>
-
+        <!--Ecoffee shops leaderboard-->
+        <section class="table-leaderboard">
+            <section class="table-header">
+                <h1>Most Sustainable Coffee Drinkers </h1>
+            </section>
+            <section class="table-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>Cups Saved</th>
+                            <th>Badges</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for custom_user in top_10_users %}  <!-- Loop 10 times -->
+                        <tr>
+                            <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
+                            <td>
+                                {{ custom_user.user.username }} 
+    
+                                {% if forloop.counter == 1 %}
+                                    🥇
+                                {% elif forloop.counter == 2 %}
+                                    🥈
+                                {% elif forloop.counter == 3 %}
+                                    🥉
+                                {% endif %}
+                            </td>
+                            <td>{{ custom_user.cups_saved }} </td>
+                            <td>
+                                <div class="badge-container">
+                                    <img src="{% static 'images/badge_lv1.png' %}"
+                                    alt="User Badge"
+                                    style="width: 30px; height: 30px;">
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </section>
+        <!--coffe shops leaderboard-->
+        <section class="table-leaderboard">
+            <section class="table-header">
+                <h1>Most Sustainable Coffee Shops</h1>
+            </section>
+            <section class="table-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Coffee Shop</th>
+                            <th>Cups Saved</th>
+                            <th>Location </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for shop in top_5_shops %}
+                        <tr>
+                            <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
+                            <td><!-- Coffee shop name -->
+                                <img src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" 
+                                alt="{{ shop.shop_name }} Logo" 
+                                style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px;">
+                                <strong>{{ shop.shop_name }}</strong>
+                                {% if forloop.counter == 1 %}
+                                    🥇
+                                {% elif forloop.counter == 2 %}
+                                    🥈
+                                {% elif forloop.counter == 3 %}
+                                    🥉
+                                {% endif %}
+                            </td>  <!-- Coffee shop name -->
+                            <td>{{ shop.number_of_visits }}</td>  <!-- cups saved -->
+                            <td>University of Exeter</td>  <!-- No location field in model, so placeholder -->
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No data available</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </section>
         <!-- board -->
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <h4 class="metric-title">Most Popular Shops</h4>
-                <ul class="ranking-list">
-                    <li class="ranking-item">
-                        <span>Starbucks</span>
-                        <span>152 visits</span>
-                    </li>
-                    <li class="ranking-item">
-                        <span>Costa Coffee</span>
-                        <span>128 visits</span>
-                    </li>
-                </ul>
-            </div>
 
             <div class="metric-card">
                 <h4 class="metric-title">Cups Saved</h4>
                 <ul class="ranking-list">
                     <li class="ranking-item">
-                        <span>User A</span>
-                        <span>328 saved</span>
+                        <span>Our partner shops have saved:</span>
+                        <span>{{ total_cups_saved }} cups</span>
                     </li>
                     <!-- <li class="ranking-item">
                         <span>User B</span>
@@ -346,43 +455,11 @@
                     </li> -->
                 </ul>
             </div>
-
-            <div class="metric-card">
-                <h4 class="metric-title">Most Cups Saved</h4>
-                <ul class="ranking-list">
-                    <li class="ranking-item">
-                        <span>User A</span>
-                        <span>58 cups</span>
-                    </li>
-                    <li class="ranking-item">
-                        <span>User B</span>
-                        <span>52 cups</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="metric-card">
-                <h4 class="metric-title">Most Recent Coffee</h4>
-                <ul class="ranking-list">
-                    <li class="ranking-item">
-                        <span>Espresso</span>
-                        <span>2 mins ago</span>
-                    </li>
-                    <li class="ranking-item">
-                        <span>Latte</span>
-                        <span>15 mins ago</span>
-                    </li>
-                </ul>
-            </div>
         </div>
-
-        <!-- Who We Are -->
-        <section class="about-section">
-            <h2 class="section-title">Who We Are</h2>
-            <p style="color: #7f8c8d; line-height: 1.6; max-width: 800px; margin: 0 auto;">
-                text here
-            </p>
-        </section>
     </main>
 </body>
 </html>
+
+
+
+

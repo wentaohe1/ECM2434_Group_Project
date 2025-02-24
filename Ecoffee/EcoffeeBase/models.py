@@ -12,9 +12,21 @@ class Shop(models.Model):
         default=0
     )
     active_code = models.CharField(max_length=255)
+    shop_id = models.AutoField(primary_key=True)
+    shop_name = models.CharField(max_length=255, unique=True)
+    number_of_visits = models.IntegerField(
+        validators=[MinValueValidator(0)],
+        default=0
+    )
+    active_code = models.CharField(max_length=255)
 
 
 class Badge(models.Model):
+    badge_id = models.AutoField(primary_key=True)
+    coffee_until_earned = models.IntegerField(
+        validators=[MinValueValidator(0)],
+        unique=True
+    )
     badge_id = models.AutoField(primary_key=True)
     coffee_until_earned = models.IntegerField(
         validators=[MinValueValidator(0)],
