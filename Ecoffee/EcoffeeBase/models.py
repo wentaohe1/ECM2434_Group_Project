@@ -19,11 +19,11 @@ class Badge(models.Model):
         validators=[MinValueValidator(0)],
         unique=True
     )
-    badge_image = models.CharField(max_length=255, default='')  # store link instead of actual image
+    badge_image = models.CharField(max_length=255, default='defaultbadge.png')  # store link instead of actual image
     """maybe information like desc or total owned? """
 
 
-class custom_user(models.Model):
+class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     cups_saved = models.IntegerField(
         default=0,
@@ -36,8 +36,8 @@ class custom_user(models.Model):
     last_active_date_time = models.DateTimeField(null=True, blank=True)
 
 
-class user_shop(models.Model):
-    user = models.ForeignKey(custom_user, on_delete=models.CASCADE)
+class UserShop(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     shop_id = models.ForeignKey(Shop, on_delete=models.CASCADE)
     visit_amounts = models.IntegerField(
         validators=[MinValueValidator(0)]
@@ -50,8 +50,8 @@ class user_shop(models.Model):
         ]
 
 
-class user_badge(models.Model):
-    user = models.ForeignKey(custom_user, on_delete=models.CASCADE)
+class UserBadge(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     badge_id = models.ForeignKey(Badge, on_delete=models.CASCADE)
     date_time_obtained = models.DateTimeField(null=True, blank=True)
 

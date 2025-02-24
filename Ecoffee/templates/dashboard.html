@@ -329,18 +329,13 @@
                     {% if user.is_authenticated %}
                     <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
                     {% endif %}
-                    <li class="nav-item"><a href="#">Camera</a></li>
                 </ul>
             </div>
             {% if user.is_authenticated %}
             <div class="stats-section">
                 <div class="stat-item">
-                    <div class="stat-title">Regular stops</div>
-                    <div class="stat-value">Starbucks</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-title">Most Saved</div>
-                    <div class="stat-value">328 Cups</div>
+                    <div class="stat-title">Cups saved by you</div>
+                    <div class="stat-value">{{ user.customuser.cups_saved }}</div>
                 </div>
                 <div class="user-menu">
                     <div class="date-time">
@@ -382,16 +377,16 @@
                     <div class="card-flex">
                         <div class="card-info">
                             <div class="card-head">
-                                <span>{{ most_popular_shop.shopName }}</span>
+                                <span>{{ most_popular_shop.shop_name }}</span>
                                 <small>Number of all time visits</small>
                             </div>
 
-                            <h2>{{ most_popular_shop.numberOfVisits }}</h2>
+                            <h2>{{ most_popular_shop.number_of_visits }}</h2>
 
-                            <small>2% more than average</small>
+                            <small></small>
                         </div>
                         <div class="card-chart">
-                            <span class="card-chart"><img src="{% static 'images/Starbucks.png' %}"></span>
+                            <span class="card-chart"><img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name}}.jpeg"></span>
                         </div>
                     </div>
                 </div>
@@ -403,7 +398,7 @@
                                 <small>By drinking sustainably you have saved</small>
                             </div>
 
-                            <h2>£{{money_saved}}</h2>
+                            <h2>£{{money_saved}}0</h2>
 
                             <small>2% more than average</small>
                         </div>

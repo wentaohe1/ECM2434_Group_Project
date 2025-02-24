@@ -5,7 +5,6 @@ from .form import *
 def add_new_data(request):
     if request.method=='POST':
         if 'shop_form_submit' in request.POST:
-            print("here")
             shop_form=ShopForm(request.POST)
             if shop_form.is_valid():
                 shop_form.save()
