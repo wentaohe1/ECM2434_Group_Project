@@ -1,3 +1,4 @@
+{% include 'header.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -63,10 +64,9 @@
         }
 
         .logo::before {
-            content: "";
+            content: "☕";
             margin-right: 10px;
             font-size: 32px;
-            background: url("{%static 'images/logo.png' %}");
         }
 
         .nav-list {
@@ -269,7 +269,8 @@
             width: 36px;
             height: 36px;
             margin-right: .5rem;
-            vertical-align: middle;            
+            vertical-align: middle;
+            box-shadow: 0 .4rem .8rem #0005;
             border-radius: .8rem;
 
         }
@@ -295,7 +296,7 @@
             backdrop-filter: blur(7px);
             padding-top: 10px;
             border-radius: 10px;
-            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         .table-body {
             width: 100%;
@@ -304,7 +305,6 @@
             margin: .8rem auto;
             border-radius: .6rem;
             overflow: auto;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         .table-body::-webkit-scrollbar{
             width: 0.5rem;
@@ -344,62 +344,15 @@
     </style>
 </head>
 <body>
-    <header class="top-nav">
-        <div class="brand-section">
-            <div class="logo">
-                <img src="{% static 'images/logo.png' %}" alt="Ecoffee Logo" style="width:50px; height:50px; margin-right:10px;">
-                Ecoffee
-            </div>
-            <ul class="nav-list">
-                <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                {% endif %}
-                <li class="nav-item"><a href="#">Camera</a></li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
-            
-                {% else %}
-                    <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
-                {% endif %}
-            
-            </ul>
-        </div>
 
-        <div class="stats-section">
-            <div class="stat-item">
-                <div class="stat-title">Regular stops</div>
-                <div class="stat-value">Starbucks</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-title">Cups saved by you</div>
-                <div class="stat-value">{{ personal_cups_saved }}</div>
-            </div>
-            <div class="user-menu">
-                <div class="date-time">
-                    <div class="stat-value">{{ user.username }}</div>
-                    <div class="stat-title">Last active: 2h ago</div>
-                </div>
-                
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Settings</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
-                </div>
-            </div>
-        </div>
-    </header>
 
     <main class="main-content">
-        {% if user.is_authenticated %}
-        <h1>Welcome back {{ user.username }}!</h1>
-        {%endif%}
         <!-- process bar -->
         <div class="progress-section">
             <h3 class="metric-title">Progress</h3>
-            <h4 class="metric-procent">{{ total_cups_saved }} cups saved today</h4>
+            <h4 class="metric-procent">{{ cups_saved_today }} cups saved today</h4>
             <div class="progress-bar">
-                <div class="progress-fill" style="width: {{ total_cups_saved|default:0 }}%;">
+                <div class="progress-fill" style="width: {{ progress_percentage|default:0 }}%;">
             </div>
         </div>
         <!--Ecoffee shops leaderboard-->
@@ -422,7 +375,7 @@
                         <tr>
                             <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
                             <td>
-                                <strong>{{ custom_user.user.username }}</strong> 
+                                {{ custom_user.user.username }} 
     
                                 {% if forloop.counter == 1 %}
                                     🥇
@@ -432,13 +385,11 @@
                                     🥉
                                 {% endif %}
                             </td>
-                            <td>{{ custom_user.cups_saved }} </td>
+                            <td>{{ custom_user.cupsSaved }} </td>
                             <td>
                                 <div class="badge-container">
-                                    {% for badge in custom_user.badges.all %}
-                                    <img src="{% static 'images/badges/' %}{{ badge.badge_image }}" 
-                                        alt="{{ badge.name }} Badge"
-                                        style="width: 30px; height: 30px;">
+                                    {% for badge in user.badges %}
+                                        <img src="{% static 'images/' %}{{ badge }}" alt="Badge">
                                     {% endfor %}
                                 </div>
                             </td>
@@ -467,21 +418,9 @@
                         {% for shop in top_5_shops %}
                         <tr>
                             <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
-                            <td>
-                                <img src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" 
-                                alt="{{ shop.shop_name }} Logo" 
-                                style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px;">
-                                <strong>{{ shop.shop_name }}</strong>
-                                {% if forloop.counter == 1 %}
-                                    🥇
-                                {% elif forloop.counter == 2 %}
-                                    🥈
-                                {% elif forloop.counter == 3 %}
-                                    🥉
-                                {% endif %}
-                            </td>  <!-- Coffee shop name -->
-                            <td>{{ shop.number_of_visits }}</td>  <!-- cups saved -->
-                            <td>University of Exeter</td>  <!-- No location field in model, so placeholder -->
+                            <td>{{ shop.shopName }}</td>  <!-- Coffee shop name -->
+                            <td>{{ shop.numberOfVisits }}</td>  <!-- cups saved -->
+                            <td>Unknown Location</td>  <!-- No location field in model, so placeholder -->
                         </tr>
                         {% empty %}
                         <tr>
@@ -507,17 +446,11 @@
                     </li> -->
                 </ul>
             </div>
-
-
-
-        <!-- Who We Are -->
-        <section class="about-section">
-            <h2 class="section-title">About Us</h2>
-            <p style="color: #7f8c8d; line-height: 1.6; max-width: 800px; margin: 0 auto;">
-                text here
-            </p>
-        </section>
         </div>
     </main>
 </body>
 </html>
+
+
+
+
