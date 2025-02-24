@@ -29,7 +29,7 @@ def receive_code(request):
             # user not logged in has to login/create account
             return redirect('login')
     except Shop.DoesNotExist:
-        return redirect('login') 
+        return redirect('home') 
 
 
 def read_shop_code(code, number_of_letters):
