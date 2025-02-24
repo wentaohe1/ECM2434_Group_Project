@@ -17,7 +17,7 @@ def home(request):
 
     print("Debugging:", cups_saved_today, progress_percentage)  # Should print in terminal
     request_user=CustomUser.objects.get(user=request.user)
-    personal_cups_saved=request_user.cupsSaved
+    personal_cups_saved=request_user.cups_saved
     top_10_users=CustomUser.objects.all().order_by('-cups_saved')[:10] #top 10 users ordered in descending order
     top_5_shops=Shop.objects.all().order_by('-number_of_visits')[:5]
     return render(request, 'homepage.html', {

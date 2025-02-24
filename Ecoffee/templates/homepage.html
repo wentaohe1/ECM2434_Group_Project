@@ -399,7 +399,7 @@
             <h3 class="metric-title">Progress</h3>
             <h4 class="metric-procent">{{ total_cups_saved }} cups saved today</h4>
             <div class="progress-bar">
-                <div class="progress-fill" style="width: {{ progress_percentage|default:0 }}%;">
+                <div class="progress-fill" style="width: {{ total_cups_saved|default:0 }}%;">
             </div>
         </div>
         <!--Ecoffee shops leaderboard-->
@@ -432,7 +432,7 @@
                                     🥉
                                 {% endif %}
                             </td>
-                            <td>{{ custom_user.cupsSaved }} </td>
+                            <td>{{ custom_user.cups_saved }} </td>
                             <td>
                                 <div class="badge-container">
                                     {% for badge in custom_user.badges.all %}
@@ -468,10 +468,10 @@
                         <tr>
                             <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
                             <td>
-                                <img src="{% static 'images/logos/' %}{{ shop.shopName}}.jpeg" 
-                                alt="{{ shop.shopName }} Logo" 
+                                <img src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" 
+                                alt="{{ shop.shop_name }} Logo" 
                                 style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px;">
-                                <strong>{{ shop.shopName }}</strong>
+                                <strong>{{ shop.shop_name }}</strong>
                                 {% if forloop.counter == 1 %}
                                     🥇
                                 {% elif forloop.counter == 2 %}
@@ -480,7 +480,7 @@
                                     🥉
                                 {% endif %}
                             </td>  <!-- Coffee shop name -->
-                            <td>{{ shop.numberOfVisits }}</td>  <!-- cups saved -->
+                            <td>{{ shop.number_of_visits }}</td>  <!-- cups saved -->
                             <td>University of Exeter</td>  <!-- No location field in model, so placeholder -->
                         </tr>
                         {% empty %}
