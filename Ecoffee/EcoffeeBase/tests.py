@@ -26,6 +26,7 @@ class DataBaseTests(TestCase):
     def test_shop_registers_visit(self):
         '''Tests log_visit updates Shop attributes to reflect user's visit'''
 
+        self.shop.refresh_from_db()
         this_shop = self.shop
 
         self.assertEqual(this_shop.numberOfVisits, 1, 'Shop vist count should increment on visit')
@@ -33,6 +34,7 @@ class DataBaseTests(TestCase):
     def test_user_registers_visit(self):
         '''Tests log_visit updates User attributes to reflect a shop visit'''
 
+        self.custom_user.refresh_from_db()
         this_user = self.custom_user
 
         self.assertEqual(this_user.mostRecentShopId, self.shop, 'The visited shop should be set as the user\'s most recent shop')
@@ -61,6 +63,9 @@ class DataBaseTests(TestCase):
         # Simulates a second request
         log_visit(self.request.wsgi_request)
 
+        self.badge_1.refresh_from_db()
+        self.badge_2.refresh_from_db()
+        self.custom_user.refresh_from_db()
         this_badge = self.badge_1
         this_user = self.custom_user
 
@@ -86,6 +91,8 @@ class DataBaseTests(TestCase):
         log_visit(self.request.wsgi_request)
         log_visit(self.request.wsgi_request)
 
+        self.badge_2.refresh_from_db()
+        self.custom_user.refresh_from_db()
         badge_2 = self.badge_2
         this_user = self.custom_user
 
