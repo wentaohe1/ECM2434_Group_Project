@@ -1,8 +1,13 @@
-{% include 'header.html' %}
 {%load static%}
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!--
+            @file dashboard.html
+            @author Wentao He
+            @date 21.2.2025
+            @description This is the dashboard page for the Ecoffee application
+        -->
         <meta charset="UTF-8">
         <meta name="Dashboard" content="width=device-width, initial-scale=1.0">
         <title>Dashboard</title>
@@ -317,7 +322,42 @@
         </style>
     </head>
     <body>
-
+        <header class="top-nav">
+            <div class="brand-section">
+                <div class="logo">Ecoffee</div>
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    {% endif %}
+                    <li class="nav-item"><a href="#">Camera</a></li>
+                </ul>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="stats-section">
+                <div class="stat-item">
+                    <div class="stat-title">Regular stops</div>
+                    <div class="stat-value">Starbucks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">Most Saved</div>
+                    <div class="stat-value">328 Cups</div>
+                </div>
+                <div class="user-menu">
+                    <div class="date-time">
+                        <div class="stat-value">{{ user.username }}</div>
+                        <div class="stat-title">Last active: 2h ago</div>
+                    </div>
+                    
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </header>
         <!--main content-->
         <main class="main-content">
             <div class="cards">
@@ -329,7 +369,7 @@
                                 <small>In January you have saved</small>
                             </div>
 
-                            <h2>17 cups</h2>
+                            <h2>{{ coffees_saved }} cups</h2>
 
                             <small>2% more cups saved</small>
                         </div>
@@ -342,11 +382,11 @@
                     <div class="card-flex">
                         <div class="card-info">
                             <div class="card-head">
-                                <span>Most popular coffee shop</span>
+                                <span>{{ most_popular_shop.shopName }}</span>
                                 <small>Number of all time visits</small>
                             </div>
 
-                            <h2>31</h2>
+                            <h2>{{ most_popular_shop.numberOfVisits }}</h2>
 
                             <small>2% more than average</small>
                         </div>
@@ -359,11 +399,11 @@
                     <div class="card-flex">
                         <div class="card-info">
                             <div class="card-head">
-                                <span>Money saved</span>
+                                <span>Money Saved</span>
                                 <small>By drinking sustainably you have saved</small>
                             </div>
 
-                            <h2>£42</h2>
+                            <h2>£{{money_saved}}</h2>
 
                             <small>2% more than average</small>
                         </div>
@@ -378,25 +418,27 @@
                 <div class="analytics-card">
                     <div class="analytics head">
                         <h3>PROGRESS</h3>
-                        <small>2 more coffess until the next badge!</small>
+                        {% if coffees_to_next_badge == 1000000000 %}
+                            <small>You've gained all the badges, Great Job!</small>
+                        {% else %}
+                            <small>{{ coffees_to_next_badge }} more coffess until the next badge!</small>
+                        {% endif %}
                         <br>
                         <span class="las la-ellipse-h"></span>
                     </div>
                     <div class="analytics-chart">
                         <div class="chart-circle">
-                            <h1>71%</h1>
+                            <h1>{{ progress }}%</h1>
                         </div>
                     </div>
                 </div>
                 <!--badges-->
                 <div class="badge-card">
                     <div class="analytics-head">
-                        <h3>YOUR BADGES</h3>
+                        <h3>YOUR BADGE</h3>
                     </div>
                     <div class="badge-grid">
-                        <div class="badge-item"><img src="{% static 'images/Badage Lv1.png' %}"></div>
-                        <div class="badge-item"><img src="{% static 'images/Badage Lv2.png' %}"></div>
-                        <div class="badge-item"><img src="{% static 'images/Badage LV3.png' %}"></div>
+                        <div class="badge-item"><img src="{% static badge_file %}"></div>
                     </div>
                 </div>
             </div>
