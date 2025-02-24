@@ -16,11 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from . import views
+from . import views, settings
+from Ecoffee.views import dashboard_view
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
-    path('',views.home,name='home'), 
+    path("" , views.welcome , name="welcome"),
+
+    path('home/', views.home, name='home'),
     path('login_system/',include('django.contrib.auth.urls')), 
     path('login_system/',include('login_system.urls')), 
+    path('dashboard/', dashboard_view, name='dashboard'),
+    path('code/',include('qr_codes.urls')),
+    path('welcome/',views.welcome,name = 'welcome'),
+    path('add_data/',include('add_to_database.urls')),
 ]

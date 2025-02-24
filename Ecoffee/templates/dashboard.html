@@ -1,0 +1,447 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--
+            @file dashboard.html
+            @author Wentao He
+            @date 21.2.2025
+            @description This is the dashboard page for the Ecoffee application
+        -->
+        <meta charset="UTF-8">
+        <meta name="Dashboard" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/line-awesome/dist/line-awesome/css/line-awesome.min.css">
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const userMenu = document.querySelector('.user-menu');
+                const dropdown = document.querySelector('.dropdown-menu');
+    
+                userMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('show');
+                });
+    
+                document.addEventListener('click', function() {
+                    dropdown.classList.remove('show');
+                });
+    
+                dropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+        </script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Segoe UI', Arial, sans-serif;
+            }
+            /* main processes */
+            .main-content {
+                margin-top: 100px;
+                padding: 30px 5%;
+            }
+            /* top  */
+            .top-nav {
+                width: 100%;
+                height: 80px;
+                background: #a6f3b5;
+                padding: 15px 5%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: fixed;
+                top: 0;
+                box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+                z-index: 1000;
+            }
+
+            .brand-section {
+                display: flex;
+                align-items: center;
+                gap: 40px;
+            }
+
+            .logo {
+                font-size: 26px;
+                font-weight: 700;
+                color: #2c3e50;
+                letter-spacing: 1.5px;
+                display: flex;
+                align-items: center;
+            }
+
+
+
+            .nav-list {
+                display: flex;
+                gap: 35px;
+                list-style: none;
+            }
+
+            .nav-item a {
+                text-decoration: none;
+                color: #34495e;
+                font-size: 16px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                padding: 8px 12px;
+                border-radius: 6px;
+            }
+
+            .nav-item a:hover {
+                color: #3498db;
+                background: rgba(52, 152, 219, 0.1);
+            }
+
+            .stats-section {
+                display: flex;
+                align-items: center;
+                gap: 40px;
+            }
+
+            .stat-item {
+                position: relative;
+                padding: 0 15px;
+            }
+
+            .stat-item:not(:last-child)::after {
+                content: "|";
+                color: #ddd;
+                position: absolute;
+                right: -20px;
+            }
+
+            .stat-title {
+                font-size: 13px;
+                color: #7f8c8d;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .stat-value {
+                font-size: 15px;
+                font-weight: 600;
+                color: #2c3e50;
+                margin-top: 3px;
+            }
+
+            .user-menu {
+                position: relative;
+                cursor: pointer;
+            }
+
+            .dropdown-menu {
+                position: absolute;
+                right: 0;
+                top: 100%;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                min-width: 160px;
+                margin-top: 10px;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                z-index: 1001;
+            }
+
+            .dropdown-menu.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .dropdown-item {
+                padding: 12px 20px;
+                color: #2c3e50;
+                text-decoration: none;
+                display: block;
+                transition: background 0.2s;
+            }
+
+            .dropdown-item:hover {
+                background: #f8f9fa;
+            }
+
+            .dropdown-divider {
+                height: 1px;
+                background: #eee;
+                margin: 4px 0;
+            }
+
+            /* main processes */
+            .main-content {
+                margin-top: 100px;
+                padding: 30px 5%;
+            }
+
+            /* process bar */
+            .progress-section {
+                width: 100%;
+                margin: 50px 0;
+            }
+
+            .progress-bar {
+                width: 100%;
+                height: 20px;
+                background: #ecf0f1;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
+            .metric-procent {
+                width: 100%;
+                height: 35px;
+                
+            }
+
+            .progress-fill {
+                width: 65%;
+                height: 100%;
+                background: linear-gradient(90deg, #3498db, #2ecc71);
+                transition: width 0.5s ease;
+            }
+
+            
+
+            @media (max-width: 768px) {
+                .metrics-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .stats-section {
+                    gap: 20px;
+                    flex-wrap: wrap;
+                }
+                
+                .nav-list {
+                    gap: 20px;
+                }
+                
+                .brand-section {
+                    gap: 20px;
+                }
+            }
+            /* cards CSS */
+            .cards {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-gap: 3em;
+            }
+            .card-single{
+                background-color: #fff;
+                padding: 1rem;
+                box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 2px;
+            }
+            .card-flex {
+                display: grid;
+                grid-template-columns: 70% auto;
+            }
+            .card-head span{
+                font-size: 18px;
+                color: #2c3e50;
+                display: block;
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: .9rem;
+            }
+            .card-head small {
+                font-weight: 600;
+                color: #555;
+            }
+            .card-info h2{
+                font-size: 2.2rem;
+                color: #333;
+            }
+            .card-chart span {
+                font-size: 5rem;
+            }
+            .card-chart img{
+                width: 100px;
+                height: auto;
+            }
+            
+            .card-grid {
+                display: grid;
+                float: right;
+                width: 40%;
+            }
+            .progress-grid {
+                margin-top: 3rem;
+                display: grid;
+                grid-template-columns: auto 66%;
+                grid-gap: 2rem;
+            }
+            .analytics-card, .badge-card {
+                background: #fff;
+                padding: 1.5rem;
+                box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 2px;
+            }
+
+            .analytics-head{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .analytics-head span{
+                font-size: 1.5rem;
+            }
+            .analytics-chart{
+                padding-top: 30px;
+            }
+            .chart-circle{
+                height: 150px;
+                width: 150px;
+                border-left: 10px solid transparent;
+                border-top: 10px solid #5850ec;
+                border-right: 10px solid #5850ec;
+                border-bottom: 10px solid #5850ec;
+                display: grid;
+                place-items: center;
+                margin: auto;
+                border-radius: 50%;
+                margin-bottom: 3em;
+            }
+            .badge-grid{
+                padding-top: 20px;
+                display: grid;
+                grid-template-columns: repeat(3,1fr);
+            }
+            .badge-item img{
+                width: 200px;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <header class="top-nav">
+            <div class="brand-section">
+                <div class="logo">
+                    <img src="{% static 'images/logo.png' %}" alt="Ecoffee Logo" style="width:50px; height:50px; margin-right:10px;">
+                    Ecoffee
+                </div>
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    {% endif %}
+                    <li class="nav-item"><a href="#">Camera</a></li>
+                </ul>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="stats-section">
+                <div class="stat-item">
+                    <div class="stat-title">Regular stops</div>
+                    <div class="stat-value">Starbucks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-title">Most Saved</div>
+                    <div class="stat-value">328 Cups</div>
+                </div>
+                <div class="user-menu">
+                    <div class="date-time">
+                        <div class="stat-value">{{ user.username }}</div>
+                        <div class="stat-title">Last active: 2h ago</div>
+                    </div>
+                    
+                    <div class="dropdown-menu">
+
+           <a href="#" class="dropdown-item">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </header>
+        <!--main content-->
+        <main class="main-content">
+            <div class="cards">
+                <div class="card-single">
+                    <div class="card-flex">
+                        <div class="card-info">
+                            <div class="card-head">
+                                <span>Purchases</span>
+                                <small>In January you have saved</small>
+                            </div>
+
+                            <h2>{{ coffees_saved }} cups</h2>
+
+                            <small>2% more cups saved</small>
+                        </div>
+                        <div class="card-chart" style="color: seagreen;">
+                            <span class="las la-chart-line"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-single">
+                    <div class="card-flex">
+                        <div class="card-info">
+                            <div class="card-head">
+                                <span>{{ most_popular_shop.shopName }}</span>
+                                <small>Number of all time visits</small>
+                            </div>
+
+                            <h2>{{ most_popular_shop.numberOfVisits }}</h2>
+
+                            <small>2% more than average</small>
+                        </div>
+                        <div class="card-chart">
+                            <span class="card-chart"><img src="{% static 'images/Starbucks.png' %}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-single">
+                    <div class="card-flex">
+                        <div class="card-info">
+                            <div class="card-head">
+                                <span>Money Saved</span>
+                                <small>By drinking sustainably you have saved</small>
+                            </div>
+
+                            <h2>£{{money_saved}}</h2>
+
+                            <small>2% more than average</small>
+                        </div>
+                        <div class="card-chart">
+                            <span class="las la-chart-line"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-grid">
+                <!--progress-->
+                <div class="analytics-card">
+                    <div class="analytics head">
+                        <h3>PROGRESS</h3>
+                        {% if coffees_to_next_badge == 1000000000 %}
+                            <small>You've gained all the badges, Great Job!</small>
+                        {% else %}
+                            <small>{{ coffees_to_next_badge }} more coffess until the next badge!</small>
+                        {% endif %}
+                        <br>
+                        <span class="las la-ellipse-h"></span>
+                    </div>
+                    <div class="analytics-chart">
+                        <div class="chart-circle">
+                            <h1>{{ progress }}%</h1>
+                        </div>
+                    </div>
+                </div>
+                <!--badges-->
+                <div class="badge-card">
+                    <div class="analytics-head">
+                        <h3>YOUR BADGE</h3>
+                    </div>
+                    <div class="badge-grid">
+                        <div class="badge-item"><img src="{% static badge_file %}"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

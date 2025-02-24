@@ -1,88 +1,62 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 
 
-# Create your models here.
 class Shop(models.Model):
-    shopId = models.AutoField(primary_key=True)
-    shopName = models.CharField(max_length=255, unique=True)
-    numberOfVisits = models.IntegerField(
-        validators=[MinValueValidator(0)]
+    shop_id = models.AutoField(primary_key=True)
+    shop_name = models.CharField(max_length=255, unique=True)
+    number_of_visits = models.IntegerField(
+        validators=[MinValueValidator(0)],
+        default=0
     )
-    activeCode = models.CharField(max_length=255)
-
-
-class Coffee(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    numberOrdered = models.IntegerField(
-        validators=[MinValueValidator(0)]
-    )
-    lastOrdered = models.DateTimeField(null=True, blank=True)
+    active_code = models.CharField(max_length=255)
 
 
 class Badge(models.Model):
-    badgeId = models.AutoField(primary_key=True)
-    coffeeUntilEarned = models.IntegerField(
-        validators=[MinValueValidator(0)]
+    badge_id = models.AutoField(primary_key=True)
+    coffee_until_earned = models.IntegerField(
+        validators=[MinValueValidator(0)],
+        unique=True
     )
+    badge_image = models.CharField(max_length=255, default='')  # store link instead of actual image
     """maybe information like desc or total owned? """
 
 
-class User(models.Model):
-    userId = models.AutoField(primary_key=True)
-    firstName = models.CharField(max_length=255)
-    lastName = models.CharField(max_length=255)
-    cupsSaved = models.IntegerField(
+class custom_user(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    cups_saved = models.IntegerField(
+        default=0,
         validators=[MinValueValidator(0)]
     )
-    mostRecentShopId = models.ForeignKey(
-        Shop,
-        null=True, 
-        blank=True, 
-        on_delete=models.SET_NULL
-    )
-    progression = models.IntegerField(
-        validators=[
-            MinValueValidator(0), 
-            MaxValueValidator(100)
-        ]
-    )
-    defaultBadgeId = models.ForeignKey(
-        Badge, 
-        null=True, 
-        blank=True, 
-        on_delete=models.SET_NULL
-    )
-    lastActiveDateTime = models.DateTimeField(null=True, blank=True)
+    most_recent_shop_id = models.ForeignKey(
+        Shop, null=True, blank=True, on_delete=models.SET_NULL)
+    default_badge_id = models.ForeignKey(
+        Badge, null=True, blank=True, on_delete=models.SET_NULL)
+    last_active_date_time = models.DateTimeField(null=True, blank=True)
 
 
-class UserShop(models.Model):
-    userId = models.ForeignKey(User, on_delete=models.CASCADE)
-    shopId = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    visitAmounts = models.IntegerField(
+class user_shop(models.Model):
+    user = models.ForeignKey(custom_user, on_delete=models.CASCADE)
+    shop_id = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    visit_amounts = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["userId", "shopId"], 
-                name="uniqueUserShop"
-            )
+                fields=["user", "shop_id"], name="unique_user_shop")
         ]
 
 
-class UserBadge(models.Model):
-    userId = models.ForeignKey(User, on_delete=models.CASCADE)
-    badgeId = models.ForeignKey(Badge, on_delete=models.CASCADE)
-    owned = models.BooleanField(default=False)
-    dateTimeObtained = models.DateTimeField(null=True, blank=True)
+class user_badge(models.Model):
+    user = models.ForeignKey(custom_user, on_delete=models.CASCADE)
+    badge_id = models.ForeignKey(Badge, on_delete=models.CASCADE)
+    date_time_obtained = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["userId", "badgeId"], 
-                name="uniqueUserBadge"
-            )
+                fields=["user", "badge_id"], name="unique_user_badge")
         ]
-
