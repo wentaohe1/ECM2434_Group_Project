@@ -16,7 +16,6 @@ def home(request):
     progress_percentage = (cups_saved_today / daily_goal) * 100 if daily_goal else 0
     progress_percentage = min(progress_percentage, 100)  # Ensure it doesn’t exceed 100%
 
-    print("Debugging:", cups_saved_today, progress_percentage)  # Should print in terminal
 
     top_10_users= custom_user.objects.all().order_by('-cups_saved')[:10] #top 10 users ordered in descending order
     top_5_shops=Shop.objects.all().order_by('-number_of_visits')[:5]

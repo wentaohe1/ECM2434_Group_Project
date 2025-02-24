@@ -12,4 +12,4 @@ def create_custom_user(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_custom_user(sender, instance, **kwargs):
-    instance.customuser.save()
+    instance.custom_user.save()
