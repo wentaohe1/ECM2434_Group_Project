@@ -7,7 +7,7 @@ class Shop(models.Model):
     shopId = models.AutoField(primary_key=True)
     shopName = models.CharField(max_length=255, unique=True)
     numberOfVisits = models.IntegerField(
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(0)],
     )
     activeCode = models.CharField(max_length=255)
 
