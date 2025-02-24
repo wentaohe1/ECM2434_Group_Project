@@ -21,6 +21,8 @@ class ShopForm(forms.ModelForm):
         return shop_name
 
 
+
+
 class BadgeForm(forms.ModelForm):
     class Meta:
         model=Badge
