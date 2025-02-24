@@ -11,5 +11,20 @@
             {% endif %}
          </ul>
       </div>
+<div class="stats-section">
+            <div class="user-menu">
+                {% if user.is_authenticated %}
+                <div class="date-time">
+                    <div class="stat-value">{{ user.username }}</div>
+                    <div class="stat-title">Last active: 2h ago</div>
+                </div>
+                {% endif %}
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Settings</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
+                </div>
+            </div>
+        </div>
    </header>
 <main>{%  block content %}{% endblock content %}</main>
