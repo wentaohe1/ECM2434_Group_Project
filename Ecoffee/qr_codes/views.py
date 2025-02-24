@@ -7,8 +7,8 @@ def receive_code(request):
     code = str(request.GET.get('code', 'No code provided'))
     try:
         # find part of the code which is relavent to the shop
-        shop_code = read_shop_code(code, 4)  # for now, first 4 letters, allows for expansion later.
-        shop = Shop.objects.get(active_code=int(shop_code))
+        shop_code=read_shop_code(code, 4)  # for now, first 4 letters, allows for expansion later.
+        shop=Shop.objects.get(active_code=int(shop_code))
         shop.number_of_visits += 1
         if request.user.is_authenticated:
             try:
