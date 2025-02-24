@@ -16,6 +16,12 @@
          </ul>
       </div>
 <div class="stats-section">
+            {% if user.is_authenticated %}
+            <div class="stat-item">
+                <div class="stat-title">Cups saved by you</div>
+                <div class="stat-value">{{ personal_cups_saved }}</div>
+            </div>
+            {% endif %}
             <div class="user-menu">
                 {% if user.is_authenticated %}
                 <div class="date-time">

@@ -265,8 +265,8 @@
             height: 36px;
             margin-right: .5rem;
             vertical-align: middle;
-            box-shadow: 0 .4rem .8rem #0005;
-            border-radius: .8rem;
+            box-shadow: 0 .2rem .5rem #0005;
+            border-radius: 30px;
 
         }
         table {
@@ -286,12 +286,12 @@
         }
         .table-leaderboard {
             width: 90vw;
-            height: 100%;
+            height: 90%;
             background-color: #fffb;
             backdrop-filter: blur(7px);
             padding-top: 10px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-top: 20px;
         }
         .table-body {
             width: 100%;
@@ -340,14 +340,16 @@
 </head>
 <body>
 
-
     <main class="main-content">
+        {% if user.is_authenticated %}
+        <h1>Welcome back {{ user.username }}!</h1>
+        {%endif%}
         <!-- process bar -->
         <div class="progress-section">
             <h3 class="metric-title">Progress</h3>
-            <h4 class="metric-procent">{{ cups_saved_today }} cups saved today</h4>
+            <h4 class="metric-procent">{{ total_cups_saved }} cups saved today</h4>
             <div class="progress-bar">
-                <div class="progress-fill" style="width: {{ progress_percentage|default:0 }}%;">
+                <div class="progress-fill" style="width: {{ total_cups_saved|default:0 }}%;">
             </div>
         </div>
         <!--Ecoffee shops leaderboard-->
@@ -380,12 +382,12 @@
                                     🥉
                                 {% endif %}
                             </td>
-                            <td>{{ custom_user.cupsSaved }} </td>
+                            <td>{{ custom_user.cups_saved }} </td>
                             <td>
                                 <div class="badge-container">
-                                    {% for badge in user.badges %}
-                                        <img src="{% static 'images/' %}{{ badge }}" alt="Badge">
-                                    {% endfor %}
+                                    <img src="{% static 'images/badge_lv1.png' %}"
+                                    alt="User Badge"
+                                    style="width: 30px; height: 30px;">
                                 </div>
                             </td>
                         </tr>
@@ -413,9 +415,21 @@
                         {% for shop in top_5_shops %}
                         <tr>
                             <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
-                            <td>{{ shop.shopName }}</td>  <!-- Coffee shop name -->
-                            <td>{{ shop.numberOfVisits }}</td>  <!-- cups saved -->
-                            <td>Unknown Location</td>  <!-- No location field in model, so placeholder -->
+                            <td><!-- Coffee shop name -->
+                                <img src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" 
+                                alt="{{ shop.shop_name }} Logo" 
+                                style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px;">
+                                <strong>{{ shop.shop_name }}</strong>
+                                {% if forloop.counter == 1 %}
+                                    🥇
+                                {% elif forloop.counter == 2 %}
+                                    🥈
+                                {% elif forloop.counter == 3 %}
+                                    🥉
+                                {% endif %}
+                            </td>  <!-- Coffee shop name -->
+                            <td>{{ shop.number_of_visits }}</td>  <!-- cups saved -->
+                            <td>University of Exeter</td>  <!-- No location field in model, so placeholder -->
                         </tr>
                         {% empty %}
                         <tr>

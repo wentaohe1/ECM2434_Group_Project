@@ -35,7 +35,7 @@ def read_shop_code(code, number_of_letters):
     return code[:number_of_letters]
 def check_badge_progress(relevant_user):
     for badge in Badge.objects.order_by("coffee_until_earned"):
-        if relevant_user.cupsSaved >= badge.coffeeUntilEarned:
+        if relevant_user.cups_saved >= badge.coffeeUntilEarned:
             relevant_user.defaultBadgeId = badge
             # this updates the user badges(actual implementaion in the dashbaord will be added next sprint)
             # search_result = UserBadge.objects.filter(user=relevant_user.user, badge_id=badge)

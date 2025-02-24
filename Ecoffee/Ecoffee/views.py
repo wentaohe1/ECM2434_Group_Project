@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from EcoffeeBase.models import *
 from django.utils.timezone import now
 from django.db.models import Sum  
+from django.templatetags.static import static
 
 def home(request):
     today = now().date()
@@ -11,12 +12,12 @@ def home(request):
     total_cups_saved=Shop.objects.all().aggregate(total=Sum('number_of_visits'))['total'] or 0
     # Set a daily goal
     daily_goal = 100  
-
+    request_user=custom_user.objects.get(user=request.user)
+    personal_cups_saved=request_user.cups_saved
     # Calculate progress percentage
     progress_percentage = (cups_saved_today / daily_goal) * 100 if daily_goal else 0
     progress_percentage = min(progress_percentage, 100)  # Ensure it doesn’t exceed 100%
-
-
+    # Function to determine user badge path
     top_10_users= custom_user.objects.all().order_by('-cups_saved')[:10] #top 10 users ordered in descending order
     top_5_shops=Shop.objects.all().order_by('-number_of_visits')[:5]
     return render(request, 'homepage.html', {
@@ -24,7 +25,9 @@ def home(request):
         'progress_percentage': round(progress_percentage, 2), # Rounding for UI
         'top_10_users':top_10_users,
         'top_5_shops':top_5_shops,
-        'total_cups_saved':total_cups_saved
+        'total_cups_saved':total_cups_saved,
+        'personal_cups_saved':personal_cups_saved,
+        'user_badge':user_badge,
     })
 
 
@@ -66,3 +69,4 @@ def get_next_badge(request_user):
             return badge
 def welcome(request):
     return render(request, 'welcome.html')
+# Ensure users without a badge get a default badge
