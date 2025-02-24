@@ -12,7 +12,7 @@ def index(request):
 @require_POST
 def log_visit(request):
     '''Updates DB fields for when a user visits a coffee shop'''
-    
+
     userId = request.POST.get("userId")
     shopId = request.POST.get("shopId")
     coffeeName = request.POST.get("coffeeName")
@@ -27,6 +27,7 @@ def log_visit(request):
         raise Http404("404: Shop does not exist")
     except Coffee.DoesNotExist:
         Coffee.objects.create(name = coffeeName, numberOrdered = 0)
+        coffee = Coffee.objects.get(name = coffeeName)
     
     # Updates object fields based on visit
     shop.numberOfVisits += 1

@@ -1,5 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.timezone import now
+from datetime import timedelta
+from django.utils.timezone import now
 from EcoffeeBase.models import Shop, User, UserShop, Badge, UserBadge, Coffee
 from EcoffeeBase.views import log_visit
 
@@ -37,12 +40,15 @@ class DataBaseTests(TestCase):
 
         self.assertEqual(this_user.cupsSaved, 1, 'User\'s cups saved count should increment on visit')
 
-        #todo: check that time of visit = almost now
+        self.assertAlmostEqual(this_user.lastActiveDateTime, now(), delta = timedelta(seconds = 1))
 
     def test_user_shop_registers_visit(self):
         '''Tests log_visit updates UserShop attributes to reflect a user's visit'''
 
-        this_userShop = UserShop.objects.get(userId = self.user.userId, shopId = self.shop.shopId)
+        try:
+            this_userShop = UserShop.objects.get(userId = self.user.userId, shopId = self.shop.shopId)
+        except UserShop.DoesNotExist:
+            print("UserShop instance should be created for the user - shop pair")
 
         self.assertEqual(this_userShop.userId.userId, self.user.userId, 'The UserShop instance should reference the correct parent User')
 
@@ -58,7 +64,11 @@ class DataBaseTests(TestCase):
 
         this_badge = Badge.objects.get(badgeId = self.badge_1.badgeId)
         this_user = User.objects.get(userId = self.user.userId)
-        user_badge = UserBadge.objects.get(badgeId = this_badge.badgeId, userId = self.user.userId)
+
+        try:
+            user_badge = UserBadge.objects.get(badgeId = this_badge.badgeId, userId = self.user.userId)
+        except UserBadge.DoesNotExist:
+            print("UserBadge instance should be created for the user - badge pair")
 
         # Tests user fields updated
         self.assertEqual(this_user.progression, 0, 'User progression should reset on earning a badge')
@@ -68,7 +78,9 @@ class DataBaseTests(TestCase):
         # Tests user_badge fields updated
         self.assertEqual(user_badge.owned, True, 'Badge ownership status should be True once earned')
 
-        #test that badge was earned 'now'
+        # Tests that badge was earned almost 'now'
+        self.assertAlmostEqual(user_badge.dateTimeObtained, now(), delta = timedelta(seconds = 1))
+
 
     def test_user_default_badge_updates_when_new_badge_won(self):
         '''Tests that the default badge ID changes when the user earns a new badge'''
@@ -82,10 +94,18 @@ class DataBaseTests(TestCase):
 
         self.assertEqual(this_user.defaultBadgeId.badgeId, badge_2.badgeId, 'The User\'s default badge should reference the earned badge with the highest coffee requirement')
 
+    def test_coffee_created_if_does_not_exist(self):
+        '''Tests that a new coffee object is created for the passed name if none exists'''
+
+        # Simulates a new query with non-existent coffee name
+        self.client.post(reverse('log_visit'), {'userId': self.user.userId, 'shopId': self.shop.shopId, 'coffeeName': 'latte'})
+
+        self.assertEqual(Coffee.objects.get(id = 2).name, 'latte', 'A new coffee should be created with name latte')
+        
         #ideas:
 
-        # test removability of data if implemnented
-        # tests  handling of large numbers of users
+        # test removability of data if implemented
+        # tests handling of large numbers of users
         # handling of user deletion
         # ensure no 2 users share usershop or userbadge as a result of the deletion
-        # coffee tests/ shop tests
+        # coffee tests / shop tests (1 user)
