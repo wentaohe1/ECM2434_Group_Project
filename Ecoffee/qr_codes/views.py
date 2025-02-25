@@ -7,13 +7,14 @@ def receive_code(request):
     code = str(request.GET.get('code', 'No code provided'))
     try:
         # find part of the code which is relavent to the shop
-        shop_code=read_shop_code(code, 4)  # for now, first 4 letters, allows for expansion later.
-        print(shop_code)
-        shop=Shop.objects.get(active_code=str(shop_code))
+        # for now, first 4 letters, allows for expansion later.
+        shop_code = read_shop_code(code, 4)
+        shop = Shop.objects.get(active_code=int(shop_code))
         shop.number_of_visits += 1
         if request.user.is_authenticated:
             try:
-                request_user = request.user  # Updates information relevant to the users order.
+                # Updates information relevant to the users order.
+                request_user = request.user
                 user = CustomUser.objects.get(user=request_user)
                 user.cups_saved += 1
                 check_badge_progress(user)
@@ -29,11 +30,16 @@ def receive_code(request):
             # user not logged in has to login/create account
             return redirect('login')
     except Shop.DoesNotExist:
-        return redirect('home') 
+        return redirect('home')
 
 
 def read_shop_code(code, number_of_letters):
     return code[:number_of_letters]
+
+
+"""Orders the badges, increments through them until it finds one that is larger than the number of cups you have saved."""
+
+
 def check_badge_progress(relevant_user):
     for badge in Badge.objects.order_by("coffee_until_earned"):
         if relevant_user.cups_saved >= badge.coffee_until_earned:

@@ -20,15 +20,14 @@ from . import views, settings
 from Ecoffee.views import dashboard_view
 
 urlpatterns = [
-    path('admin/', admin.site.urls), 
-    path("" , views.welcome , name="welcome"),
-
+    path('admin/', admin.site.urls),
+    path("", views.welcome, name="welcome"),
     path('home/', views.home, name='home'),
-    path('login_system/',include('django.contrib.auth.urls')), 
-    path('login_system/',include('login_system.urls')),
+    path('login_system/', include('django.contrib.auth.urls')),
+    path('login_system/', include('login_system.urls')),
     path('EcoffeeBase/', include('EcoffeeBase.urls')),
     path('dashboard/', dashboard_view, name='dashboard'),
-    path('code/',include('qr_codes.urls')),
-    path('welcome/',views.welcome,name = 'welcome'),
-    path('add_data/',include('add_to_database.urls')),
+    path('code/', include('qr_codes.urls')),
+    path('welcome/', views.welcome, name='welcome'),
+    path('add_data/', include('add_to_database.urls')),
 ]

@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from EcoffeeBase.models import CustomUser
 
+# creates a custom user whenever someone creates a django user through admin or register page.
+
 
 @receiver(post_save, sender=User)
 def create_CustomUser(sender, instance, created, **kwargs):

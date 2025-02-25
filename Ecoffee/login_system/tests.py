@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
+
 class LoginSystemTests(TestCase):
     def setUp(self):
         self.User = get_user_model()
@@ -31,6 +32,8 @@ class LoginSystemTests(TestCase):
             'password': 'testpass123'
         })
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.headers.get(
+            'Location'), '/home/')
 
     def test_login_failure(self):
         """Test failed login"""
@@ -39,9 +42,13 @@ class LoginSystemTests(TestCase):
             'password': 'wrongpassword'
         })
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.headers.get(
+            'Location'), '/login_system/login_user')
 
     def test_logout(self):
         """Test logout functionality"""
         self.client.login(username='testuser', password='testpass123')
         response = self.client.get(reverse('logout'))
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.headers.get(
+            'Location'), '/login_system/login_user')

@@ -46,7 +46,8 @@ class Badge(models.Model):
         validators=[MinValueValidator(0)],
         unique=True
     )
-    badge_image = models.CharField(max_length=255, default='')  # store link instead of actual image
+    # store link instead of actual image
+    badge_image = models.CharField(max_length=255, default='defaultbadge.png')
 
 
 class CustomUser(models.Model):
