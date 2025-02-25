@@ -45,6 +45,14 @@ python manage.py runserver
 ```
 
 7. **The application should now be running at http://127.0.0.1:8000/**
+
+
+8. To add data to the database, including your own badges and shops, follow the link
+ http://127.0.0.1:8000/add_data/add_new_data
+
+9. To register a visit to the shop, follow the link
+   127.0.0.1:8000/code/?code=(active_code you submitted above)
+
    
 ## Requirement
 - Python 3.10
