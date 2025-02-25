@@ -7,11 +7,10 @@ from django.utils.timezone import now
 from EcoffeeBase.models import Shop, CustomUser, UserShop, Badge, UserBadge
 from EcoffeeBase.views import log_visit
 
-class TestLogVisit(TestCase):
-    '''Tests for the log_visit() view'''
+class DataBaseTests(TestCase):
 
     def setUp(self):
-        '''Sets up a DB with mock objects and a simulated POST request'''
+        '''Sets up a DB with test objects and a simulated POST request'''
 
         self.shop = Shop.objects.create(shop_name = 'New Shop', active_code = '123', number_of_visits = 0)
         self.user = User.objects.create_user(username = '1', password = 'password_1', first_name = 'John', last_name = 'Smith')
