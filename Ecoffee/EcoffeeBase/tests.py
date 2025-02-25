@@ -7,10 +7,11 @@ from django.utils.timezone import now
 from EcoffeeBase.models import Shop, CustomUser, UserShop, Badge, UserBadge
 from EcoffeeBase.views import log_visit
 
-class DataBaseTests(TestCase):
+class TestLogVisit(TestCase):
+    '''Tests for the log_visit() view'''
 
     def setUp(self):
-        '''Sets up a DB with test objects and a simulated POST request'''
+        '''Sets up a DB with mock objects and a simulated POST request'''
 
         self.shop = Shop.objects.create(shop_name = 'New Shop', active_code = '123', number_of_visits = 0)
         self.user = User.objects.create_user(username = '1', password = 'password_1', first_name = 'John', last_name = 'Smith')
@@ -97,3 +98,34 @@ class DataBaseTests(TestCase):
         this_user = self.custom_user
 
         self.assertEqual(this_user.default_badge_id, badge_2, 'The User\'s default badge should reference the earned badge with the highest coffee requirement')
+
+class TestHomeView:
+    '''Tests for the home() view'''
+
+    def setUp(self):
+        '''Sets up a DB with mock objects and a simulated POST request'''
+
+        # Initialises badges and shop
+        self.badge_1 = Badge.objects.create(coffee_until_earned = 1)
+        self.badge_2 = Badge.objects.create(coffee_until_earned = 3)
+        self.shop = Shop.objects.create(shop_name = 'New Shop', active_code = '123', number_of_visits = 5)
+
+        # Creates mock users and CustomUsers
+        self.user_1 = User.objects.create_user(username = '1', password = 'password_1', first_name = 'John', last_name = 'Smith')
+        self.user_2 = User.objects.create_user(username = '2', password = 'password_2', first_name = 'John', last_name = 'Doe')
+        self.user_3 = User.objects.create_user(username = '3', password = 'password_3', first_name = 'Jane', last_name = 'Doe')
+
+        # Creates 2 CustomUsers with badge_1
+        for user in [self.user_1, self.user_2]:
+            if not CustomUser.objects.filter(user = user).exists():
+                CustomUser.objects.create(user = user, cups_saved = 1, most_recent_shop_id = self.shop.last_active_date_time = now().date())
+            else:
+                self.custom_user = CustomUser.objects.get(user = user)
+
+        # Creates 1 CustomUser with badge_2
+        if not CustomUser.objects.filter(user = self.user_3).exists():
+            self.custom_user = CustomUser.objects.create(user = self.user_3, cups_saved = 3)
+        else:
+            self.custom_user = CustomUser.objects.get(user = self.user_3, last_active_date_time = now().date(),)
+
+        
