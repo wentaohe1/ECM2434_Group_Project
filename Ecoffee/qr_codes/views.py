@@ -1,7 +1,10 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect,render
 from EcoffeeBase.models import *
 from datetime import datetime
-
+import hmac
+import time
+from django.http import JsonResponse
+SECRET_KEY = b'coffee-secret-key-2024'
 
 def receive_code(request):
     code = str(request.GET.get('code', 'No code provided'))
@@ -36,6 +39,29 @@ def receive_code(request):
 def read_shop_code(code, number_of_letters):
     return code[:number_of_letters]
 
+def generate_params():
+    timestamp = int(time.time() // 120) * 120
+    signature = hmac.new(SECRET_KEY, str(timestamp).encode(), 'sha256').hexdigest()
+    return {'t': timestamp, 'sig': signature}
+
+def summon_view(request):
+    return render(request, 'summon.html')
+
+def get_params(request):
+    return JsonResponse(generate_params())
+
+def code_redirect_view(request):
+    timestamp = request.GET.get('t', '')
+    sig = request.GET.get('sig', '')
+    
+    expected_sig = hmac.new(SECRET_KEY, str(timestamp).encode(), 'sha256').hexdigest()
+    if not hmac.compare_digest(sig, expected_sig):
+        return JsonResponse({'status': 'invalid signature'}, status=403)
+    
+    if int(time.time()) - int(timestamp) > 120:
+        return JsonResponse({'status': 'expired'}, status=410)
+    
+    return redirect('http://127.0.0.1:8000/code/?code=0001')
 
 """Orders the badges, increments through them until it finds one that is larger than the number of cups you have saved."""
 

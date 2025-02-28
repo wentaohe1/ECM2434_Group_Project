@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QRsummoner</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #qrcode {
+            display: block ;
+            min-height: 200px;
+            background: white;
+            margin-left: 40%;
+        }
+        #countdown {
+            color: #e74c3c;
+            font-size: 18px;
+            margin: 15px 0;
+        }
+        .error-message {
+            color: red;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ecoffee QRcode</h1>
+        <div id="qrcode"></div>
+        <div id="countdown">Avible time：120s</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let qrcodeInstance = null;
+            let countdownTimer = null;
+
+            function updateCountdown(seconds) {
+                document.getElementById('countdown').innerText = 
+                    `Avilble time：${seconds}s`;
+            }
+
+            function initQRCode(url) {
+                try {
+                    const qrcodeEl = document.getElementById("qrcode");
+                    if (!qrcodeEl) {
+                        throw new Error("Cannot find QRcode container");
+                    }
+                    
+                    if (qrcodeInstance) {
+                        qrcodeInstance.clear();
+                        qrcodeEl.innerHTML = ''; 
+                    }
+
+                    qrcodeInstance = new QRCode(qrcodeEl, {
+                        text: url,  
+                        width: 200,
+                        height: 200,
+                        correctLevel: 2  
+                    });
+
+                } catch (error) {
+                    console.error('QRcode fail to summon:', error);
+                    const errorHtml = `<p class="error-message">QRcode summon failed: ${error.message}</p>`;
+                    document.getElementById("qrcode").innerHTML = errorHtml;
+                }
+            }
+
+            async function refreshQR() {
+                try {
+                    const response = await fetch('/code/get-params/');
+                    if (!response.ok) throw new Error(`HTTP failed code: ${response.status}`);
+                    
+                    const data = await response.json();
+                    
+                    const url = new URL('/code/', window.location.origin);
+                    url.searchParams.set('t', data.t);
+                    url.searchParams.set('sig', data.sig);
+                    
+                    initQRCode(url.href);
+                    startCountdown();
+                    
+                } catch (error) {
+                    console.error('Quest failed:', error);
+                    document.getElementById("countdown").innerText = "Load failed, please wait for 5s and then retry";
+                    setTimeout(refreshQR, 5000);
+                }
+            }
+
+            function startCountdown() {
+                let seconds = 120;
+                updateCountdown(seconds);
+                
+                clearInterval(countdownTimer);
+                countdownTimer = setInterval(() => {
+                    seconds -= 1;
+                    updateCountdown(seconds);
+                    if (seconds <= 0) clearInterval(countdownTimer);
+                }, 1000);
+            }
+
+            refreshQR();
+            setInterval(refreshQR, 120000);
+        });
+    </script>
+</body>
+</html>
