@@ -73,20 +73,18 @@
             async function refreshQR() {
                 try {
                     const response = await fetch('/code/get-params/');
-                    if (!response.ok) throw new Error(`HTTP failed code: ${response.status}`);
-                    
                     const data = await response.json();
-                    
-                    const url = new URL('/code/', window.location.origin);
-                    url.searchParams.set('t', data.t);
-                    url.searchParams.set('sig', data.sig);
-                    
-                    initQRCode(url.href);
+        
+                    const qrUrl = new URL('/code/', window.location.origin);
+                    qrUrl.searchParams.set('code', '0001');  
+                    qrUrl.searchParams.set('t', data.t);
+                    qrUrl.searchParams.set('sig', data.sig);
+        
+                    initQRCode(qrUrl.href);
                     startCountdown();
-                    
                 } catch (error) {
-                    console.error('Quest failed:', error);
-                    document.getElementById("countdown").innerText = "Load failed, please wait for 5s and then retry";
+                    console.error('Quest Failed:', error);
+                    document.getElementById("countdown").innerText = "Load data failed, retry in 5 secondes.";
                     setTimeout(refreshQR, 5000);
                 }
             }
