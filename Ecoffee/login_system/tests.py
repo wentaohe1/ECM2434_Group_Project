@@ -52,3 +52,25 @@ class LoginSystemTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.headers.get(
             'Location'), '/login_system/login_user')
+
+    def test_register_view(self):
+        """Test register view"""
+        response = self.client.get(reverse('register'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'authenticate/register_user.html')
+
+    def test_register_success(self):
+        """Test successful registration"""
+        user_count = self.User.objects.count()
+        response = self.client.post(reverse('register'), {
+            'username': 'newuser',
+            'password1': 'securepwd123',
+            'password2': 'securepwd123'
+        })
+        # Check redirect
+        self.assertEqual(response.status_code, 302)
+        # Check user was created
+        self.assertEqual(self.User.objects.count(), user_count + 1)
+        # Verify the user data
+        new_user = self.User.objects.get(username='newuser')
+        self.assertTrue(new_user.check_password('securepwd123'))
