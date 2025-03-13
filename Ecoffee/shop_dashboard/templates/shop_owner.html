@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>{{ current_shop.shop_name }} - Owner page</title>
@@ -58,19 +58,19 @@
         <!-- Left:QRcode -->
         <div class="qr-section">
             <h2>Shop QRcode</h2>
-            <img src="data:image/png;base64,{{ qr_image }}" class="qr-code" alt="店铺二维码">
+            <img src="data:image/png;base64,{{ qr_image }}" class="qr-code" alt="shop-qrcode">
             <a href="{% url 'upload-logo' %}" class="upload-btn">Upload Logo</a>
         </div>
 
         <!-- Left:shop dashboard -->
         <div class="leaderboard">
-            <h2>咖啡销量排行榜</h2>
+            <h2>Coffee sells-count dashboard</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>排名</th>
-                        <th>店铺名称</th>
-                        <th>累计杯数</th>
+                        <th>Place</th>
+                        <th>Shop name</th>
+                        <th>Total cups</th>
                     </tr>
                 </thead>
                 <tbody>
