@@ -24,11 +24,9 @@ def shop_owner_dashboard(request):
     # 假设用户与店铺关联（需根据实际模型调整）
     shop = request.user.shop
 
-    # 生成带签名的二维码URL
     params = generate_params()
     qr_url = f"{settings.SITE_URL}/receive_code/?code={shop.active_code}&t={params['t']}&sig={params['sig']}"
 
-    # 生成二维码图片
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -42,7 +40,7 @@ def shop_owner_dashboard(request):
     img.save(buffer, format="PNG")
     qr_base64 = base64.b64encode(buffer.getvalue()).decode()
 
-    # 获取排行榜数据
+    # get dashoard information
     top_shops = Shop.objects.order_by('-number_of_visits')[:10]
 
     return render(request, 'shop_owner.html', {
