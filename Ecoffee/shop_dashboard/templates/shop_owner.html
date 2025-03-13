@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ current_shop.shop_name }} - Owner page</title>
+    <style>
+        .dashboard-container {
+            display: flex;
+            gap: 30px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .qr-section {
+            flex: 1;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .qr-code {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px 0;
+        }
+        .leaderboard {
+            flex: 2;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Left:QRcode -->
+        <div class="qr-section">
+            <h2>Shop QRcode</h2>
+            <img src="data:image/png;base64,{{ qr_image }}" class="qr-code" alt="店铺二维码">
+            <a href="{% url 'upload-logo' %}" class="upload-btn">Upload Logo</a>
+        </div>
+
+        <!-- Left:shop dashboard -->
+        <div class="leaderboard">
+            <h2>咖啡销量排行榜</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>店铺名称</th>
+                        <th>累计杯数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for shop in top_shops %}
+                    <tr {% if shop == current_shop %}style="background-color: #e3f2fd;"{% endif %}>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ shop.shop_name }}</td>
+                        <td>{{ shop.number_of_visits }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
