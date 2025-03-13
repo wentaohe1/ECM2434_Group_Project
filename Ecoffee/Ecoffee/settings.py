@@ -43,7 +43,11 @@ INSTALLED_APPS = [
     'login_system',
     'qr_codes',
     'add_to_database',
+    'shop_dashboard',
 ]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
