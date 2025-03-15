@@ -19,6 +19,7 @@ from django.urls import include, path
 from . import views, settings
 from Ecoffee.views import dashboard_view
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.welcome, name="welcome"),

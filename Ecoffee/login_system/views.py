@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
+from .forms import UserRegistrationForm;
 
 
 # Uses built in django login system and authentication.
@@ -30,19 +30,26 @@ def logout_user(request):
     return redirect('login')
 
 
-def register_user(request):
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            # checks inputted data to ensure there are no conflicts and that it is valid.
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            messages.success(request, ("Registration Successful"))
-            return redirect('home')
-    else:
-        form = UserCreationForm()
 
-    return render(request, 'authenticate/register_user.html', {'form': form, })
+def register_user(request):
+    if request.method=="POST":
+        form=UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user=form.save()
+            username=form.cleaned_data['username']
+            password=form.cleaned_data['password1']
+            user=authenticate(username=username, password=password)
+
+            if user:
+                login(request, user)
+                messages.success(request,"Registration Successful")
+                return redirect('home')
+            else:
+                messages.error(request,"Authentication failed. Please try again.")
+                return redirect('register')
+
+    else:
+        form = UserRegistrationForm()
+
+    return render(request,'authenticate/register_user.html',{'form': form})
+
