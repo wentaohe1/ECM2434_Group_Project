@@ -23,6 +23,7 @@ def login_user(request):
                 current_user.streak += 1
             elif streak_day_difference.days >= current_user.streak:
                 current_user.streak = time.date()
+            current_user.save()
             return redirect('home')  # Redirect to the home page after successful login
         else:
             messages.error(request, "There was an error logging in. Try again.") #Error if login failed.
