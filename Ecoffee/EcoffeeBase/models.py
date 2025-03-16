@@ -81,7 +81,7 @@ class CustomUser(models.Model):
         Badge, null=True, blank=True, on_delete=models.SET_NULL)
     last_active_date_time = models.DateTimeField(auto_now_add=True)
     streak = models.IntegerField(default=1)
-    streak_start_day = models.DateField(auto_now_add=True, default=now)
+    streak_start_day = models.DateField(default=now)
 
 
 class UserShop(models.Model):
