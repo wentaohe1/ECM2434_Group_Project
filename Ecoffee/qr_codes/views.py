@@ -20,6 +20,12 @@ def receive_code(request):
                 check_badge_progress(user)
                 user.most_recent_shop_id = shop
                 user.last_active_date_time = datetime.now()
+                streak_day_difference = now().date() - CustomUser.streak_start_day
+                if streak_day_difference == CustomUser.streak:
+                    CustomUser.streak += 1
+                elif streak_day_difference >= CustomUser.streak:
+                    CustomUser.streak = 1
+                    CustomUser.streak_start_day = now().date()
                 # need to run a trigger to check if the badge needs to be updated.
                 user.save()
                 shop.save()  # saves after everything is confirmed okay, changes will rollback (by default after a request has returned) if not

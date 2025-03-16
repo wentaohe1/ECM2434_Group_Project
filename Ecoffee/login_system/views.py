@@ -2,9 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserRegistrationForm;
+from EcoffeeBase.models import *
+from django.utils.timezone import now
 
 def login_user(request):
     if request.user.is_authenticated: #if the user is already authenticated, redirect them to the home page
+        CustomUser.last_active_date_time = now
+        streak_day_difference = now().date() - CustomUser.streak_start_day
+        if streak_day_difference == CustomUser.streak:
+            CustomUser.streak += 1
+        elif streak_day_difference >= CustomUser.streak:
+            CustomUser.streak = 1
+            CustomUser.streak_start_day = now().date()
         return redirect('home')
     
     if request.method=="POST":
