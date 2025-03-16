@@ -33,6 +33,8 @@ class Shop(models.Model):
         default=0
     )
     active_code = models.CharField(max_length=255)
+    def __str__(self):
+        return self.shop_name
 
 
 class Badge(models.Model):
@@ -50,6 +52,9 @@ class Badge(models.Model):
     )
     # store link instead of actual image
     badge_image = models.CharField(max_length=255, default='defaultbadge.png')
+    
+    def __str__(self):
+        return self.badge_id.coffee_until_earned
 
 
 class CustomUser(models.Model):
@@ -82,6 +87,9 @@ class CustomUser(models.Model):
     last_active_date_time = models.DateTimeField(default=now)
     streak = models.IntegerField(default=1)
     streak_start_day = models.DateField(default=now)
+
+    def __str__(self):
+        return self.user.username
 
 
 class UserShop(models.Model):
@@ -138,3 +146,9 @@ class UserBadge(models.Model):
             models.UniqueConstraint(
                 fields=["user", "badge_id"], name="unique_user_badge")
         ]
+
+class ShopUser(models.Model):
+    shop_id = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.shop_id.shop_name} Owner"

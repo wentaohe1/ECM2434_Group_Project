@@ -7,7 +7,7 @@ from EcoffeeBase.models import *
 class ShopForm(forms.ModelForm):
     class Meta:
         model = Shop
-        fields = ('shop_name', 'active_code')
+        fields = ('active_code',)
 
     # Checks that the active is a unique 4 digit number
     def clean_active_code(self):
@@ -18,15 +18,10 @@ class ShopForm(forms.ModelForm):
         if Shop.objects.filter(active_code=active_code).exists():
             raise forms.ValidationError(
                 'A shop is already using that active code')
+        
+        
         return active_code
 
-    # Checks that the name entered is unique
-    def clean_shop_name(self):
-        shop_name = self.cleaned_data.get('shop_name')
-        if Shop.objects.filter(shop_name=shop_name).exists():
-            raise forms.ValidationError(
-                'Shop name already exists, please choose a different one')
-        return shop_name
 
 
 # Describes the django form to that when submitted creates a new badge object in the database
