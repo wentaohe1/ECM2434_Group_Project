@@ -21,7 +21,7 @@ def receive_code(request):
                 user.most_recent_shop_id = shop
                 user.last_active_date_time = datetime.now()
                 time = now()
-                user.last_active_date_time = now
+                user.last_active_date_time = time
                 streak_day_difference = time.date() - user.streak_start_day
                 if streak_day_difference.days == user.streak:
                     user.streak += 1
