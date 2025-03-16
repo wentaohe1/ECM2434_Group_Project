@@ -11,6 +11,7 @@ Edited and improved by Project Team A
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Shop(models.Model):
@@ -77,7 +78,9 @@ class CustomUser(models.Model):
         Shop, null=True, blank=True, on_delete=models.SET_NULL)
     default_badge_id = models.ForeignKey(
         Badge, null=True, blank=True, on_delete=models.SET_NULL)
-    last_active_date_time = models.DateTimeField(null=True, blank=True)
+    last_active_date_time = models.DateTimeField(auto_now_add=True)
+    streak = models.IntegerField(default=1)
+    streak_start_day = models.DateField(auto_now_add=True)
 
 
 class UserShop(models.Model):
