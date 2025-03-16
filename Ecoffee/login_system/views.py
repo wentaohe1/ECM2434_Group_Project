@@ -3,25 +3,26 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserRegistrationForm;
 
-
-# Uses built in django login system and authentication.
 def login_user(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
+    if request.user.is_authenticated: #if the user is already authenticated, redirect them to the home page
+        return redirect('home')
+    
+    if request.method=="POST":
+        username=request.POST["username"]
+        password=request.POST["password"]
+        user=authenticate(request,username=username,password=password)
         if user is not None:
-            login(request, user)
-            return redirect('home')  # home once logged in
-
+            login(request,user)
+            return redirect('home')  # Redirect to the home page after successful login
         else:
-            # sends error message if one occurs on login to webpage
-            messages.success(
-                request, ("There was an error logging in, Try again"))
+            messages.error(request, "There was an error logging in. Try again.") #Error if login failed.
             return redirect('login')
 
-    else:
-        return render(request, 'authenticate/login.html', {})
+    response = render(request,'authenticate/login.html', {})
+    response['Cache-Control']='no-store' #Prevent caching of login page, prevents bugs.
+    response['Pragma']='no-cache'
+    response['Expires']='0'
+    return response
 
 
 def logout_user(request):
