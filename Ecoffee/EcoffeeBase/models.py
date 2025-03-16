@@ -12,6 +12,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.timezone import now
 
 
 class Shop(models.Model):
@@ -80,7 +81,7 @@ class CustomUser(models.Model):
         Badge, null=True, blank=True, on_delete=models.SET_NULL)
     last_active_date_time = models.DateTimeField(auto_now_add=True)
     streak = models.IntegerField(default=1)
-    streak_start_day = models.DateField(auto_now_add=True)
+    streak_start_day = models.DateField(auto_now_add=True, default=now)
 
 
 class UserShop(models.Model):
