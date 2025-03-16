@@ -7,13 +7,6 @@ from django.utils.timezone import now
 
 def login_user(request):
     if request.user.is_authenticated: #if the user is already authenticated, redirect them to the home page
-        CustomUser.last_active_date_time = now
-        streak_day_difference = now().date() - CustomUser.streak_start_day
-        if streak_day_difference == CustomUser.streak:
-            CustomUser.streak += 1
-        elif streak_day_difference >= CustomUser.streak:
-            CustomUser.streak = 1
-            CustomUser.streak_start_day = now().date()
         return redirect('home')
     
     if request.method=="POST":
@@ -22,6 +15,14 @@ def login_user(request):
         user=authenticate(request,username=username,password=password)
         if user is not None:
             login(request,user)
+            current_user = CustomUser.objects.get(user = request.user)
+            time = now()
+            current_user.last_active_date_time = now
+            streak_day_difference = time.date() - current_user.streak_start_day
+            if streak_day_difference.days == current_user.streak:
+                current_user.streak += 1
+            elif streak_day_difference.days >= current_user.streak:
+                current_user.streak = time.date()
             return redirect('home')  # Redirect to the home page after successful login
         else:
             messages.error(request, "There was an error logging in. Try again.") #Error if login failed.
