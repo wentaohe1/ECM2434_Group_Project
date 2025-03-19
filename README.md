@@ -1,7 +1,25 @@
-# ECM2434_Group_Project
+# Ecoffee - Sustainability Gamification Platform
+
+## Overview
+Ecoffee is a web application designed to promote sustainability by incentivizing the use of reusable coffee cups. The platform gamifies environmentally friendly behavior by tracking coffee shop visits, rewarding users with badges, and maintaining user streaks. Key features include:
+
+- QR code scanning for logging visits to partner coffee shops
+- Badge system to reward sustainable behavior
+- User dashboard to track progress and impact
+- Leaderboards to encourage community participation
+- GDPR compliant user data management
+
+The app aims to reduce single-use cup waste by creating a fun, engaging platform that motivates users to bring their own cups to participating coffee shops.
 
 ## Setup
-Basic instructions for setting up the app locally. 
+
+### Prerequisites
+- Python 3.10 or higher
+- Django 4.x
+- SQLite (included in Django)
+- pip (Python package manager)
+
+### Installation
 
 1. **Clone the repository**
 ```bash
@@ -20,9 +38,9 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-3. **Install dependencies (if needed)**
+3. **Install dependencies**
 ```bash
-pip install django psycopg2-binary
+pip install -r requirements.txt
 ```
 
 4. **Apply database migrations**
@@ -46,28 +64,41 @@ python manage.py runserver
 
 7. **The application should now be running at http://127.0.0.1:8000/**
 
+### Setting Up Test Data
 
-8. To add data to the database, including your own badges and shops, follow the link
- http://127.0.0.1:8000/add_data/add_new_data
+1. To add test data to the database, including badges and shops:
+   - Navigate to http://127.0.0.1:8000/add_data/add_new_data
 
-9. To register a visit to the shop, follow the link
-   127.0.0.1:8000/code/?code=(active_code you submitted above)
-
-   
-## Requirement
-- Python 3.10
-- PostgreSQL
-- pip (Python package manager)
+2. To simulate a shop visit using a QR code:
+   - Visit http://127.0.0.1:8000/code/?code=YOUR_ACTIVE_CODE
+   - Replace YOUR_ACTIVE_CODE with an active code you created for a shop
 
 ## Testing
-To test the basic functionalities (login, registration, basic gamification), you can use:
+The project includes tests for all core functionalities:
 
-~~~
-# test all
+```bash
+# Run all tests
 python manage.py test
 
-# test specific app
+# Test specific apps
 python manage.py test login_system
 python manage.py test EcoffeeBase
 python manage.py test qr_codes
-~~~
+
+# Test GDPR compliance features
+python manage.py test gdpr_tests
+```
+
+## Contributing
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgements
+- Developed by Project Team A as part of ECM2434
+- Thanks to all contributing developers
