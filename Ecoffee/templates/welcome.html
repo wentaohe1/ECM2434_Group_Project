@@ -6,6 +6,7 @@
    <head>
       <title>Welcome</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script src="{% static 'js/number-animation.js' %}" defer></script>
    </head>
    <body style="padding-top: 75px;">
       <div class="banner">
@@ -21,7 +22,8 @@
                   <div class="card-head">
                      <span>Together we have saved:</span>
                   </div>
-                  <h2>345632 </h2>
+                  <!--replace the data target with coffess sold-->
+                  <h2 class="counter" data-target="3400"> 0 </h2>
                   <small> Cups </small>
                </div>
                <div class="card-chart">
@@ -35,7 +37,7 @@
                   <div class="card-head">
                      <span>Together we are:</span>
                   </div>
-                  <h2>4254</h2>
+                  <h2 class="counter" data-target="500"> 0 </h2>
                   <small> Strong </small>
                </div>
                <div class="card-chart">
@@ -323,6 +325,7 @@
       padding: 1rem;
       box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
       border-radius: 2px;
+      border-radius: 10px;
       }
       .card-flex {
       display: grid;
