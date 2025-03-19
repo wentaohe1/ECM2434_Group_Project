@@ -26,8 +26,8 @@ def login_user(request):
             current_user.save()
             return redirect('home')  # Redirect to the home page after successful login
         else:
-            messages.error(request, "There was an error logging in. Try again.") #Error if login failed.
-            return redirect('login')
+            messages.error(request, "Invalid username or password. Please try again.") #Error if login failed.
+            return render(request,'authenticate/login.html', {})
 
     response = render(request,'authenticate/login.html', {})
     response['Cache-Control']='no-store' #Prevent caching of login page, prevents bugs.

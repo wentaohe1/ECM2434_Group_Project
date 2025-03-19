@@ -224,6 +224,9 @@
 
             <button type="submit" class="btn">Register</button>
         </form>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'login' %}" style="color: #3498db; text-decoration: none;">Already have an account? Login here</a>
+        </div>
     </div>
 
     <script>
@@ -249,11 +252,11 @@
                 if (password.length < 8) {
                     passwordError.textContent = "Your password must contain at least 8 characters.";
                 } else if (!isNaN(password)) {
-                    passwordError.textContent = "Your password can’t be entirely numeric.";
+                    passwordError.textContent = "Your password can't be entirely numeric.";
                 } else if (commonPasswords.includes(password.toLowerCase())) {
-                    passwordError.textContent = "Your password can’t be a commonly used password.";
+                    passwordError.textContent = "Your password can't be a commonly used password.";
                 } else if (password.toLowerCase().includes(username.toLowerCase())) {
-                    passwordError.textContent = "Your password can’t be too similar to your username.";
+                    passwordError.textContent = "Your password can't be too similar to your username.";
                 }
             }
 
