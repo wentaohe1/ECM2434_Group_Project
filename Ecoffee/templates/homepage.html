@@ -349,9 +349,15 @@
             <h3 class="metric-title">Progress</h3>
             <h4 class="metric-procent">{{ total_cups_saved }} cups saved today</h4>
             <div class="progress-bar">
-                <div class="progress-fill" style="width: {{ total_cups_saved|default:0 }}%;">
+                <div class="progress-fill" id="progress-fill-bar"></div>
             </div>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const progressFill = document.getElementById('progress-fill-bar');
+                progressFill.style.width = '{{ total_cups_saved|default:0 }}%';
+            });
+        </script>
         <!--Ecoffee shops leaderboard-->
         <section class="table-leaderboard">
             <section class="table-header">
@@ -385,9 +391,15 @@
                             <td>{{ custom_user.cups_saved }} </td>
                             <td>
                                 <div class="badge-container">
-                                    <img src="{% static 'images/' %}{{ custom_user.default_badge_id.badge_image}}"
+                                    {% if custom_user.default_badge_id and custom_user.default_badge_id.badge_image %}
+                                    <img src="{% static 'images/'|add:custom_user.default_badge_id.badge_image %}"
                                     alt="User Badge"
-                                    style="width: 30px; height: 30px;">
+                                    style="width: 30px; height: 30px; object-fit: contain;">
+                                    {% else %}
+                                    <img src="{% static 'images/defaultbadge.png' %}"
+                                    alt="Default Badge"
+                                    style="width: 30px; height: 30px; object-fit: contain;">
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>
@@ -416,9 +428,15 @@
                         <tr>
                             <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
                             <td><!-- Coffee shop name -->
-                                <img src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" 
+                                {% if shop.shop_name %}
+                                <img src="{% static 'images/logos/'|add:shop.shop_name|add:'.jpeg' %}" 
                                 alt="{{ shop.shop_name }} Logo" 
-                                style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px;">
+                                style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px; object-fit: cover;">
+                                {% else %}
+                                <img src="{% static 'images/logo.png' %}" 
+                                alt="Default Logo" 
+                                style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px; object-fit: cover;">
+                                {% endif %}
                                 <strong>{{ shop.shop_name }}</strong>
                                 {% if forloop.counter == 1 %}
                                     🥇
