@@ -328,6 +328,7 @@
                     <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
                     {% if user.is_authenticated %}
                     <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -340,7 +341,7 @@
                 <div class="user-menu">
                     <div class="date-time">
                         <div class="stat-value">{{ user.username }}</div>
-                        <div class="stat-title">Last active: 2h ago</div>
+                        <div class="stat-title">Last active: {{ user.customuser.last_active_date_time|timesince }} ago</div>
                     </div>
                     
                     <div class="dropdown-menu">
@@ -433,7 +434,7 @@
                         <h3>YOUR BADGE</h3>
                     </div>
                     <div class="badge-grid">
-                        <div class="badge-item"><img src="{% static badge_file %}"></div>
+                        <div class="badge-item"><img src="{% static badge_file %}" alt="Your Badge"></div>
                     </div>
                 </div>
             </div>

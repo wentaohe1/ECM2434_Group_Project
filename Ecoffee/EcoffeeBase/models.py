@@ -54,7 +54,7 @@ class Badge(models.Model):
     badge_image = models.CharField(max_length=255, default='defaultbadge.png')
     
     def __str__(self):
-        return self.badge_id.coffee_until_earned
+        return str(self.coffee_until_earned)
 
 
 class CustomUser(models.Model):
