@@ -7,69 +7,491 @@
       <title>Welcome</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <script src="{% static 'js/number-animation.js' %}" defer></script>
+      <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+      <style>
+         body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;;
+         }
+         .about-section {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            align-items: center;
+            background-color: #D2F9DA;
+            border-radius: 10px;
+            height: auto !important;
+            width: 90%; 
+            margin: 50px auto;
+            text-align: center;
+            font-family: 'Inter', sans-serif;  
+         }
+         .banner {
+            width: 90%;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 300px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+         }
+         .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 10px;
+         }
+         .banner.slides::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            width: 100%;
+            height: 20%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+         }
+         .banner-text {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            z-index: 2;
+            width: 90%;
+         }
+         @keyframes changeImage {
+            0%, 100% { background-image: url('../static/banner-images/plantation1.jpg'); }
+            33% { background-image: url('../static/banner-images/plantation2.jpg'); }
+            66% { background-image: url('../static/banner-images/plantation3.jpg'); }
+         }
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+         }
+         /* main processes */
+         .main-content {
+            margin-top: 80px;
+            padding: 10px 5%;
+            }
+         /* top  */
+         .top-nav {
+            width: 100%;
+            height: 80px;
+            background: #a6f3b5;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            z-index: 1000;
+         }
+         .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+         }
+         .logo {
+            font-size: 26px;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+         }
+   
+         .nav-list {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+         }
+         .nav-item a {
+            text-decoration: none;
+            color: #34495e;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 6px;
+         }
+         .nav-item a:hover {
+         color: #3498db;
+         background: rgba(52, 152, 219, 0.1);
+         }
+         .stats-section {
+         display: flex;
+         align-items: center;
+         gap: 40px;
+         }
+         .stat-item {
+         position: relative;
+         padding: 0 15px;
+         }
+         .stat-item:not(:last-child)::after {
+         content: "|";
+         color: #ddd;
+         position: absolute;
+         right: -20px;
+         }
+         .stat-title {
+         font-size: 13px;
+         color: #7f8c8d;
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+         }
+         .stat-value {
+         font-size: 15px;
+         font-weight: 600;
+         color: #2c3e50;
+         margin-top: 3px;
+         }
+         .user-menu {
+         position: relative;
+         cursor: pointer;
+         }
+         .dropdown-menu {
+         position: absolute;
+         right: 0;
+         top: 100%;
+         background: white;
+         border-radius: 8px;
+         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+         min-width: 160px;
+         margin-top: 10px;
+         opacity: 0;
+         visibility: hidden;
+         transition: all 0.3s ease;
+         z-index: 1001;
+         }
+         .dropdown-menu.show {
+         opacity: 1;
+         visibility: visible;
+         }
+         .dropdown-item {
+         padding: 12px 20px;
+         color: #2c3e50;
+         text-decoration: none;
+         display: block;
+         transition: background 0.2s;
+         }
+         .dropdown-item:hover {
+         background: #f8f9fa;
+         }
+         .dropdown-divider {
+         height: 1px;
+         background: #eee;
+         margin: 4px 0;
+         }
+         /* main processes */
+         .main-content {
+         margin-top: 50px;
+         padding: 30px 5%;
+         }
+         /* process bar */
+         .progress-section {
+         width: 100%;
+         margin: 50px 0;
+         }
+         .progress-bar {
+         width: 100%;
+         height: 20px;
+         background: #ecf0f1;
+         border-radius: 10px;
+         overflow: hidden;
+         }
+         .metric-procent {
+         width: 100%;
+         height: 35px;
+         }
+         .progress-fill {
+         width: 65%;
+         height: 100%;
+         background: linear-gradient(90deg, #3498db, #2ecc71);
+         transition: width 0.5s ease;
+         }
+         @media (max-width: 768px) {
+         .metrics-grid {
+         grid-template-columns: 1fr;
+         }
+         .stats-section {
+         gap: 20px;
+         flex-wrap: wrap;
+         }
+         .nav-list {
+         gap: 20px;
+         }
+         .brand-section {
+         gap: 20px;
+         }
+         }
+         /* cards CSS */
+         .cards {
+         display: grid;
+         grid-template-columns: repeat(3, 1fr);
+         grid-gap: 3em;
+         }
+         .card-single{
+         background-color: #fff;
+         padding: 1rem;
+         box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+         border-radius: 2px;
+         border-radius: 10px;
+         }
+         .card-flex {
+         display: grid;
+         grid-template-columns: 70% auto;
+         }
+         .card-head span{
+         font-size: 18px;
+         color: #2c3e50;
+         display: block;
+         font-weight: bold;
+         font-size: .9rem;
+         }
+         .card-head small {
+         font-weight: 600;
+         color: #555;
+         }
+         .card-info h2{
+         font-size: 2.2rem;
+         color: #333;
+         }
+         .card-chart span {
+         font-size: 5rem;
+         }
+         .card-chart img{
+         width: 100px;
+         height: auto;
+         }
+         .card-grid {
+         display: grid;
+         float: right;
+         width: 40%;
+         }
+         .progress-grid {
+         margin-top: 3rem;
+         display: grid;
+         grid-template-columns: auto 66%;
+         grid-gap: 2rem;
+         }
+         .analytics-card, .badge-card {
+         background: #fff;
+         padding: 1.5rem;
+         box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+         border-radius: 2px;
+         }
+         .analytics-head{
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         }
+         .analytics-head span{
+         font-size: 1.5rem;
+         }
+         .analytics-chart{
+         padding-top: 30px;
+         }
+         .badge-grid{
+         padding-top: 20px;
+         display: grid;
+         grid-template-columns: repeat(3,1fr);
+         }
+         .badge-item img{
+            width: 200px;
+            height: auto;
+         }
+         .about-container {
+            padding-top: 100px;
+            max-width: 60vw;
+            margin: 30px auto; 
+            color: #FF746C;
+         }
+         .micro-label {
+            background-color: #E9FCED; 
+            display: inline-block; 
+            padding: 10px;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            font-weight: bold;
+         }
+         .headline {
+            font-size: 4rem;
+            font-weight: 900; 
+            margin-bottom: .5rem;
+         }
+         .sub-text {
+            color: #FAA0A0;
+            font-weight: bold;
+            max-width: 70ch;
+            margin: 1rem auto;
+            margin-bottom: 30px;
+         }
+         .buttons {
+            gap: 15px;
+            display: inline-flex;
+         }
+         .button {
+            padding: 10px;
+
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+         }
+         .button.one {
+            background-color: #FF746C;
+            color: #FFFFFF;
+         }
+         .button.two {
+            background-color: transparent;
+            color: #FF746C;
+            border: 2px solid #FF746C;
+         }
+         .info-heading {
+            font-size:1.125rem;
+            color:#FF746C;
+            padding-top: 20px;
+            display: inline-block;
+         }
+         .banner.info {
+            font-weight: bold;
+            background-color: #E9FCED; 
+            margin:4rem auto;
+            padding:2rem;
+            border-radius:12px;
+            box-shadow:0 8px 24px rgba(0,0,0,0.08);
+            text-align:center;
+            display: inline-block;
+            margin-bottom: 40px;
+            margin-top: -5px;
+         }
+         .stat-number {
+            display: inline-block;
+            font-size: 100px;
+            margin-top: 20px;
+            color: #FF746C;
+         }
+         .banner-subtext {
+            font-size:1rem;
+            color:#FAA0A0;
+            margin-top:0.5rem;
+            display: inline-block
+         }
+         /* MOBILE */
+        @media (max-width: 640px) {
+         .about-section {
+            padding: 2rem 1rem;  /* only 32px top/bottom */
+            margin-top: 20px;
+         }
+
+        .about-container {
+            max-width: 100%;
+        }
+
+        .micro-label {
+            font-size: 0.75rem;
+            padding: 6px 12px;
+        }
+
+        .headline {
+            font-size: clamp(2rem, 8vw, 3rem);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .sub-text {
+            font-size: 1rem;
+            max-width: 90%;
+            margin: 0 auto 1.5rem;
+        }
+
+        .buttons {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+        }
+        .banner.info {
+            width: 90%;
+            max-width: 360px;
+            padding: 1.5rem;
+            margin: 2rem auto;
+         }
+
+         .info-heading {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+         }
+
+         .stat-number {
+            font-size: clamp(2rem, 8vw, 3rem);
+            margin-top: 0.5rem;
+         }
+
+         .banner-subtext {
+            font-size: 0.875rem;
+            max-width: 45ch;
+            margin-top: 0.5rem;
+         }
+        }
+      </style>
    </head>
    <body style="padding-top: 75px;">
-      <div class="banner">
+      <div class="banner slides">
          <img id="banner-image" src="../static/banner-images/plantation1.jpg" alt="Banner">
          <div class="banner-text">Welcome to Ecoffee</div>
       </div>
+      <section class="about-section">
+         <!-- Hero container -->
+            <div class="about-container pop">
+               <!-- Micro‑label -->
+               <span class="micro-label">
+                  Discover the all‑new Ecoffee
+                  <i class='bx bxs-coffee-bean'></i>
+               </span>
+
+               <!-- Headline -->
+               <h1 class="headline">
+                  A Sustainable Way to Stay <br> Caffeinated
+               </h1>
+
+               <!-- Sub‑text -->
+               <p class="sub-text">
+                  Ecoffee turns your daily brew into measurable climate action — track your coffee consumption, 
+                  cut waste with a reusable cup, and join a community competing to save the planet (and money) 
+                  one cup at a time.
+               </p>
+
+               <!-- Call‑to‑action buttons -->
+               <div class="buttons">
+                  <a href="{% url 'register' %}" class="button one">
+                     Join Us Now
+                  </a>
+                  <a href="https://donate.exeter.ac.uk/p/environment-and-sustainability-research/" class="button two">
+                     Donate
+                  </a>
+               </div>
+            </div>
+            <div class="banner info">
+               <span class="info-heading">Disposable coffee cups annually in the UK by the Numbers:</span><br>
+               <span class="counter stat-number" data-target=" 2500000000">0 </span><br>
+               <span class="banner-subtext">That's around 7 million cups per day - but only 1% of these get recycled.</span> 
+            </div>
+      </section>
    </body>
-   <div class="main-content">
-      <div class = "cards">
-         <div class="card-single">
-            <div class="card-flex">
-               <div class="card-info">
-                  <div class="card-head">
-                     <span>Together we have saved:</span>
-                  </div>
-                  <!--replace the data target with coffess sold-->
-                  <h2 class="counter" data-target="3400"> 0 </h2>
-                  <small> Cups </small>
-               </div>
-               <div class="card-chart">
-                  <span class="card-chart"><img src="../static/banner-images/cups.jpg"></span>
-               </div>
-            </div>
-         </div>
-         <div class="card-single">
-            <div class="card-flex">
-               <div class="card-info">
-                  <div class="card-head">
-                     <span>Together we are:</span>
-                  </div>
-                  <h2 class="counter" data-target="500"> 0 </h2>
-                  <small> Strong </small>
-               </div>
-               <div class="card-chart">
-                  <span class="card-chart"><img src="../static/banner-images/people.jpg"></span>
-               </div>
-            </div>
-         </div>
-         <div class="card-single">
-            <div class="card-flex">
-               <div class="card-info">
-                  <p> Eager to make a change? </p>
-                  <div class="card-head">
-                     <br>
-                     <span>Join our community, <a href="{%  url 'register' %}"> Register here. </a></span>
-                     <br>
-                     <span>Already a member? <a href = "{%  url 'login' %}">Login here </a></span>
-                  </div>
-               </div>
-
-            </div>
-         </div>
-      </div>
-   </div>
-
-   <section class="about-section">
-       <p style = 'text-align: center; margin: 25px; font-family: "Arial";font-size: larger'>
-         Ecoffee is an application that allows you to track your coffee consumption, and watch the difference you make to the world and our climate.
-         Our goal is to support the use of reusable solutions to modern day problems, starting with your morning coffee. We aim to help likeminded people
-         connect and compete to save our climate and secure a green future for the coffee industry. So get yourself a reusable coffee cup and start saving
-         our home, and maybe save some money along the way...
-      </p>
-   </section>
    <script>
       let images = [
           "../static/banner-images/plantation1.jpg",
@@ -87,321 +509,4 @@
 
       setInterval(changeImage, 8000);
    </script>
-         <style>
-      body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      }
-      .about-section {
-      display: flex;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-      align-items: center;
-      background: #a6f3b5;
-      border-radius: 10px;
-      width: 90%;
-      height: 300px;
-      margin-top: 0px;
-      margin: 50px auto;
-      text-align: center;
-      }
-      .banner {
-      width: 90%;
-      height: 300px;
-      position: relative;
-      overflow: hidden;
-      margin-top: 300px;
-      margin: 50px auto;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-      background-color: #000;
-      }
-      .banner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      border-radius: 10px;
-      }
-      .banner::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      z-index: 1;
-      width: 100%;
-      height: 20%;
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
-      }
-      .banner-text {
-      position: absolute;
-      bottom: 5%;
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      font-size: 1.5rem;
-      font-weight: bold;
-      text-align: center;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-      z-index: 2;
-      width: 90%;
-      }
-      @keyframes changeImage {
-      0%, 100% { background-image: url('../static/banner-images/plantation1.jpg'); }
-      33% { background-image: url('../static/banner-images/plantation2.jpg'); }
-      66% { background-image: url('../static/banner-images/plantation3.jpg'); }
-      }
-      * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      }
-      /* main processes */
-      .main-content {
-      margin-top: 80px;
-      padding: 10px 5%;
-      }
-      /* top  */
-      .top-nav {
-      width: 100%;
-      height: 80px;
-      background: #a6f3b5;
-      padding: 15px 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: fixed;
-      top: 0;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-      z-index: 1000;
-      }
-      .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      }
-      .logo {
-      font-size: 26px;
-      font-weight: 700;
-      color: #2c3e50;
-      letter-spacing: 1.5px;
-      display: flex;
-      align-items: center;
-      }
-
-      .nav-list {
-      display: flex;
-      gap: 35px;
-      list-style: none;
-      }
-      .nav-item a {
-      text-decoration: none;
-      color: #34495e;
-      font-size: 16px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      padding: 8px 12px;
-      border-radius: 6px;
-      }
-      .nav-item a:hover {
-      color: #3498db;
-      background: rgba(52, 152, 219, 0.1);
-      }
-      .stats-section {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      }
-      .stat-item {
-      position: relative;
-      padding: 0 15px;
-      }
-      .stat-item:not(:last-child)::after {
-      content: "|";
-      color: #ddd;
-      position: absolute;
-      right: -20px;
-      }
-      .stat-title {
-      font-size: 13px;
-      color: #7f8c8d;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      }
-      .stat-value {
-      font-size: 15px;
-      font-weight: 600;
-      color: #2c3e50;
-      margin-top: 3px;
-      }
-      .user-menu {
-      position: relative;
-      cursor: pointer;
-      }
-      .dropdown-menu {
-      position: absolute;
-      right: 0;
-      top: 100%;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      min-width: 160px;
-      margin-top: 10px;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      z-index: 1001;
-      }
-      .dropdown-menu.show {
-      opacity: 1;
-      visibility: visible;
-      }
-      .dropdown-item {
-      padding: 12px 20px;
-      color: #2c3e50;
-      text-decoration: none;
-      display: block;
-      transition: background 0.2s;
-      }
-      .dropdown-item:hover {
-      background: #f8f9fa;
-      }
-      .dropdown-divider {
-      height: 1px;
-      background: #eee;
-      margin: 4px 0;
-      }
-      /* main processes */
-      .main-content {
-      margin-top: 50px;
-      padding: 30px 5%;
-      }
-      /* process bar */
-      .progress-section {
-      width: 100%;
-      margin: 50px 0;
-      }
-      .progress-bar {
-      width: 100%;
-      height: 20px;
-      background: #ecf0f1;
-      border-radius: 10px;
-      overflow: hidden;
-      }
-      .metric-procent {
-      width: 100%;
-      height: 35px;
-      }
-      .progress-fill {
-      width: 65%;
-      height: 100%;
-      background: linear-gradient(90deg, #3498db, #2ecc71);
-      transition: width 0.5s ease;
-      }
-      @media (max-width: 768px) {
-      .metrics-grid {
-      grid-template-columns: 1fr;
-      }
-      .stats-section {
-      gap: 20px;
-      flex-wrap: wrap;
-      }
-      .nav-list {
-      gap: 20px;
-      }
-      .brand-section {
-      gap: 20px;
-      }
-      }
-      /* cards CSS */
-      .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-gap: 3em;
-      }
-      .card-single{
-      background-color: #fff;
-      padding: 1rem;
-      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 2px;
-      border-radius: 10px;
-      }
-      .card-flex {
-      display: grid;
-      grid-template-columns: 70% auto;
-      }
-      .card-head span{
-      font-size: 18px;
-      color: #2c3e50;
-      display: block;
-      font-weight: bold;
-      font-size: .9rem;
-      }
-      .card-head small {
-      font-weight: 600;
-      color: #555;
-      }
-      .card-info h2{
-      font-size: 2.2rem;
-      color: #333;
-      }
-      .card-chart span {
-      font-size: 5rem;
-      }
-      .card-chart img{
-      width: 100px;
-      height: auto;
-      }
-      .card-grid {
-      display: grid;
-      float: right;
-      width: 40%;
-      }
-      .progress-grid {
-      margin-top: 3rem;
-      display: grid;
-      grid-template-columns: auto 66%;
-      grid-gap: 2rem;
-      }
-      .analytics-card, .badge-card {
-      background: #fff;
-      padding: 1.5rem;
-      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 2px;
-      }
-      .analytics-head{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      }
-      .analytics-head span{
-      font-size: 1.5rem;
-      }
-      .analytics-chart{
-      padding-top: 30px;
-      }
-      .chart-circle{
-      height: 150px;
-      width: 150px;
-      border-left: 10px solid transparent;
-      border-top: 10px solid #5850ec;
-      border-right: 10px solid #5850ec;
-      border-bottom: 10px solid #5850ec;
-      display: grid;
-      place-items: center;
-      margin: auto;
-      border-radius: 50%;
-      margin-bottom: 3em;
-      }
-      .badge-grid{
-      padding-top: 20px;
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      }
-      .badge-item img{
-      width: 200px;
-      height: auto;
-      }
-   </style>
 </html>

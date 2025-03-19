@@ -22,3 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
       window.requestAnimationFrame(step);
     });
   });
+/**
+ * makes the about section to pop out
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const about = document.querySelector('.about-section');
+  const observer = new IntersectionObserver(([entry], obs) => {
+    if (entry.isIntersecting) {
+      about.classList.add('visible');
+      obs.disconnect();
+    }
+  }, { threshold: 0.25 });
+  observer.observe(about);
+});
+   
