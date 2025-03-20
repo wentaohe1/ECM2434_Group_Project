@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Upload shop Logo{% endblock %}
+{% block page_title %}Upload Logo - {{ current_shop.shopName }}{% endblock %}
+{% block content %}
+<div class="card upload-logo">
+    <h2>Upload shop Logo</h2>
+    {% if error %}
+    <div class="error-message">{{ error }}</div>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="logo" accept="image/png, image/jpeg" class="file-input">
+        <button type="submit" class="primary-btn">Comfirm upload</button>
+    </form>
+    <a href="{% url 'shop_owner' shop_id=current_shop.shopId %}" class="secondary-btn">Back</a>
+</div>
+{% endblock %}

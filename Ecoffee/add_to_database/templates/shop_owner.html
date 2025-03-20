@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ current_shop.shopName }} Management{% endblock %}
+{% block page_title %}{{ current_shop.shopName }} Dashboard{% endblock %}
+{% block content %}
+<!-- Shop Logo Display -->
+{% if current_shop.logo %}
+<div class="logo-preview">
+    <img src="{{ MEDIA_URL }}{{ current_shop.logo }}" alt="Shop Logo">
+</div>
+{% endif %}
+
+<!-- Enhanced QR Section -->
+<div class="card qr-section">
+    <h2>Shop QR Code</h2>
+    <img src="data:image/png;base64,{{ qr_image }}" class="qr-code">
+    <div class="action-buttons">
+        <a href="{% url 'add_shop' %}" class="primary-btn">Create New Shop</a>
+        <a href="{% url 'upload-logo' shop_id=current_shop.shopId %}" class="primary-btn">Upload Logo</a>
+    </div>
+</div>
+
+<!-- Statistics Panel -->
+<div class="card stats">
+    <h2>Shop Statistics</h2>
+    <div class="stat-item">
+        <span>Total Visits</span>
+        <strong>{{ current_shop.numberOfVisits }}</strong>
+    </div>
+    <div class="stat-item">
+        <span>Activation Code</span>
+        <code>{{ current_shop.activeCode }}</code>
+    </div>
+</div>
+{% endblock %}
