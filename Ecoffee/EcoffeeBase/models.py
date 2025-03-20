@@ -12,6 +12,8 @@ class Shop(models.Model):
         default=0
     )
     activeCode = models.CharField(max_length=255)
+    qr_code = models.TextField(blank=True)  
+    logo = models.CharField(max_length=255, blank=True) 
 
 
 class Coffee(models.Model):
