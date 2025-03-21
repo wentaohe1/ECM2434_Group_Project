@@ -110,6 +110,8 @@ class UserShop(models.Model):
     visit_amounts = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
+    def __str__(self):
+        return self.shop_id.shop_name+' ('+self.user.user.username+') visits'
 
     class Meta:
         """
@@ -138,6 +140,9 @@ class UserBadge(models.Model):
     badge_id = models.ForeignKey(Badge, on_delete=models.CASCADE)
     date_time_obtained = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self):
+        return str(self.badge_id.coffee_until_earned)+' ('+self.user.user.username+') badge'
+
     class Meta:
         """
         This is for combining user and badge_id to form a composite key.
@@ -152,3 +157,4 @@ class ShopUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.shop_id.shop_name} Owner"
+    

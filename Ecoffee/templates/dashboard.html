@@ -378,11 +378,11 @@
                     <div class="card-flex">
                         <div class="card-info">
                             <div class="card-head">
-                                <span>{{ most_popular_shop.shop_name }}</span>
+                                <span>{{ most_visited_shop.shop_id.shop_name }}</span>
                                 <small>Number of all time visits</small>
                             </div>
 
-                            <h2>{{ most_popular_shop.number_of_visits }}</h2>
+                            <h2>{{ most_visited_shop.visit_amounts }}</h2>
 
                             <small></small>
                         </div>
@@ -431,11 +431,14 @@
                 <!--badges-->
                 <div class="badge-card">
                     <div class="analytics-head">
-                        <h3>YOUR BADGE</h3>
+                        <h3>YOUR BADGES</h3>
                     </div>
                     <div class="badge-grid">
-                        <div class="badge-item"><img src="{% static 'images/'|add:badge_file %}" alt="Your Badge" style="width: 200px; height: 200px; object-fit: contain;"></div>
+                        {% for badge in top_three_badges %}
+                            <div class="badge-item"><img src="{% static 'images/'|add:badge.badge_id.badge_image %}" alt="Your Badge" style="width: 200px; height: 200px; object-fit: contain;"></div>
+                        {% endfor %}
                     </div>
+
                 </div>
             </div>
         </main>

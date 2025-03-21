@@ -52,6 +52,9 @@ def dashboard_view(request):
     if request.user.is_authenticated:  # only accessible if logged in
         request_user = CustomUser.objects.get(user=request.user)
         coffees_saved = request_user.cups_saved
+        most_visited_shop=UserShop.objects.filter(user=request_user).order_by('-visit_amounts').first()
+        top_three_earned_badges=reversed(UserBadge.objects.filter(user=request_user).all().order_by('-badge_id__coffee_until_earned')[:3])
+
         if request_user.default_badge_id != None:  # retreive the image and next badge from the database
             user_badge = str(request_user.default_badge_id.badge_image)
             next_badge = get_next_badge(request_user)
@@ -78,7 +81,9 @@ def dashboard_view(request):
         "badge_file": user_badge,
         "most_popular_shop": Shop.objects.order_by('-number_of_visits').first(),
         "progress": progress,
-        "coffees_to_next_badge": coffees_to_next_badge
+        "coffees_to_next_badge": coffees_to_next_badge,
+        "most_visited_shop":most_visited_shop,
+        "top_three_badges":top_three_earned_badges,
     })
 
 # orders badges and then returns the first badge that has a higher requirement than the cups the user has saved
