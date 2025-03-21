@@ -27,7 +27,7 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.16.23.84', 'localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -145,3 +145,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER ='ecoffeepta@gmail.com'
 EMAIL_HOST_PASSWORD = 'ask luke as confidential'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Same as EMAIL_HOST_USER
+
+#media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

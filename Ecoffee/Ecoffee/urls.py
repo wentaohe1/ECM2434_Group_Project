@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from . import views, settings
-from Ecoffee.views import dashboard_view
+from Ecoffee.views import dashboard_view, settings_view
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -31,4 +32,7 @@ urlpatterns = [
     path('code/', include('qr_codes.urls')),
     path('welcome/', views.welcome, name='welcome'),
     path('add_data/', include('add_to_database.urls')),
-]
+    path('dashboard/settings/', settings_view, name='settings'),
+    path('home/settings/', settings_view, name='settings'),
+    path('welcome/settings/', settings_view, name='settings'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

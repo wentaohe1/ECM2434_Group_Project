@@ -1,4 +1,5 @@
 {% load static %}
+<link href="{% static 'css/navbar.css' %}" rel="stylesheet">
 <header class="top-nav">
       <div class="brand-section">
          <div class="logo">
@@ -15,7 +16,7 @@
             {% endif %}
          </ul>
       </div>
-<div class="stats-section">
+    <div class="stats-section">
             {% if user.is_authenticated %}
             <div class="stat-item">
                 <div class="stat-title">Cups saved by you</div>
@@ -28,15 +29,22 @@
                     <div class="stat-value">{{ user.username }}</div>
                     <div class="stat-title">Last active: 2h ago</div>
                 </div>
-                {% endif %}
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Settings</a>
+                    <a href="{% url 'settings' %}" class="dropdown-item">Settings</a>
                     <div class="dropdown-divider"></div>
                     <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
                 </div>
+                {% endif %}
             </div>
-        </div>
-   </header>
+    </div>
+    <div class="profile-pic">
+        <img 
+        src="{{ user.customuser.profile_image.url }}" 
+        alt="Profile" 
+        style="width:42px;height:42px;border-radius:50%; ">
+    </div>
+    
+</header>
 <main>{%  block content %}{% endblock content %}</main>
 
 

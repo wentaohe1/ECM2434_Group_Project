@@ -1,5 +1,5 @@
 {% include 'header.html' %}
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,7 +12,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/line-awesome/dist/line-awesome/css/line-awesome.min.css">
+        <script src="{% static 'css/navbar.css' %}" defer></script>
+        <script src="{% static 'js/number-animation.js' %}" defer></script>
+        <script src="{% static 'js/drop-down.js' %}" defer></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/line-awesome/dist/line-awesome/css/line-awesome.min.css">>
         <style>
             * {
                 margin: 0;
@@ -25,183 +28,6 @@
                 margin-top: 100px;
                 padding: 30px 5%;
             }
-            /* top  */
-            .top-nav {
-                width: 100%;
-                height: 80px;
-                background: #a6f3b5;
-                padding: 15px 5%;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                position: fixed;
-                top: 0;
-                box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-                z-index: 1000;
-            }
-
-            .brand-section {
-                display: flex;
-                align-items: center;
-                gap: 40px;
-            }
-
-            .logo {
-                font-size: 26px;
-                font-weight: 700;
-                color: #2c3e50;
-                letter-spacing: 1.5px;
-                display: flex;
-                align-items: center;
-            }
-
-
-
-            .nav-list {
-                display: flex;
-                gap: 35px;
-                list-style: none;
-            }
-
-            .nav-item a {
-                text-decoration: none;
-                color: #34495e;
-                font-size: 16px;
-                font-weight: 500;
-                transition: all 0.3s ease;
-                padding: 8px 12px;
-                border-radius: 6px;
-            }
-
-            .nav-item a:hover {
-                color: #3498db;
-                background: rgba(52, 152, 219, 0.1);
-            }
-
-            .stats-section {
-                display: flex;
-                align-items: center;
-                gap: 40px;
-            }
-
-            .stat-item {
-                position: relative;
-                padding: 0 15px;
-            }
-
-            .stat-item:not(:last-child)::after {
-                content: "|";
-                color: #ddd;
-                position: absolute;
-                right: -20px;
-            }
-
-            .stat-title {
-                font-size: 13px;
-                color: #7f8c8d;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-
-            .stat-value {
-                font-size: 15px;
-                font-weight: 600;
-                color: #2c3e50;
-                margin-top: 3px;
-            }
-
-            .user-menu {
-                position: relative;
-                cursor: pointer;
-            }
-
-            .dropdown-menu {
-                position: absolute;
-                right: 0;
-                top: 100%;
-                background: white;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                min-width: 160px;
-                margin-top: 10px;
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.3s ease;
-                z-index: 1001;
-            }
-
-            .dropdown-menu.show {
-                opacity: 1;
-                visibility: visible;
-            }
-
-            .dropdown-item {
-                padding: 12px 20px;
-                color: #2c3e50;
-                text-decoration: none;
-                display: block;
-                transition: background 0.2s;
-            }
-
-            .dropdown-item:hover {
-                background: #f8f9fa;
-            }
-
-            .dropdown-divider {
-                height: 1px;
-                background: #eee;
-                margin: 4px 0;
-            }
-            @media (max-width: 768px) {
-                .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-                .stats-section {
-                    gap: 20px;
-                    flex-wrap: wrap;
-                }
-                .nav-list {
-                    gap: 20px;
-                }
-                .brand-section {
-                    gap: 20px;
-                    }
-            }
-            /* main processes */
-            .main-content {
-                margin-top: 100px;
-                padding: 30px 5%;
-            }
-
-            /* process bar */
-            .progress-section {
-                width: 100%;
-                margin: 50px 0;
-            }
-
-            .progress-bar {
-                width: 100%;
-                height: 20px;
-                background: #ecf0f1;
-                border-radius: 10px;
-                overflow: hidden;
-            }
-
-            .metric-procent {
-                width: 100%;
-                height: 35px;
-                
-            }
-
-            .progress-fill {
-                width: 65%;
-                height: 100%;
-                background: linear-gradient(90deg, #3498db, #2ecc71);
-                transition: width 0.5s ease;
-            }
-
-            
-
             /* cards CSS */
             .cards {
                 display: grid;
@@ -241,7 +67,9 @@
             .card-chart img {
                 width: 120px;
                 height: auto;
-                padding-right: 10px;
+                padding-right: 40px;
+                padding-top: 10px;
+                display: inline-block;
             }
             .card-chart {
                 display: flex;
@@ -305,8 +133,9 @@
                 color: #2c3e50;
             }
             .heading {
-                font-size: 48px;
+                font-size: 36px;
                 text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+                white-space: nowrap;
             }
             .card-head,
             .analytics-head {
@@ -323,7 +152,11 @@
             .visits h2 {
                 font-size: 72px;
             }
-            /* ========== Mobile Styles ========== */
+            .dashboard-grid {
+                position: absolute;
+                min-width: 90vw;
+            }
+            /*mobile*/
             @media (max-width: 768px) {
                 /* Let the nav wrap and expand height */
                 .top-nav {
@@ -374,7 +207,7 @@
 
                 /* Possibly reduce heading size for small screens */
                 .heading {
-                    font-size: 36px; /* optional smaller heading on mobile */
+                    font-size: 36px; 
                 }
             }
     </style>
@@ -382,92 +215,94 @@
 <body>
     <!--main content-->
     <main class="main-content">
-        <div class="cards">
-            <div class="card-single">
-                <div class="card-flex">
-                    <div class="card-info">
-                        <div class="card-head">
-                            <span class="heading">Purchases</span>
-                            <small>In January you have saved</small>
+        <div class="dashboard-grid">
+            <div class="cards">
+                <div class="card-single">
+                    <div class="card-flex">
+                        <div class="card-info">
+                            <div class="card-head">
+                                <span class="heading">Purchases</span>
+                                <small>In January you have saved</small>
+                            </div>
+                            <div class="visits">
+                                <h2 class="counter stat-number" data-target="{{ coffees_saved }} ">{{ coffees_saved }} cups</h2>
+                                <small>2% more than average</small>
+                            </div>
                         </div>
-                        <div class="cups">
-                            <h2>{{ coffees_saved }} cups</h2>
-                            <small>2% more cups saved</small>
+                        <div class="card-chart" style="color: #FF746C;">
                         </div>
                     </div>
-                    <div class="card-chart" style="color: #FF746C;">
+                </div>
+                <div class="card-single">
+                    <div class="card-flex">
+                        <div class="card-info">
+                            <div class="card-head">
+                                <span class="heading">{{ most_popular_shop.shop_name }}</span>
+                                <small>Number of all time visits</small>
+                            </div>
+                            <div class="visits">
+                                <h2 class="counter stat-number" data-target="{{ most_popular_shop.number_of_visits }} ">{{ most_popular_shop.number_of_visits }}</h2>
+                            </div>
+                            <small></small>
+                        </div>
+                        <div class="card-chart">
+                            <span class="card-chart">
+                                <img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name }}.jpeg">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-single">
+                    <div class="card-flex">
+                        <div class="card-info">
+                            <div class="card-head">
+                                <span class="heading">Money Saved</span>
+                                <small>By drinking sustainably you have saved</small>
+                            </div>
+                            <div class="cups">
+                                <h2>£{{ money_saved }}0</h2>
+                                <small>2% more than average</small>
+                            </div>
+                        </div>
+                        <div class="card-chart">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="card-single">
-                <div class="card-flex">
-                    <div class="card-info">
-                        <div class="card-head">
-                            <span class="heading">{{ most_popular_shop.shop_name }}</span>
-                            <small>Number of all time visits</small>
-                        </div>
-                        <div class="visits">
-                            <h2>{{ most_popular_shop.number_of_visits }}</h2>
-                        </div>
-                        <small></small>
+            <div class="progress-grid">
+                <!--progress-->
+                <div class="analytics-card">
+                    <div class="analytics head">
+                        <h3 class="heading">PROGRESS</h3>
+                        {% if coffees_to_next_badge == 1000000000 %}
+                            <small>You've gained all the badges, Great Job!</small>
+                        {% else %}
+                            <small>{{ coffees_to_next_badge }} more coffess until the next badge!</small>
+                        {% endif %}
+                        <br>
+                        <span class="las la-ellipse-h"></span>
                     </div>
-                    <div class="card-chart">
-                        <span class="card-chart">
-                            <img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name }}.jpeg">
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="card-single">
-                <div class="card-flex">
-                    <div class="card-info">
-                        <div class="card-head">
-                            <span class="heading">Money Saved</span>
-                            <small>By drinking sustainably you have saved</small>
-                        </div>
-                        <div class="cups">
-                            <h2>£{{ money_saved }}0</h2>
-                            <small>2% more than average</small>
+                    <div class="analytics-chart">
+                        <div class="chart-circle">
+                            <h1>{{ progress }}%</h1>
                         </div>
                     </div>
-                    <div class="card-chart">
-                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="progress-grid">
-            <!--progress-->
-            <div class="analytics-card">
-                <div class="analytics head">
-                    <h3 class="heading">PROGRESS</h3>
-                    {% if coffees_to_next_badge == 1000000000 %}
-                        <small>You've gained all the badges, Great Job!</small>
-                    {% else %}
-                        <small>{{ coffees_to_next_badge }} more coffess until the next badge!</small>
-                    {% endif %}
-                    <br>
-                    <span class="las la-ellipse-h"></span>
-                </div>
-                <div class="analytics-chart">
-                    <div class="chart-circle">
-                        <h1>{{ progress }}%</h1>
+                <!--badges-->
+                <div class="badge-card">
+                    <div class="analytics-head">
+                        <h3 class="heading">YOUR BADGES</h3>
                     </div>
-                </div>
-            </div>
-            <!--badges-->
-            <div class="badge-card">
-                <div class="analytics-head">
-                    <h3 class="heading">YOUR BADGES</h3>
-                </div>
-                <div class="badge-grid">
-                    <div class="badge-item">
-                        <img src="{% static 'images/badge_Lv1.png' %}"  alt="Your Badge">
-                    </div>
-                    <div class="badge-item">
-                        <img src="{% static 'images/badge_Lv2.png' %}"  alt="Your Badge">
-                    </div>
-                    <div class="badge-item">
-                        <img src="{% static 'images/badge_Lv3.png' %}"  alt="Your Badge">
+                    <div class="badge-grid">
+                        <div class="badge-item">
+                            <img src="{% static 'images/badge_Lv1.png' %}"  alt="Your Badge">
+                        </div>
+                        <div class="badge-item">
+                            <img src="{% static 'images/badge_Lv2.png' %}"  alt="Your Badge">
+                        </div>
+                        <div class="badge-item">
+                            <img src="{% static 'images/badge_Lv3.png' %}"  alt="Your Badge">
+                        </div>
                     </div>
                 </div>
             </div>

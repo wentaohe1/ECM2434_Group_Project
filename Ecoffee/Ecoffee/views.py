@@ -3,6 +3,7 @@ from EcoffeeBase.models import *
 from django.utils.timezone import now
 from django.db.models import Sum
 from django.templatetags.static import static
+from EcoffeeBase.forms import ProfileImageForm
 
 
 def home(request):
@@ -99,3 +100,15 @@ def get_next_badge(request_user):
 def welcome(request):
     return render(request, 'welcome.html')
 # (sprint2) Ensure users without a badge get a default badge
+#settings view
+def settings_view(request):
+    user = request.user.customuser
+    if request.method == 'POST':
+        form = ProfileImageForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('settings')
+    else:
+        form = ProfileImageForm(instance=user)
+
+    return render(request, 'settings.html', {'form': form})

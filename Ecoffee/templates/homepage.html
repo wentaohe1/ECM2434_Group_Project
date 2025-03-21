@@ -5,26 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="Main page" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'js/drop-down.js' %}" defer></script>
     <title>Ecoffee Mainpage</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const userMenu = document.querySelector('.user-menu');
-            const dropdown = document.querySelector('.dropdown-menu');
-
-            userMenu.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdown.classList.toggle('show');
-            });
-
-            document.addEventListener('click', function() {
-                dropdown.classList.remove('show');
-            });
-
-            dropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        });
-    </script>
     <style>
         * {
             margin: 0;
@@ -32,134 +14,6 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-
-        /* top  */
-        .top-nav {
-            width: 100%;
-            height: 80px;
-            background: #a6f3b5;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-
-        .brand-section {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .logo {
-            font-size: 26px;
-            font-weight: 700;
-            color: #2c3e50;
-            letter-spacing: 1.5px;
-            display: flex;
-            align-items: center;
-        }
-
-
-        .nav-list {
-            display: flex;
-            gap: 35px;
-            list-style: none;
-        }
-
-        .nav-item a {
-            text-decoration: none;
-            color: #34495e;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 8px 12px;
-            border-radius: 6px;
-        }
-
-        .nav-item a:hover {
-            color: #3498db;
-            background: rgba(52, 152, 219, 0.1);
-        }
-
-        .stats-section {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .stat-item {
-            position: relative;
-            padding: 0 15px;
-        }
-
-        .stat-item:not(:last-child)::after {
-            content: "|";
-            color: #ddd;
-            position: absolute;
-            right: -20px;
-        }
-
-        .stat-title {
-            font-size: 13px;
-            color: #7f8c8d;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-value {
-            font-size: 15px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-top: 3px;
-        }
-
-        .user-menu {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            top: 100%;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 160px;
-            margin-top: 10px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 1001;
-        }
-
-        .dropdown-menu.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .dropdown-item {
-            padding: 12px 20px;
-            color: #2c3e50;
-            text-decoration: none;
-            display: block;
-            transition: background 0.2s;
-        }
-
-        .dropdown-item:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #eee;
-            margin: 4px 0;
-        }
-
         /* main processes */
         .main-content {
             margin-top: 100px;
@@ -341,7 +195,7 @@
     </style>
 </head>
 <body>
-
+    
     <main class="main-content">
         {% if user.is_authenticated %}
         <h1>Welcome back {{ user.username }}!</h1>
