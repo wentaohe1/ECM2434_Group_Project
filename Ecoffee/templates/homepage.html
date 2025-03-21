@@ -13,11 +13,13 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Arial, sans-serif;
+            
         }
         /* main processes */
         .main-content {
-            margin-top: 100px;
+            margin-top: 80px;
             padding: 30px 5%;
+            background-color: #E9FCED; 
         }
 
         /* process bar */
@@ -28,9 +30,9 @@
 
         .progress-bar {
             width: 100%;
-            height: 20px;
+            height: 16px;
             background: #ecf0f1;
-            border-radius: 10px;
+            border-radius: 20px;
             overflow: hidden;
         }
 
@@ -130,18 +132,18 @@
             padding: 1rem;
             border-collapse: collapse;
             text-align: left;
+            
         }
         .table-header {
             width: 100%;
             max-height: 89%;
-            background-color: #fffb;
+            
             padding-left: 5px;
             
         }
         .table-leaderboard {
             width: 90vw;
-            height: 90%;
-            background-color: #fffb;
+            height: auto;
             backdrop-filter: blur(7px);
             padding-top: 10px;
             border-radius: 10px;
@@ -154,6 +156,7 @@
             margin: .8rem auto;
             border-radius: .6rem;
             overflow: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .table-body::-webkit-scrollbar{
             width: 0.5rem;
@@ -191,7 +194,9 @@
             object-fit: contain;
         }
         
-
+        body {
+            background: linear-gradient(to bottom, #F4FEF6, #E9FCED);
+        }
     </style>
 </head>
 <body>
@@ -209,109 +214,96 @@
             </div>
         </div>
         <!--Ecoffee shops leaderboard-->
-        <section class="table-leaderboard">
-            <section class="table-header">
-                <h1>Most Sustainable Coffee Drinkers </h1>
+        <div class="leaderboard-container">
+            <section class="table-leaderboard">
+                <section class="table-header">
+                    <h1>Most Sustainable Coffee Drinkers </h1>
+                </section>
+                <section class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>User</th>
+                                <th>Cups Saved</th>
+                                <th>Badges</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for custom_user in top_10_users %}  <!-- Loop 10 times -->
+                            <tr>
+                                <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
+                                <td>
+                                    {{ custom_user.user.username }} 
+        
+                                    {% if forloop.counter == 1 %}
+                                        🥇
+                                    {% elif forloop.counter == 2 %}
+                                        🥈
+                                    {% elif forloop.counter == 3 %}
+                                        🥉
+                                    {% endif %}
+                                </td>
+                                <td>{{ custom_user.cups_saved }} </td>
+                                <td>
+                                    <div class="badge-container">
+                                        <img src="{% static 'images/badge_Lv3.png' %}" 
+                                        alt="Default Badge" 
+                                        style="width: 30px; height: 30px;">
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
             </section>
-            <section class="table-body">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>User</th>
-                            <th>Cups Saved</th>
-                            <th>Badges</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for custom_user in top_10_users %}  <!-- Loop 10 times -->
-                        <tr>
-                            <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
-                            <td>
-                                {{ custom_user.user.username }} 
-    
-                                {% if forloop.counter == 1 %}
-                                    🥇
-                                {% elif forloop.counter == 2 %}
-                                    🥈
-                                {% elif forloop.counter == 3 %}
-                                    🥉
-                                {% endif %}
-                            </td>
-                            <td>{{ custom_user.cups_saved }} </td>
-                            <td>
-                                <div class="badge-container">
-                                    <img src="{% static 'images/badge_Lv3.png' %}" 
-                                    alt="Default Badge" 
-                                    style="width: 30px; height: 30px;">
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <!--coffee shops leaderboard-->
+            <section class="table-leaderboard">
+                <section class="table-header">
+                    <h1>Most Sustainable Coffee Shops</h1>
+                </section>
+                <section class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Coffee Shop</th>
+                                <th>Cups Saved</th>
+                                <th>Location </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shop in top_5_shops %}
+                            <tr>
+                                <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
+                                <td><!-- Coffee shop name -->
+                                    <img src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" 
+                                    alt="{{ shop.shop_name }} Logo" 
+                                    style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px;">
+                                    <strong>{{ shop.shop_name }}</strong>
+                                    {% if forloop.counter == 1 %}
+                                        🥇
+                                    {% elif forloop.counter == 2 %}
+                                        🥈
+                                    {% elif forloop.counter == 3 %}
+                                        🥉
+                                    {% endif %}
+                                </td>  <!-- Coffee shop name -->
+                                <td>{{ shop.number_of_visits }}</td>  <!-- cups saved -->
+                                <td>University of Exeter</td>  <!-- No location field in model, so placeholder -->
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
             </section>
-        </section>
-        <!--coffee shops leaderboard-->
-        <section class="table-leaderboard">
-            <section class="table-header">
-                <h1>Most Sustainable Coffee Shops</h1>
-            </section>
-            <section class="table-body">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Coffee Shop</th>
-                            <th>Cups Saved</th>
-                            <th>Location </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for shop in top_5_shops %}
-                        <tr>
-                            <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
-                            <td><!-- Coffee shop name -->
-                                <img src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" 
-                                alt="{{ shop.shop_name }} Logo" 
-                                style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px;">
-                                <strong>{{ shop.shop_name }}</strong>
-                                {% if forloop.counter == 1 %}
-                                    🥇
-                                {% elif forloop.counter == 2 %}
-                                    🥈
-                                {% elif forloop.counter == 3 %}
-                                    🥉
-                                {% endif %}
-                            </td>  <!-- Coffee shop name -->
-                            <td>{{ shop.number_of_visits }}</td>  <!-- cups saved -->
-                            <td>University of Exeter</td>  <!-- No location field in model, so placeholder -->
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5">No data available</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </section>
-        </section>
-        <!-- board -->
-
-            <div class="metric-card">
-                <h4 class="metric-title">Cups Saved</h4>
-                <ul class="ranking-list">
-                    <li class="ranking-item">
-                        <span>Our partner shops have saved:</span>
-                        <span>{{ total_cups_saved }} cups</span>
-                    </li>
-                    <!-- <li class="ranking-item">
-                        <span>User B</span>
-                        <span>284 saved</span>
-                    </li> -->
-                </ul>
-            </div>
         </div>
+        <!-- board -->
     </main>
 </body>
 </html>

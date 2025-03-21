@@ -54,7 +54,7 @@
 .stats-section {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 30px;
 }
 
 .stat-item {
