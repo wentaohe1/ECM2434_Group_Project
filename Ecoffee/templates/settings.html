@@ -104,11 +104,34 @@
                 font-weight: bold;
             }
             input[type="file"] {
+                opacity: 0;
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                z-index: -1;
+            }
+            #update-btn, #save-btn {
+                display: block;
+                width: 200px;
+                padding: 12px;
+                margin: 10px auto;
+                cursor: pointer;
+                background-color: #E9FCED;
+                border-radius: 10px;
+                text-align: center;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+                font-weight: bold;
+                text-align: center;
+                border: none;
+                font-size: 16px;
+            }
+
+                /* Initially hide the Save button */
+            #save-btn {
                 display: none;
             }
-            .save-btn {
-                display: none;
-            }
+
+
         </style>
     </head>
     <body style="padding-top: 50px;">
@@ -129,11 +152,13 @@
                         <div class="profile-picture-img">
                             <img src="{{ request.user.customuser.profile_image.url }}" id="profpic" alt="Profile picture" />
                         </div>
-                        {{ form.profile_image }} 
+                        <input type="file" id="id_profile_image" name="profile_image" accept="image/*" />
+                        <!-- Both buttons in the same place -->
                         <label for="id_profile_image" id="update-btn" class="update-btn">Update image</label>
-                        <button type="submit" id="save-btn" style="display:none;">Save</button>
-                        </div>
-                </form>
+                        <button type="submit" id="save-btn" style="display: none;">Save</button>
+                    </div>
+                </form>                
+                
                 <div class="user-settings">
                     <div class="input-box">
                         <h2>Username</h2>
@@ -152,25 +177,37 @@
                 </div>
             </div>
         </div>
-    <script>
-        const profilePic = document.getElementById('profpic');
-        const inputFile  = document.getElementById('id_profile_image');
-        const updateBtn  = document.getElementById('update-btn');
-        const saveBtn    = document.getElementById('save-btn');
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const profilePic = document.getElementById('profpic');
+                const inputFile  = document.getElementById('id_profile_image');
+                const updateBtn  = document.getElementById('update-btn');
+                const saveBtn    = document.getElementById('save-btn');
 
-        updateBtn.addEventListener('click', () => {
-            console.log('Update button clicked');
-            inputFile.click();
-        });
+                console.log("Checking inputFile:", inputFile);
 
-        inputFile.addEventListener('change', () => {
-            console.log('File selected:', inputFile.files);
-            if (inputFile.files.length) {
-                profilePic.src = URL.createObjectURL(inputFile.files[0]);
-                updateBtn.style.display = 'none';
-                saveBtn.style.display   = 'inline-block';
-            }
-        });
-    </script>
+                if (!inputFile) {
+                    console.error("ERROR: File input element not found!");
+                } else {
+                    console.log("Adding event listener to:", inputFile);
+
+                    inputFile.addEventListener('change', () => {
+                        console.log('File selected:', inputFile.files);
+
+                        if (inputFile.files.length) {
+                            profilePic.src = URL.createObjectURL(inputFile.files[0]);
+
+                            // Hide "Update Image" and show "Save" in the same position
+                            updateBtn.style.display = 'none';
+                            saveBtn.style.display = 'block';
+
+                            console.log("Preview updated, Update button hidden, Save button visible.");
+                        }
+                    });
+                }
+            });
+
+
+        </script>
     </body>
 </html>

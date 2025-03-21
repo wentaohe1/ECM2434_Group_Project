@@ -15,8 +15,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 })
-//profile picture update button
-document.getElementById('id_profile_image').onchange = function(e) {
-    document.getElementById('profpic').src = URL.createObjectURL(e.target.files[0]);
-};
+
   
