@@ -26,15 +26,14 @@ def login_user(request):
         password=request.POST["password"]
         user=authenticate(request,username=username,password=password)
         if user is not None:
+            current_user = CustomUser.objects.get(user=user)
+            if not current_user.is_email_verified:
+                messages.error(request,'Please verify your email')
+                return render(request,'authenticate/login.html', {})
+
+            
             login(request,user)
-            current_user = CustomUser.objects.get(user = request.user)
-            time = now()
-            current_user.last_active_date_time = time
-            streak_day_difference = time.date() - current_user.streak_start_day
-            if streak_day_difference.days == current_user.streak:
-                current_user.streak += 1
-            elif streak_day_difference.days >= current_user.streak:
-                current_user.streak = time.date()
+            current_user.last_active_date_time = now()
             current_user.save()
             return redirect('home')  # Redirect to the home page after successful login
         else:
@@ -109,13 +108,15 @@ def register_user(request):
         form=UserRegistrationForm(request.POST)
         if form.is_valid():
             user=form.save()
+            new_user=CustomUser.objects.get(user=user)
+            send_verification_email(user,new_user,request)
             username=form.cleaned_data['username']
             password=form.cleaned_data['password1']
             user=authenticate(username=username, password=password)
 
             if user:
                 login(request, user)
-                messages.success(request,"Registration Successful")
+                messages.success(request, "Registration successful. Please check your email to verify your account.")
                 return redirect('home')
             else:
                 messages.error(request,"Authentication failed. Please try again.")
@@ -144,3 +145,33 @@ class custom_password_reset_confirm_view(PasswordResetConfirmView):
     def get_success_url(self):
         return reverse_lazy("password_reset_complete")
 
+
+from django.utils.crypto import get_random_string
+from django.contrib.sites.shortcuts import get_current_site
+
+def send_verification_email(user,custom_user,request):
+    token=get_random_string(length=32)
+    custom_user.email_verification_token=token
+    custom_user.save()
+    current_site=get_current_site(request)
+    verification_link = f"{current_site.domain}{reverse('verify_email',args=[token])}"
+    
+    send_mail(
+        'Verify Your Email',
+        f'Please click the link to verify your email: {verification_link}',
+        'ecoffeepta@gmail.com',
+        [user.email],
+        fail_silently=False,
+    )
+
+def verify_email(request, token):
+    try:
+        user=CustomUser.objects.get(email_verification_token=token)
+        user.is_email_verified=True
+        user.email_verification_token=''
+        user.save()
+        messages.success(request, "Email Verified, You can now login")
+        return redirect('login')
+    except CustomUser.DoesNotExist:
+        messages.error(request, "Invalid verification link, please contact support")
+        return redirect('home')
