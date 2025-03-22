@@ -51,6 +51,11 @@ def home(request):
 def dashboard_view(request):
     if request.user.is_authenticated:  # only accessible if logged in
         request_user = CustomUser.objects.get(user=request.user)
+        percentage_above_average=calculate_percentage_above_average(request_user)
+        negative=False
+        if percentage_above_average<0:
+            negative=True
+            percentage_above_average=-percentage_above_average
         coffees_saved = request_user.cups_saved
         most_visited_shop=UserShop.objects.filter(user=request_user).order_by('-visit_amounts').first()
         top_three_earned_badges=reversed(UserBadge.objects.filter(user=request_user).all().order_by('-badge_id__coffee_until_earned')[:3])
@@ -84,6 +89,8 @@ def dashboard_view(request):
         "coffees_to_next_badge": coffees_to_next_badge,
         "most_visited_shop":most_visited_shop,
         "top_three_badges":top_three_earned_badges,
+        "percentage_above_average":percentage_above_average,
+        "negative":negative,
     })
 
 # orders badges and then returns the first badge that has a higher requirement than the cups the user has saved
@@ -104,3 +111,16 @@ def get_next_badge(request_user):
 def welcome(request):
     return render(request, 'welcome.html')
 # (sprint2) Ensure users without a badge get a default badge
+
+def calculate_percentage_above_average(request_user):
+    all_users=CustomUser.objects.all()
+    total=0
+    for user in all_users:
+        total+=user.cups_saved
+    if total==0:#if no one has saved a cup, return 1
+        return 0
+    average=(total/len(all_users))
+
+    result=(request_user.cups_saved-average)/(total/len(all_users))*100
+    return result
+

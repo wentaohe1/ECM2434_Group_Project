@@ -362,12 +362,11 @@
                         <div class="card-info">
                             <div class="card-head">
                                 <span>Purchases</span>
-                                <small>In January you have saved</small>
+                                <small>To date you have saved</small>
                             </div>
 
                             <h2>{{ coffees_saved }} cups</h2>
 
-                            <small>2% more cups saved</small>
                         </div>
                         <div class="card-chart" style="color: seagreen;">
                             <span class="las la-chart-line"></span>
@@ -381,13 +380,20 @@
                                 <span>{{ most_visited_shop.shop_id.shop_name }}</span>
                                 <small>Number of all time visits</small>
                             </div>
-
-                            <h2>{{ most_visited_shop.visit_amounts }}</h2>
+                            {%if most_visited_shop.visit_amounts != None %}
+                                <h2>{{ most_visited_shop.visit_amounts }}</h2>
+                            {% else %}
+                                <h4>You havent saved a coffee</h4>
+                            {% endif %}
 
                             <small></small>
                         </div>
                         <div class="card-chart">
-                            <span class="card-chart"><img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name}}.jpeg"></span>
+                            {%if most_visited_shop.visit_amounts != None %}
+                                <span class="card-chart"><img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name}}.jpeg"></span>
+                            {% else %}
+                                <span class="card-chart"><img src="{% static 'images/no-visits.png' %}"></span> 
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -401,7 +407,12 @@
 
                             <h2>£{{money_saved}}0</h2>
 
-                            <small>2% more than average</small>
+                            {% if not negative %}
+                                <small>{{ percentage_above_average }}% more than average</small>
+                            {% else %}
+                                <small>{{ percentage_above_average }}% below the average</small>
+                            {% endif %}
+
                         </div>
                         <div class="card-chart">
                             <span class="las la-chart-line"></span>

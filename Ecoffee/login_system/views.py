@@ -18,11 +18,6 @@ def login_user(request):
             current_user = CustomUser.objects.get(user = request.user)
             time = now()
             current_user.last_active_date_time = time
-            streak_day_difference = time.date() - current_user.streak_start_day
-            if streak_day_difference.days == current_user.streak:
-                current_user.streak += 1
-            elif streak_day_difference.days >= current_user.streak:
-                current_user.streak = time.date()
             current_user.save()
             return redirect('home')  # Redirect to the home page after successful login
         else:

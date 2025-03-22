@@ -19,17 +19,14 @@ def receive_code(request):
                 user.cups_saved += 1
                 check_badge_progress(user)
                 user.most_recent_shop_id = shop
-                user.last_active_date_time = timezone.now()
+                user.last_active_date_time = now()
                 time = now()
                 create_new_user_shop(shop,user)
-                
-                user.last_active_date_time = time
                 streak_day_difference = time.date() - user.streak_start_day
                 if streak_day_difference.days == user.streak:
                     user.streak += 1
                 elif streak_day_difference.days >= user.streak:
                     user.streak = time.date()
-                # need to run a trigger to check if the badge needs to be updated.
                 user.save()
                 shop.save()  # saves after everything is confirmed okay, changes will rollback (by default after a request has returned) if not
                 return redirect('home')
