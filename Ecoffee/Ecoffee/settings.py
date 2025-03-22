@@ -143,5 +143,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER ='ecoffeepta@gmail.com'
-EMAIL_HOST_PASSWORD = 'ask luke as confidential'
+EMAIL_HOST_PASSWORD = 'bhzpehcmwbscqcef'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Same as EMAIL_HOST_USER
