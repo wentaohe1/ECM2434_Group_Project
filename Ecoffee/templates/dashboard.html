@@ -124,8 +124,10 @@
             font-weight: bold;
             color: #FF746C;
         }
-
-        /* Responsive Design */
+        h2 {
+            font-size: 48px;
+            margin-bottom: 5px;
+        }
         @media (max-width: 1024px) {
             .cards-grid {
                 grid-template-columns: 1fr;
@@ -152,7 +154,6 @@
     <main class="main-content">
         <div class="dashboard-grid">
             <div class="cards-grid">
-                <!-- Row 1 -->
                 <div class="card-single">
                     <div class="card-head">Purchases</div>
                     <p>In January you have saved</p>
@@ -166,8 +167,6 @@
                     <h2 class="counter stat-number" data-target="{{ most_popular_shop.number_of_visits }}">{{ most_popular_shop.number_of_visits }}</h2>
                     <img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name }}.jpeg" width="60" alt="{{ most_popular_shop.shop_name }}">
                 </div>
-
-                <!-- Row 2 -->
                 <div class="card-single">
                     <div class="card-head">Money Saved</div>
                     <p>By drinking sustainably you have saved</p>

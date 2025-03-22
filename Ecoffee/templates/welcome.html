@@ -236,10 +236,20 @@
             margin-top:0.5rem;
             display: inline-block
          }
-         /* MOBILE */
+         .three-steps {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+         }
+         .three-steps img{
+            width: 65vw;
+            height: auto;
+            display: block;
+            margin: 1rem auto 1rem;
+         }
         @media (max-width: 640px) {
          .about-section {
-            padding: 2rem 1rem;  /* only 32px top/bottom */
+            padding: 2rem 1rem; 
             margin-top: 20px;
          }
 
@@ -305,27 +315,29 @@
          <div class="banner-text">Welcome to Ecoffee</div>
       </div>
       <section class="about-section">
-         <!-- Hero container -->
             <div class="about-container pop">
-               <!-- Micro‑label -->
+               <!-- micro label -->
                <span class="micro-label">
                   Discover the all‑new Ecoffee
                   <i class='bx bxs-coffee-bean'></i>
                </span>
 
-               <!-- Headline -->
+               <!-- headline -->
                <h1 class="headline">
                   A Sustainable Way to Stay <br> Caffeinated
                </h1>
 
-               <!-- Sub‑text -->
+               <!-- sub text-->
                <p class="sub-text">
                   Ecoffee turns your daily brew into measurable climate action — track your coffee consumption, 
                   cut waste with a reusable cup, and join a community competing to save the planet (and money) 
                   one cup at a time.
                </p>
-
-               <!-- Call‑to‑action buttons -->
+               <!--three steps-->
+               <section class="three-steps">
+                  <img src="{% static 'images/three-steps.png' %}" a="three steps">
+               </section>
+               <!-- buttons -->
                <div class="buttons">
                   <a href="{% url 'register' %}" class="button one">
                      Join Us Now

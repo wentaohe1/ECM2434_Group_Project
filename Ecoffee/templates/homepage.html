@@ -203,7 +203,7 @@
             display: flex;
             align-items: center;
             border: 1px solid rgba(0, 0, 0, 0.05);
-            border-radius: 999px; /* Fully rounded pill */
+            border-radius: 999px; 
             padding: 4px 10px;
             gap: 8px;
             width: 8vw;
@@ -257,7 +257,6 @@
             }
         }
 
-        /* navbar for mobile */
 
     </style>
 </head>
@@ -277,7 +276,6 @@
                 <div class="progress-fill" style="width: {{ total_cups_saved|default:0 }}%;">
             </div>
         </div>
-        <!--Ecoffee shops leaderboard-->
         <div class="leaderboard-container">
             <section class="table-leaderboard">
                 <section class="table-header">
@@ -294,9 +292,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for custom_user in top_10_users %}  <!-- Loop 10 times -->
+                            {% for custom_user in top_10_users %} 
                             <tr>
-                                <!-- Rank -->
                                 <td>
                                     <div class="rank-wrapper">
                                         <span class="rank-number">{{ forloop.counter }}</span>
@@ -356,8 +353,8 @@
                                         <span class="rank-number">{{ forloop.counter }}</span>
                                         <img class="profile-img" src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" alt="profile picture" />
                                     </div>
-                                </td> <!-- Rank -->
-                                <td><!-- Coffee shop name -->
+                                </td> 
+                                <td>
                                     <strong>{{ shop.shop_name }}</strong>
                                     {% if forloop.counter == 1 %}
                                         🥇
@@ -366,9 +363,9 @@
                                     {% elif forloop.counter == 3 %}
                                         🥉
                                     {% endif %}
-                                </td>  <!-- Coffee shop name -->
-                                <td>{{ shop.number_of_visits }}</td>  <!-- cups saved -->
-                                <td>University of Exeter</td>  <!-- No location field in model, so placeholder -->
+                                </td>  
+                                <td>{{ shop.number_of_visits }}</td> 
+                                <td>University of Exeter</td> 
                             </tr>
                             {% empty %}
                             <tr>
@@ -380,7 +377,6 @@
                 </section>
             </section>
         </div>
-        <!-- board -->
     </main>
 </body>
 </html>
