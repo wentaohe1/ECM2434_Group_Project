@@ -4,8 +4,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="Main page" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="{% static 'js/drop-down.js' %}" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <title>Ecoffee Mainpage</title>
     <style>
         * {
@@ -64,7 +65,7 @@
         }
 
         .metric-title, .table-header h1 {
-            font-size: 18px;
+            font-size: 26px;
             color: #2c3e50;
             margin-bottom: 15px;
             padding-bottom: 10px;
@@ -97,24 +98,6 @@
             margin-bottom: 30px;
         }
 
-        @media (max-width: 768px) {
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-section {
-                gap: 20px;
-                flex-wrap: wrap;
-            }
-            
-            .nav-list {
-                gap: 20px;
-            }
-            
-            .brand-section {
-                gap: 20px;
-            }
-        }
         /* Leaderboard styling */
         td img {
             width: 36px;
@@ -189,21 +172,102 @@
             align-items: center;
         }
         .badge-container img{
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
         }
-        
+        .badge-container img:hover{
+            transform: scale(1.2);
+        }
         body {
             background: linear-gradient(to bottom, #F4FEF6, #E9FCED);
         }
+        .welcome-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: 
+                typing 2s steps(18),
+                cursor .4s step-end infinite alternate;
+        }
+        @keyframes typing {
+            from { width: 0}
+        }
+        .bxs-coffee{
+            font-size: 1.8rem;
+        }
+        .rank-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 999px; /* Fully rounded pill */
+            padding: 4px 10px;
+            gap: 8px;
+            width: 8vw;
+            justify-content: space-between;
+        }
+        .rank-number {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .profile-img {
+            width: 32px;
+            height: 32px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-left: auto;
+        }
+        .cups-saved {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .cups-saved i {
+            font-size: 1.1rem;
+            margin-bottom: 1px;
+        }
+        /* for smaller screen*/
+        table td, table th {
+            word-wrap: break-word;
+            max-width: 150px;
+        }
+    
+        @media (max-width: 768px) {
+            table, th, td {
+                font-size: 13px;
+                padding: 0.5rem;
+            }
+
+            .rank-wrapper {
+                width: auto;
+                font-size: 12px;
+            }
+
+            .cups-saved i {
+                font-size: 1rem;
+            }
+
+            .badge-container img {
+                width: 25px;
+            }
+        }
+
+        /* navbar for mobile */
+
     </style>
 </head>
 <body>
-    
     <main class="main-content">
         {% if user.is_authenticated %}
-        <h1>Welcome back {{ user.username }}!</h1>
+        <div class="welcome-message">
+            <h1>Welcome back {{ user.username }}!</h1>
+            <i class='bx bxs-coffee'></i>
+        </div>
         {%endif%}
         <!-- process bar -->
         <div class="progress-section">
@@ -232,8 +296,14 @@
                         <tbody>
                             {% for custom_user in top_10_users %}  <!-- Loop 10 times -->
                             <tr>
-                                <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
+                                <!-- Rank -->
                                 <td>
+                                    <div class="rank-wrapper">
+                                        <span class="rank-number">{{ forloop.counter }}</span>
+                                        <img class="profile-img" src="{{ custom_user.profile_image.url }}" alt="profile picture" />
+                                    </div>
+                                </td> 
+                                <td style="font-weight: bold;">
                                     {{ custom_user.user.username }} 
         
                                     {% if forloop.counter == 1 %}
@@ -244,7 +314,12 @@
                                         🥉
                                     {% endif %}
                                 </td>
-                                <td>{{ custom_user.cups_saved }} </td>
+                                <td>
+                                    <span class="cups-saved">
+                                        {{ custom_user.cups_saved }}
+                                        <i class='bx bx-coffee-togo'></i>
+                                    </span>
+                                </td>
                                 <td>
                                     <div class="badge-container">
                                         <img src="{% static 'images/badge_Lv3.png' %}" 
@@ -276,11 +351,13 @@
                         <tbody>
                             {% for shop in top_5_shops %}
                             <tr>
-                                <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
+                                <td>
+                                    <div class="rank-wrapper">
+                                        <span class="rank-number">{{ forloop.counter }}</span>
+                                        <img class="profile-img" src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" alt="profile picture" />
+                                    </div>
+                                </td> <!-- Rank -->
                                 <td><!-- Coffee shop name -->
-                                    <img src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" 
-                                    alt="{{ shop.shop_name }} Logo" 
-                                    style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px;">
                                     <strong>{{ shop.shop_name }}</strong>
                                     {% if forloop.counter == 1 %}
                                         🥇

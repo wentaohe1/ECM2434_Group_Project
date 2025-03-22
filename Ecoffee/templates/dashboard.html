@@ -26,22 +26,22 @@
             flex-direction: column;
             align-items: center;
             padding: 50px 5%;
+            min-height: 100vh;
         }
-
         /* Dashboard Grid */
         .dashboard-grid {
+            margin-top: 50px;
             width: 100%;
             max-width: 1200px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 60px;
         }
 
-        /* Cards Section (1st & 2nd Row) */
+        /* Cards Section */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             width: 100%;
             justify-content: center;
@@ -49,24 +49,35 @@
 
         .card-single {
             background-color: #D2F9DA;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 10px;
             box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             color: #FF746C;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .card-head {
-            font-size: 30px;
+            font-size: 28px;
             font-weight: bold;
             text-transform: uppercase;
             color: #FF746C;
-            margin-bottom: 10px !important;
+            margin-bottom: 15px;
         }
 
         .card-info h2 {
-            font-size: 5.5rem;
+            font-size: 4.5rem;
             color: #FF746C;
+            font-weight: bold;
+        }
+
+        .card-single p {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #FAA0A0;
         }
 
         /* Full-width Badges Row */
@@ -93,9 +104,10 @@
         .badge-item img {
             width: 150px;
             height: auto;
+            transition: transform 0.3s ease-in-out;
         }
         .badge-item img:hover {
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
 
         /* Progress Circle */
@@ -110,18 +122,16 @@
             margin: 20px auto;
             font-size: 2rem;
             font-weight: bold;
-        }
-
-        .card-single h2 {
-            font-size: 3rem !important;
-            font-weight: bold;
             color: #FF746C;
-        }
-        .card-single p {
-            margin-bottom: 20px; /* Adjust spacing between paragraph and number */
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .cards-grid {
                 grid-template-columns: 1fr;
@@ -175,6 +185,8 @@
                     <div class="chart-circle">{{ progress }}%</div>
                 </div>
             </div>
+
+            <!-- Full-width Badges Row -->
             <div class="badge-card">
                 <h3 class="card-head">Your Badges</h3>
                 <div class="badge-grid">
@@ -193,5 +205,6 @@
     </main>
 </body>
 </html>
+
 
 

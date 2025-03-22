@@ -129,18 +129,3 @@
     background: #eee;
     margin: 4px 0;
 }
-@media (max-width: 768px) {
-    .metrics-grid {
-    grid-template-columns: 1fr;
-}
-    .stats-section {
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-    .nav-list {
-        gap: 20px;
-    }
-    .brand-section {
-        gap: 20px;
-        }
-}
