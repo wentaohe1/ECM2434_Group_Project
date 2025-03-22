@@ -3,6 +3,7 @@ from EcoffeeBase.models import *
 from django.utils.timezone import now
 from django.db.models import Sum
 from django.templatetags.static import static
+from EcoffeeBase.forms import ProfileImageForm
 
 
 def home(request):
@@ -112,6 +113,7 @@ def welcome(request):
     return render(request, 'welcome.html')
 # (sprint2) Ensure users without a badge get a default badge
 
+
 def calculate_percentage_above_average(request_user):
     all_users=CustomUser.objects.all()
     total=0
@@ -123,4 +125,18 @@ def calculate_percentage_above_average(request_user):
 
     result=(request_user.cups_saved-average)/(total/len(all_users))*100
     return result
+
+
+#settings view
+def settings_view(request):
+    user = request.user.customuser
+    if request.method == 'POST':
+        form = ProfileImageForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('settings')
+    else:
+        form = ProfileImageForm(instance=user)
+
+    return render(request, 'settings.html', {'form': form})
 

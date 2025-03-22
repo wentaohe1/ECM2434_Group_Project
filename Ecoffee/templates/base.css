@@ -111,13 +111,13 @@
       list-style: none;
       }
       .nav-item a {
-      text-decoration: none;
-      color: #34495e;
-      font-size: 16px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      padding: 8px 12px;
-      border-radius: 6px;
+        text-decoration: none;
+        color: #34495e;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        padding: 8px 12px;
+        border-radius: 6px;
       }
       .nav-item a:hover {
       color: #3498db;
@@ -173,11 +173,11 @@
       visibility: visible;
       }
       .dropdown-item {
-      padding: 12px 20px;
-      color: #2c3e50;
-      text-decoration: none;
-      display: block;
-      transition: background 0.2s;
+        padding: 12px 20px;
+        color: #2c3e50;
+        text-decoration: none;
+        display: block;
+        transition: background 0.2s;
       }
       .dropdown-item:hover {
       background: #f8f9fa;

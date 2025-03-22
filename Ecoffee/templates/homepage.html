@@ -4,166 +4,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="Main page" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'js/drop-down.js' %}" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <title>Ecoffee Mainpage</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const userMenu = document.querySelector('.user-menu');
-            const dropdown = document.querySelector('.dropdown-menu');
-
-            userMenu.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdown.classList.toggle('show');
-            });
-
-            document.addEventListener('click', function() {
-                dropdown.classList.remove('show');
-            });
-
-            dropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        });
-    </script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Arial, sans-serif;
+            
         }
-
-        /* top  */
-        .top-nav {
-            width: 100%;
-            height: 80px;
-            background: #a6f3b5;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-
-        .brand-section {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .logo {
-            font-size: 26px;
-            font-weight: 700;
-            color: #2c3e50;
-            letter-spacing: 1.5px;
-            display: flex;
-            align-items: center;
-        }
-
-
-        .nav-list {
-            display: flex;
-            gap: 35px;
-            list-style: none;
-        }
-
-        .nav-item a {
-            text-decoration: none;
-            color: #34495e;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 8px 12px;
-            border-radius: 6px;
-        }
-
-        .nav-item a:hover {
-            color: #3498db;
-            background: rgba(52, 152, 219, 0.1);
-        }
-
-        .stats-section {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .stat-item {
-            position: relative;
-            padding: 0 15px;
-        }
-
-        .stat-item:not(:last-child)::after {
-            content: "|";
-            color: #ddd;
-            position: absolute;
-            right: -20px;
-        }
-
-        .stat-title {
-            font-size: 13px;
-            color: #7f8c8d;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-value {
-            font-size: 15px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-top: 3px;
-        }
-
-        .user-menu {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            top: 100%;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 160px;
-            margin-top: 10px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 1001;
-        }
-
-        .dropdown-menu.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .dropdown-item {
-            padding: 12px 20px;
-            color: #2c3e50;
-            text-decoration: none;
-            display: block;
-            transition: background 0.2s;
-        }
-
-        .dropdown-item:hover {
-            background: #f8f9fa;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #eee;
-            margin: 4px 0;
-        }
-
         /* main processes */
         .main-content {
-            margin-top: 100px;
+            margin-top: 80px;
             padding: 30px 5%;
+            background-color: #E9FCED; 
         }
 
         /* process bar */
@@ -174,9 +31,9 @@
 
         .progress-bar {
             width: 100%;
-            height: 20px;
+            height: 16px;
             background: #ecf0f1;
-            border-radius: 10px;
+            border-radius: 20px;
             overflow: hidden;
         }
 
@@ -208,7 +65,7 @@
         }
 
         .metric-title, .table-header h1 {
-            font-size: 18px;
+            font-size: 26px;
             color: #2c3e50;
             margin-bottom: 15px;
             padding-bottom: 10px;
@@ -241,24 +98,6 @@
             margin-bottom: 30px;
         }
 
-        @media (max-width: 768px) {
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-section {
-                gap: 20px;
-                flex-wrap: wrap;
-            }
-            
-            .nav-list {
-                gap: 20px;
-            }
-            
-            .brand-section {
-                gap: 20px;
-            }
-        }
         /* Leaderboard styling */
         td img {
             width: 36px;
@@ -276,18 +115,18 @@
             padding: 1rem;
             border-collapse: collapse;
             text-align: left;
+            
         }
         .table-header {
             width: 100%;
             max-height: 89%;
-            background-color: #fffb;
+            
             padding-left: 5px;
             
         }
         .table-leaderboard {
             width: 90vw;
-            height: 90%;
-            background-color: #fffb;
+            height: auto;
             backdrop-filter: blur(7px);
             padding-top: 10px;
             border-radius: 10px;
@@ -300,6 +139,7 @@
             margin: .8rem auto;
             border-radius: .6rem;
             overflow: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .table-body::-webkit-scrollbar{
             width: 0.5rem;
@@ -332,17 +172,101 @@
             align-items: center;
         }
         .badge-container img{
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
         }
+        .badge-container img:hover{
+            transform: scale(1.2);
+        }
+        body {
+            background: linear-gradient(to bottom, #F4FEF6, #E9FCED);
+        }
+        .welcome-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: 
+                typing 2s steps(18),
+                cursor .4s step-end infinite alternate;
+        }
+        @keyframes typing {
+            from { width: 0}
+        }
+        .bxs-coffee{
+            font-size: 1.8rem;
+        }
+        .rank-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 999px; 
+            padding: 4px 10px;
+            gap: 8px;
+            width: 8vw;
+            justify-content: space-between;
+        }
+        .rank-number {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .profile-img {
+            width: 32px;
+            height: 32px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-left: auto;
+        }
+        .cups-saved {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .cups-saved i {
+            font-size: 1.1rem;
+            margin-bottom: 1px;
+        }
+        /* for smaller screen*/
+        table td, table th {
+            word-wrap: break-word;
+            max-width: 150px;
+        }
+    
+        @media (max-width: 768px) {
+            table, th, td {
+                font-size: 13px;
+                padding: 0.5rem;
+            }
+
+            .rank-wrapper {
+                width: auto;
+                font-size: 12px;
+            }
+
+            .cups-saved i {
+                font-size: 1rem;
+            }
+
+            .badge-container img {
+                width: 25px;
+            }
+        }
+
+
     </style>
 </head>
 <body>
-
     <main class="main-content">
         {% if user.is_authenticated %}
-        <h1>Welcome back {{ user.username }}!</h1>
+        <div class="welcome-message">
+            <h1>Welcome back {{ user.username }}!</h1>
+            <i class='bx bxs-coffee'></i>
+        </div>
         {%endif%}
         <!-- process bar -->
         <div class="progress-section">
@@ -352,127 +276,106 @@
                 <div class="progress-fill" id="progress-fill-bar"></div>
             </div>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const progressFill = document.getElementById('progress-fill-bar');
-                progressFill.style.width = '{{ total_cups_saved|default:0 }}%';
-            });
-        </script>
-        <!--Ecoffee shops leaderboard-->
-        <section class="table-leaderboard">
-            <section class="table-header">
-                <h1>Most Sustainable Coffee Drinkers </h1>
-            </section>
-            <section class="table-body">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>User</th>
-                            <th>Cups Saved</th>
-                            <th>Badges</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for custom_user in top_10_users %}  <!-- Loop 10 times -->
-                        <tr>
-                            <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
-                            <td>
-                                {{ custom_user.user.username }} 
-    
-                                {% if forloop.counter == 1 %}
-                                    🥇
-                                {% elif forloop.counter == 2 %}
-                                    🥈
-                                {% elif forloop.counter == 3 %}
-                                    🥉
-                                {% endif %}
-                            </td>
-                            <td>{{ custom_user.cups_saved }} </td>
-                            <td>
-                                <div class="badge-container">
-                                    {% if custom_user.default_badge_id and custom_user.default_badge_id.badge_image %}
-                                    <img src="{% static 'images/'|add:custom_user.default_badge_id.badge_image %}"
-                                    alt="User Badge"
-                                    style="width: 30px; height: 30px; object-fit: contain;">
-                                    {% else %}
-                                    <img src="{% static 'images/defaultbadge.png' %}"
-                                    alt="Default Badge"
-                                    style="width: 30px; height: 30px; object-fit: contain;">
+        <div class="leaderboard-container">
+            <section class="table-leaderboard">
+                <section class="table-header">
+                    <h1>Most Sustainable Coffee Drinkers </h1>
+                </section>
+                <section class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>User</th>
+                                <th>Cups Saved</th>
+                                <th>Badges</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for custom_user in top_10_users %} 
+                            <tr>
+                                <td>
+                                    <div class="rank-wrapper">
+                                        <span class="rank-number">{{ forloop.counter }}</span>
+                                        <img class="profile-img" src="{{ custom_user.profile_image.url }}" alt="profile picture" />
+                                    </div>
+                                </td> 
+                                <td style="font-weight: bold;">
+                                    {{ custom_user.user.username }} 
+        
+                                    {% if forloop.counter == 1 %}
+                                        🥇
+                                    {% elif forloop.counter == 2 %}
+                                        🥈
+                                    {% elif forloop.counter == 3 %}
+                                        🥉
                                     {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                </td>
+                                <td>
+                                    <span class="cups-saved">
+                                        {{ custom_user.cups_saved }}
+                                        <i class='bx bx-coffee-togo'></i>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="badge-container">
+                                        <img src="{% static 'images/badge_Lv3.png' %}" 
+                                        alt="Default Badge" 
+                                        style="width: 30px; height: 30px;">
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
             </section>
-        </section>
-        <!--coffee shops leaderboard-->
-        <section class="table-leaderboard">
-            <section class="table-header">
-                <h1>Most Sustainable Coffee Shops</h1>
+            <!--coffee shops leaderboard-->
+            <section class="table-leaderboard">
+                <section class="table-header">
+                    <h1>Most Sustainable Coffee Shops</h1>
+                </section>
+                <section class="table-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Coffee Shop</th>
+                                <th>Cups Saved</th>
+                                <th>Location </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shop in top_5_shops %}
+                            <tr>
+                                <td>
+                                    <div class="rank-wrapper">
+                                        <span class="rank-number">{{ forloop.counter }}</span>
+                                        <img class="profile-img" src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" alt="profile picture" />
+                                    </div>
+                                </td> 
+                                <td>
+                                    <strong>{{ shop.shop_name }}</strong>
+                                    {% if forloop.counter == 1 %}
+                                        🥇
+                                    {% elif forloop.counter == 2 %}
+                                        🥈
+                                    {% elif forloop.counter == 3 %}
+                                        🥉
+                                    {% endif %}
+                                </td>  
+                                <td>{{ shop.number_of_visits }}</td> 
+                                <td>University of Exeter</td> 
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
             </section>
-            <section class="table-body">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Coffee Shop</th>
-                            <th>Cups Saved</th>
-                            <th>Location </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for shop in top_5_shops %}
-                        <tr>
-                            <td><strong>{{ forloop.counter }}</strong></td> <!-- Rank -->
-                            <td><!-- Coffee shop name -->
-                                {% if shop.shop_name %}
-                                <img src="{% static 'images/logos/'|add:shop.shop_name|add:'.jpeg' %}" 
-                                alt="{{ shop.shop_name }} Logo" 
-                                style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px; object-fit: cover;">
-                                {% else %}
-                                <img src="{% static 'images/logo.png' %}" 
-                                alt="Default Logo" 
-                                style="width: 40px; height: 40px; border-radius: 15px; margin-right: 10px; object-fit: cover;">
-                                {% endif %}
-                                <strong>{{ shop.shop_name }}</strong>
-                                {% if forloop.counter == 1 %}
-                                    🥇
-                                {% elif forloop.counter == 2 %}
-                                    🥈
-                                {% elif forloop.counter == 3 %}
-                                    🥉
-                                {% endif %}
-                            </td>  <!-- Coffee shop name -->
-                            <td>{{ shop.number_of_visits }}</td>  <!-- cups saved -->
-                            <td>University of Exeter</td>  <!-- No location field in model, so placeholder -->
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5">No data available</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </section>
-        </section>
-        <!-- board -->
-
-            <div class="metric-card">
-                <h4 class="metric-title">Cups Saved</h4>
-                <ul class="ranking-list">
-                    <li class="ranking-item">
-                        <span>Our partner shops have saved:</span>
-                        <span>{{ total_cups_saved }} cups</span>
-                    </li>
-                    <!-- <li class="ranking-item">
-                        <span>User B</span>
-                        <span>284 saved</span>
-                    </li> -->
-                </ul>
-            </div>
         </div>
     </main>
 </body>

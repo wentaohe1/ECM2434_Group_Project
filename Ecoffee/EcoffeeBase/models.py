@@ -89,6 +89,10 @@ class CustomUser(models.Model):
     last_active_date_time = models.DateTimeField(default=now)
     streak = models.IntegerField(default=1)
     streak_start_day = models.DateField(default=now)
+    profile_image = models.ImageField(
+        upload_to='profile_pics',
+        default='profile_pics/default.png'
+    )
 
     def __str__(self):
         return self.user.username
