@@ -58,8 +58,6 @@ def dashboard_view(request):
             negative=True
             percentage_above_average=-percentage_above_average
         coffees_saved = request_user.cups_saved
-        #track the number of coffees for the progress circle
-        circle_progress = (coffees_saved % 5) / 5 * 100
         most_visited_shop=UserShop.objects.filter(user=request_user).order_by('-visit_amounts').first()
         top_three_earned_badges=reversed(UserBadge.objects.filter(user=request_user).all().order_by('-badge_id__coffee_until_earned')[:3])
 
