@@ -289,7 +289,7 @@
                                 <th>Rank</th>
                                 <th>User</th>
                                 <th>Cups Saved</th>
-                                <th>Badges</th>
+                                <th>Badge</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -320,7 +320,9 @@
                                 </td>
                                 <td>
                                     <div class="badge-container">
-                                        <img src="{% static 'images/badge_Lv3.png' %}" 
+                                        {% if custom_user.badge_id != None %}
+                                            <img src="{% static 'images/'|add:custom_user.default_badge_id.badge_image %}" 
+                                        {% endif %}
                                         alt="Default Badge" 
                                         style="width: 30px; height: 30px;">
                                     </div>

@@ -129,7 +129,7 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            background: conic-gradient(#FF746C {{ circle_progress }}%, #FAA0A0 {{ circle_progress }}%);
+            background: conic-gradient(#FF746C {{ progress }}%, #FAA0A0 {{ progress }}%);
             position: relative;
             margin: 0 auto;
             display: flex;
@@ -218,7 +218,7 @@
                         <p>{{ coffees_to_next_badge }} more coffees until the next badge!</p>
                     {% endif %}
                     <div class="progress-circle">
-                        <div class="inner-text">{{ circle_progress|default:0|floatformat:0 }}%</div>
+                        <div class="inner-text">{{ progress }}%</div>
                     </div>
                 </div>
             </div>

@@ -45,7 +45,6 @@ def home(request):
         'top_5_shops': top_5_shops,
         'total_cups_saved': total_cups_saved,
         'personal_cups_saved': personal_cups_saved,
-        'user_badge': user_badge,
     })
 
 
