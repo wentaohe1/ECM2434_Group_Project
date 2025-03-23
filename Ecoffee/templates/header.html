@@ -4,7 +4,7 @@
     .stats-section {
         display: flex;
         align-items: center;
-        gap: 20px;
+        
     }
 
     .stat-item,
@@ -15,6 +15,9 @@
 
     .profile-pic.active + .user-menu .dropdown-menu {
         display: block;
+    }
+    .profile-pic.user-menu {
+        margin-left: 10px;
     }
     .profile-pic img {
         width: 42px;
@@ -65,11 +68,11 @@
       </div>
       <ul class="nav-list">
         {% if user.is_authenticated %}
-        <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
-        <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-        <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
+          <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
         {% else %}
-        <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
+          <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
         {% endif %}
       </ul>
     </div>
@@ -77,32 +80,33 @@
     <div class="stats-section">
       {% if user.is_authenticated %}
         <div class="stat-item">
-            <div class="stat-title">Cups saved by you</div>
-            {% if personal_cups_saved != None %}
-              <div class="stat-value">{{ personal_cups_saved }}</div>
-            {% else %}
-              <div class="stat-value">0</div>
-            {% endif %}
+          <div class="stat-title">Cups saved by you</div>
+          {% if personal_cups_saved != None %}
+            <div class="stat-value">{{ personal_cups_saved }}</div>
+          {% else %}
+            <div class="stat-value">0</div>
+          {% endif %}
         </div>
-      <div>
-        <div class="date-time">
-          <div class="stat-value">{{ user.username }}</div>
-          <div class="stat-title">{{ user.customuser.last_active_date_time|timesince }} ago</div>
+        <div>
+          <div class="date-time">
+            <div class="stat-value">{{ user.username }}</div>
+            <div class="stat-title">{{ user.customuser.last_active_date_time|timesince }} ago</div>
+          </div>
         </div>
-      </div>
+        <div class="profile-pic user-menu">
+          <img src="{{ user.customuser.profile_image.url }}" alt="Profile">
+        </div>
+        <div class="user-menu">
+          <div class="dropdown-menu" id="dropdown">
+            <a href="{% url 'settings' %}" class="dropdown-item">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
+          </div>
+        </div>
+      {% endif %}
     </div>
-    <div class="profile-pic user-menu">
-        <img src="{{ user.customuser.profile_image.url }}" alt="Profile">
-      </div>
-      <div class="user-menu">
-        <div class="dropdown-menu" id="dropdown">
-          <a href="{% url 'settings' %}" class="dropdown-item">Settings</a>
-          <div class="dropdown-divider"></div>
-          <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
-        </div>
-        {% endif %}
-    </div>
-</header>
-<main>{%  block content %}{% endblock content %}</main>
+  </header>
+  <main>{% block content %}{% endblock content %}</main>
+  
 
 
