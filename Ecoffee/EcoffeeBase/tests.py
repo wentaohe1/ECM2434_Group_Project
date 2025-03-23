@@ -1,141 +1,115 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-from EcoffeeBase.models import CustomUser, Badge, Shop
 from django.utils.timezone import now
-import datetime
+from datetime import timedelta
+from django.utils.timezone import now
+from EcoffeeBase.models import Shop, CustomUser, UserShop, Badge, UserBadge
+from EcoffeeBase.views import log_visit
 
-class ChallengesDisplayTests(TestCase):
-    """Tests for the display of challenges and progress in the Ecoffee app"""
-    
+
+class DataBaseTests(TestCase):
+
     def setUp(self):
-        """Set up test data - users, badges, and shops"""
-        # Create test user
-        self.user = User.objects.create_user(
-            username='testuser',
-            email='test@example.com',
-            password='testpass123'
-        )
-        
-        # Create badges with different levels
-        self.badge1 = Badge.objects.create(coffee_until_earned=5, badge_image='badge_lv1.png')
-        self.badge2 = Badge.objects.create(coffee_until_earned=10, badge_image='badge_lv2.png')
-        self.badge3 = Badge.objects.create(coffee_until_earned=20, badge_image='badge_lv3.png')
-        
-        # Create a shop
+        '''Sets up a DB with test objects and a simulated POST request'''
+
         self.shop = Shop.objects.create(
-            shop_name='Test Coffee Shop',
-            number_of_visits=100,
-            active_code='TESTCODE123'
-        )
-        
-        # Create custom user with basic progress
-        self.custom_user = CustomUser.objects.get(user=self.user)
-        self.custom_user.cups_saved = 7
-        self.custom_user.default_badge_id = self.badge1
-        self.custom_user.most_recent_shop_id = self.shop
-        self.custom_user.last_active_date_time = now()
-        self.custom_user.save()
-        
-        # Set up the test client
-        self.client = Client()
-    
-    def test_dashboard_badge_display(self):
-        """Test that the dashboard correctly displays the user's current badge"""
-        # Log in
-        self.client.login(username='testuser', password='testpass123')
-        
-        # Access dashboard
-        response = self.client.get(reverse('dashboard'))
-        
-        # Check that the response is successful
-        self.assertEqual(response.status_code, 200)
-        
-        # Check that the correct badge file is passed to the template
-        self.assertEqual(response.context['badge_file'], 'badge_lv1.png')
-    
-    def test_progress_calculation(self):
-        """Test that progress towards the next badge is correctly calculated"""
-        # Log in
-        self.client.login(username='testuser', password='testpass123')
-        
-        # Access dashboard
-        response = self.client.get(reverse('dashboard'))
-        
-        # Check that progress is calculated correctly
-        # User has 7 cups, next badge requires 10, so they need 3 more cups
-        self.assertEqual(response.context['coffees_to_next_badge'], 3)
-        
-        # Progress should be correct percentage
-        expected_progress = 70  # 7/10 = 70%
-        self.assertEqual(response.context['progress'], expected_progress)
-    
-    def test_completed_all_challenges(self):
-        """Test display when user has completed all available badges/challenges"""
-        # Update user to have earned all badges
-        self.custom_user.cups_saved = 25
-        self.custom_user.default_badge_id = self.badge3
-        self.custom_user.save()
-        
-        # Log in
-        self.client.login(username='testuser', password='testpass123')
-        
-        # Access dashboard
-        response = self.client.get(reverse('dashboard'))
-        
-        # Since they have the highest badge, they should get the "completed all" value
-        self.assertEqual(response.context['coffees_to_next_badge'], 1000000000)
-        self.assertEqual(response.context['progress'], 100)
-    
-    def test_homepage_daily_goal_progress(self):
-        """Test that the homepage shows daily goal progress"""
-        # Log in
-        self.client.login(username='testuser', password='testpass123')
-        
-        # Access homepage
-        response = self.client.get(reverse('home'))
-        
-        # Check that daily progress values are in the context
-        self.assertIn('progress_percentage', response.context)
-        self.assertIn('cups_saved_today', response.context)
-        
-        # Progress percentage should be calculated based on daily goal (100)
-        self.assertGreaterEqual(response.context['progress_percentage'], 0)
-        self.assertLessEqual(response.context['progress_percentage'], 100)
-    
-    def test_leaderboards_display(self):
-        """Test that leaderboards are displayed on the homepage"""
-        # Create some additional users with different cup counts
-        user2 = User.objects.create_user(
-            username='user2',
-            email='user2@example.com',
-            password='testpass123'
-        )
-        custom_user2 = CustomUser.objects.get(user=user2)
-        custom_user2.cups_saved = 15
-        custom_user2.save()
-        
-        user3 = User.objects.create_user(
-            username='user3',
-            email='user3@example.com',
-            password='testpass123'
-        )
-        custom_user3 = CustomUser.objects.get(user=user3)
-        custom_user3.cups_saved = 3
-        custom_user3.save()
-        
-        # Log in
-        self.client.login(username='testuser', password='testpass123')
-        
-        # Access homepage
-        response = self.client.get(reverse('home'))
-        
-        # Check that leaderboards are included in context
-        self.assertIn('top_10_users', response.context)
-        self.assertIn('top_5_shops', response.context)
-        
-        # Verify the order of users in the leaderboard
-        top_users = response.context['top_10_users']
-        self.assertEqual(top_users[0], custom_user2)
-        self.assertEqual(top_users[1], self.custom_user)
-        self.assertEqual(top_users[2], custom_user3)
+            shop_name='New Shop', active_code='123', number_of_visits=0)
+        self.user = User.objects.create_user(
+            username='1', password='password_1', first_name='John', last_name='Smith')
+        if not CustomUser.objects.filter(user=self.user).exists():
+            self.custom_user = CustomUser.objects.create(
+                user=self.user, cups_saved=0)
+        else:
+            self.custom_user = CustomUser.objects.get(user=self.user)
+
+        # Initialises badges: different thresholds enable user.defaultBadgeId testing
+        self.badge_1 = Badge.objects.create(coffee_until_earned=2)
+        self.badge_2 = Badge.objects.create(coffee_until_earned=3)
+
+        # Simulates recieving a POST request
+        self.request = self.client.post(reverse('log_visit'), {
+                                        'username': self.custom_user.user.username, 'shop_id': self.shop.shop_id})
+
+    def test_shop_registers_visit(self):
+        '''Tests log_visit updates Shop attributes to reflect user's visit'''
+
+        self.shop.refresh_from_db()
+        this_shop = self.shop
+
+        self.assertEqual(this_shop.number_of_visits, 1,
+                         'Shop vist count should increment on visit')
+
+    def test_user_registers_visit(self):
+        '''Tests log_visit updates User attributes to reflect a shop visit'''
+
+        self.custom_user.refresh_from_db()
+        this_user = self.custom_user
+
+        self.assertEqual(this_user.most_recent_shop_id, self.shop,
+                         'The visited shop should be set as the user\'s most recent shop')
+
+        self.assertEqual(this_user.cups_saved, 1,
+                         'User\'s cups saved count should increment on visit')
+
+        self.assertAlmostEqual(
+            this_user.last_active_date_time, now(), delta=timedelta(seconds=1))
+
+    def test_user_shop_registers_visit(self):
+        '''Tests log_visit updates UserShop attributes to reflect a user's visit'''
+
+        try:
+            this_user_shop = UserShop.objects.get(
+                user=self.custom_user, shop_id=self.shop)
+        except UserShop.DoesNotExist:
+            print("UserShop instance should be created for the user - shop pair")
+
+        self.assertEqual(this_user_shop.user, self.custom_user,
+                         'The UserShop instance should reference the correct parent User')
+
+        self.assertEqual(this_user_shop.shop_id, self.shop,
+                         'The UserShop instance should reference the correct parent Shop')
+
+        self.assertEqual(this_user_shop.visit_amounts, 1,
+                         'UserShop vist count should increment on visit')
+
+    def test_user_badge_registers_visit(self):
+        '''Tests log_visit updates UserBadge attributes to reflect a user's visit'''
+
+        # Simulates a second request
+        log_visit(self.request.wsgi_request)
+
+        self.badge_1.refresh_from_db()
+        self.badge_2.refresh_from_db()
+        self.custom_user.refresh_from_db()
+        this_badge = self.badge_1
+        this_user = self.custom_user
+
+        try:
+            user_badge = UserBadge.objects.get(
+                badge_id=this_badge, user=this_user)
+        except UserBadge.DoesNotExist:
+            print("UserBadge instance should be created for the user - badge pair")
+
+        # Tests user fields updated
+        self.assertEqual(this_user.default_badge_id, this_badge,
+                         'Initial earned badge should be set as the User\'s default badge')
+
+        # Tests that badge was earned almost 'now'
+        self.assertAlmostEqual(user_badge.date_time_obtained,
+                               now(), delta=timedelta(seconds=1))
+
+    def test_user_default_badge_updates_when_new_badge_won(self):
+        '''Tests that the default badge ID changes when the user earns a new badge'''
+
+        # Logs enough visits for both 1st and 2nd badges to be owned
+        log_visit(self.request.wsgi_request)
+        log_visit(self.request.wsgi_request)
+
+        self.badge_2.refresh_from_db()
+        self.custom_user.refresh_from_db()
+        badge_2 = self.badge_2
+        this_user = self.custom_user
+
+        self.assertEqual(this_user.default_badge_id, badge_2,
+                         'The User\'s default badge should reference the earned badge with the highest coffee requirement')

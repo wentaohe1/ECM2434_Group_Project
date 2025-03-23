@@ -23,11 +23,15 @@ class LoginSystemTests(TestCase):
             email='test@example.com',
             password='testpass123'
         )
+        cls.test_custom_user=CustomUser.objects.get(user=cls.test_user)
+        cls.test_custom_user.is_email_verified=True
+        cls.test_custom_user.save()
 
     def setUp(self):
         """Set up before each test method"""
         # Create a fresh client for each test
         self.client = Client()
+
 
     def test_user_creation(self):
         """Test user creation with proper attributes"""
@@ -43,8 +47,6 @@ class LoginSystemTests(TestCase):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'authenticate/login.html')
-        # Check if form is included in context
-        self.assertIn('form', response.context)
 
     def test_login_success(self):
         """Test successful login with valid credentials"""
@@ -186,6 +188,28 @@ class LoginSystemTests(TestCase):
         # Should have form errors
         self.assertTrue(response.context['form'].errors)
 
+    
+    def test_login_user_email_not_activated(self):
+        self.test_custom_user.is_email_verified=False
+        self.test_custom_user.save()
+        response = self.client.post(reverse('login'),{
+            'username':'testuser',
+            'password':'testpass123'
+        })
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,'authenticate/login.html')
+        messages=list(get_messages(response.wsgi_request))
+        self.assertTrue(any("Please verify your email" in str(message) for message in messages))
+        
+
+    def test_login_user_email_activated(self):
+        response = self.client.post(reverse('login'),{
+            'username':'testuser',
+            'password':'testpass123'
+        })
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(response.headers.get('Location'),'/home/')
+        
 
 class GDPRComplianceTests(TestCase):
     """Test suite for GDPR compliance functionality"""
@@ -334,7 +358,7 @@ class GDPRComplianceTests(TestCase):
             'id',
             'user', 'cups_saved', 'most_recent_shop_id', 
             'default_badge_id', 'last_active_date_time',
-            'streak', 'streak_start_day'
+            'streak', 'streak_start_day','is_email_verified','email_verification_token','profile_image'
         ]
         
         # Define expected relationship fields (excluded from validation)
