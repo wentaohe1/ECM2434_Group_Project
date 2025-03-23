@@ -78,6 +78,8 @@ TEMPLATES = [
     },
 ]
 
+ALLOWED_HOSTS = ["*"]
+PORT = os.getenv("PORT", 8000)#deployment stuff for render
 WSGI_APPLICATION = 'Ecoffee.wsgi.application'
 
 
