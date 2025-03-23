@@ -78,8 +78,9 @@ TEMPLATES = [
     },
 ]
 
-ALLOWED_HOSTS = ["*"]
-PORT = os.getenv("PORT", 8000)#deployment stuff for render
+
+PORT = os.getenv("PORT", "8000")  # Default to 8000 if not set
+ALLOWED_HOSTS = ["ECM2434_Group_Project.onrender.com", "localhost", "127.0.0.1"]
 WSGI_APPLICATION = 'Ecoffee.wsgi.application'
 
 

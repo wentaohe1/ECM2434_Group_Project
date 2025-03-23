@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="made migrations? still working on getting it deployed">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ecoffee/login_system/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ecoffee/login_system/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Fixed Procfile" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -159,7 +156,7 @@
       <workItem from="1739790174564" duration="1932000" />
       <workItem from="1739807606773" duration="72210000" />
       <workItem from="1740406961502" duration="6038000" />
-      <workItem from="1742739642914" duration="4408000" />
+      <workItem from="1742739642914" duration="4690000" />
     </task>
     <task id="LOCAL-00001" summary="first draft of the welcome page and a new media file for images">
       <option name="closed" value="true" />
@@ -265,7 +262,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742744808624</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Fixed Procfile">
+      <option name="closed" value="true" />
+      <created>1742745404530</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1742745404530</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -281,6 +286,7 @@
     <MESSAGE value="Added Prorocfile and a couple lines in settings for deployment" />
     <MESSAGE value="Needed Pillow Package" />
     <MESSAGE value="made migrations? still working on getting it deployed" />
-    <option name="LAST_COMMIT_MESSAGE" value="made migrations? still working on getting it deployed" />
+    <MESSAGE value="Fixed Procfile" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Procfile" />
   </component>
 </project>
