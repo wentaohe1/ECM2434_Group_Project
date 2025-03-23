@@ -112,22 +112,49 @@
 
         /* Progress Circle */
         .chart-circle {
-            height: 150px;
-            width: 150px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            border: 10px solid #FF746C;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px auto;
-            font-size: 2rem;
             font-weight: bold;
-            color: #FF746C;
+            font-size: 1.5rem;
         }
         h2 {
             font-size: 48px;
             margin-bottom: 5px;
         }
+        .progress-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(#FF746C {{ circle_progress }}%, #FAA0A0 {{ circle_progress }}%);
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 120px;
+            height: 120px;
+            background-color: #D2F9DA;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 1;
+        }
+
+        .inner-text {
+            position: relative;
+            z-index: 2;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FF746C;
+        }
+
         @media (max-width: 1024px) {
             .cards-grid {
                 grid-template-columns: 1fr;
@@ -160,12 +187,12 @@
                 </div>
 
                 <div class="card-single">
-                    <div class="card-head">{{ most_popular_shop.shop_name }}</div>
-                    <p>Your number one coffee shop</p>
+                    <div class="card-head">Your number one coffee shop</div>
                     {%if most_visited_shop.visit_amounts != None %}
+                        <p>{{ most_popular_shop.shop_name }}</p>
                         <h2 class="counter stat-number" data-target="{{ most_popular_shop.number_of_visits }}">{{ most_visited_shop.visit_amounts }}</h2>
                     {% else %}
-                        <h4>Save a coffee to reveal!</h4>
+                        <p>Save a coffee to reveal!</p>
                     {% endif %}
                     {%if most_visited_shop.visit_amounts != None %}
                         <span class="card-chart"><img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name}}.jpeg"></span>
@@ -183,7 +210,6 @@
                     <small>{{ percentage_above_average }}% below the average</small>
                     {% endif %}
                 </div>
-
                 <div class="card-single">
                     <div class="card-head">Progress</div>
                     {% if coffees_to_next_badge == 1000000000 %}
@@ -191,11 +217,11 @@
                     {% else %}
                         <p>{{ coffees_to_next_badge }} more coffees until the next badge!</p>
                     {% endif %}
-                    <div class="chart-circle">{{ progress }}%</div>
+                    <div class="progress-circle">
+                        <div class="inner-text">{{ circle_progress|default:0|floatformat:0 }}%</div>
+                    </div>
                 </div>
             </div>
-
-            <!-- Full-width Badges Row -->
             <div class="badge-card">
                 <h3 class="card-head">Your Badges</h3>
                 <div class="badge-grid">

@@ -126,7 +126,7 @@
       .stats-section {
       display: flex;
       align-items: center;
-      gap: 40px;
+      gap: 10px;
       }
       .stat-item {
       position: relative;

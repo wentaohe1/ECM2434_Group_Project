@@ -32,9 +32,10 @@
         .progress-bar {
             width: 100%;
             height: 16px;
-            background: #ecf0f1;
+            background: #f7f9fa;
             border-radius: 20px;
             overflow: hidden;
+            border: 0.1px solid #0000000b;
         }
 
         .metric-procent {
@@ -273,7 +274,7 @@
             <h3 class="metric-title">Progress</h3>
             <h4 class="metric-procent">{{ total_cups_saved }} cups saved today</h4>
             <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill-bar"></div>
+                <div class="progress-fill" style="width: {{ total_cups_saved|default:0 }}%;">
             </div>
         </div>
         <div class="leaderboard-container">
