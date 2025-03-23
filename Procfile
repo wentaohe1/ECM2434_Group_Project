@@ -1,1 +1,1 @@
-web: daphne -b 0.0.0.0 -p $PORT Ecoffee.asgi:application
+web: daphne Ecoffee.asgi:application --port $PORT --bind 0.0.0.0
