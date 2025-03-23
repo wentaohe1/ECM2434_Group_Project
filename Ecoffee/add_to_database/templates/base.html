@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Ecoffee{% endblock %}</title>
+    <style>
+        .top-nav {
+    background: #a6f3b5;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.primary-btn {
+    background: black;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.primary-btn:hover {
+    opacity: 0.8;
+}
+
+.qr-code {
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.stat-item {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.upload-logo {
+    max-width: 500px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.file-input {
+    margin: 20px 0;
+    padding: 10px;
+    border: 2px dashed #ddd;
+    border-radius: 12px;
+    width: 100%;
+}
+
+.secondary-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #6c757d;
+    color: white;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.secondary-btn:hover {
+    opacity: 0.8;
+}
+
+.error-message {
+    color: red;
+    margin: 10px 0;
+}
+.form-card {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+}
+
+.form-title {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.form-fields div {
+    margin-bottom: 20px;
+}
+
+.form-fields label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #34495e;
+}
+
+.form-fields input,
+.form-fields select,
+.form-fields textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.form-fields input:focus,
+.form-fields select:focus,
+.form-fields textarea:focus {
+    border-color: #a6f3b5;
+    outline: none;
+}
+
+/* Submit Button */
+.primary-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 40px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.primary-btn:hover {
+    opacity: 0.9;
+}
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="brand-section">
+            <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="Ecoffee Logo">
+            </div>
+            <h1>{% block page_title %}{% endblock %}</h1>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'add_shop' %}" class="primary-btn">Create New Shop</a>
+        </div>
+    </nav>
+    <div class="dashboard-container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
