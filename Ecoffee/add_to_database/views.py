@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
-from .models import Shop, Coffee, CustomUser
+from EcoffeeBase.models import Shop, Coffee, CustomUser
 from .form import *
 import qrcode
 from io import BytesIO
