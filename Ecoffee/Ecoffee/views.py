@@ -92,7 +92,6 @@ def dashboard_view(request):
         "top_three_badges":top_three_earned_badges,
         "percentage_above_average":percentage_above_average,
         "negative":negative,
-        "circle_progress": circle_progress,
     })
 
 # orders badges and then returns the first badge that has a higher requirement than the cups the user has saved
