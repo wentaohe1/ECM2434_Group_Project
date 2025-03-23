@@ -1,1 +1,2 @@
-web: gunicorn ECM2434_Group_Project.wsgi:application --bind 0.0.0.0:$PORT
+
+web: daphne -b 0.0.0.0 -p $PORT ECM2434_Group_Project.asgi:application
