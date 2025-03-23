@@ -173,6 +173,23 @@
             margin-bottom: 10px;
         }
 
+        .register-link {
+            font-size: 14.5px;
+            margin-top: 20px;
+            text-align: center;
+            margin: 20px 0 15px;
+        }
+        
+        .register-link p a {
+            color: black;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .register-link p a:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
@@ -185,7 +202,8 @@
             </div>
             <ul class="nav-list">
                 <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
-                <li class="nav-item"><a href="#">Camera</a></li>
+                <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
             </ul>
         </div>
     </header>
@@ -245,6 +263,9 @@
 
             <button type="submit" class="btn">Register</button>
         </form>
+        <div class="register-link">
+            <p>Already have an account?<a href="{% url 'login' %}"> Login</a></p>
+        </div>
     </div>
 
     <script>
@@ -271,11 +292,11 @@
                 if (password.length < 8) {
                     passwordError.textContent = "Your password must contain at least 8 characters.";
                 } else if (!isNaN(password)) {
-                    passwordError.textContent = "Your password can’t be entirely numeric.";
+                    passwordError.textContent = "Your password can't be entirely numeric.";
                 } else if (commonPasswords.includes(password.toLowerCase())) {
-                    passwordError.textContent = "Your password can’t be a commonly used password.";
+                    passwordError.textContent = "Your password can't be a commonly used password.";
                 } else if (password.toLowerCase().includes(username.toLowerCase())) {
-                    passwordError.textContent = "Your password can’t be too similar to your username.";
+                    passwordError.textContent = "Your password can't be too similar to your username.";
                 }
             }
 

@@ -54,7 +54,7 @@ class Badge(models.Model):
     badge_image = models.CharField(max_length=255, default='defaultbadge.png')
     
     def __str__(self):
-        return self.badge_id.coffee_until_earned
+        return str(self.coffee_until_earned)
 
 
 class CustomUser(models.Model):
@@ -76,6 +76,8 @@ class CustomUser(models.Model):
     logs a new visit.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    is_email_verified=models.BooleanField(default=False)
+    email_verification_token=models.CharField(max_length=64, blank=True, null=True)
     cups_saved = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)]
@@ -87,6 +89,10 @@ class CustomUser(models.Model):
     last_active_date_time = models.DateTimeField(default=now)
     streak = models.IntegerField(default=1)
     streak_start_day = models.DateField(default=now)
+    profile_image = models.ImageField(
+        upload_to='profile_pics',
+        default='profile_pics/default.png'
+    )
 
     def __str__(self):
         return self.user.username
@@ -110,6 +116,8 @@ class UserShop(models.Model):
     visit_amounts = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
+    def __str__(self):
+        return self.shop_id.shop_name+' ('+self.user.user.username+') visits'
 
     class Meta:
         """
@@ -138,6 +146,9 @@ class UserBadge(models.Model):
     badge_id = models.ForeignKey(Badge, on_delete=models.CASCADE)
     date_time_obtained = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self):
+        return str(self.badge_id.coffee_until_earned)+' ('+self.user.user.username+') badge'
+
     class Meta:
         """
         This is for combining user and badge_id to form a composite key.
@@ -152,3 +163,4 @@ class ShopUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.shop_id.shop_name} Owner"
+    

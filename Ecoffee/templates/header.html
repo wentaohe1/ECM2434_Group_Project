@@ -1,42 +1,112 @@
 {% load static %}
+<link href="{% static 'css/navbar.css' %}" rel="stylesheet">
+<style>
+    .stats-section {
+        display: flex;
+        align-items: center;
+        
+    }
+
+    .stat-item,
+    .user-menu .date-time {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-pic.active + .user-menu .dropdown-menu {
+        display: block;
+    }
+    .profile-pic.user-menu {
+        margin-left: 10px;
+    }
+    .profile-pic img {
+        width: 42px;
+        height: 42px;
+        object-fit: cover;
+    }
+    @media (max-width: 768px) {
+        .stats-section .stat-item,
+        .stats-section .date-time {
+            display: none !important;
+        }
+
+        .top-nav {
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .brand-section {
+            gap: 10px;
+        }
+
+        .nav-list {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-item a {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .logo a {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .profile-pic img {
+            width: 32px;
+            height: 32px;
+        }
+    }
+</style>
 <header class="top-nav">
-      <div class="brand-section">
-         <div class="logo">
-            <img src="{% static 'images/logo.png' %}" alt="Ecoffee Logo" style="width:50px; height:50px; margin-right:10px;">
-            <a style = 'color: inherit;text-decoration: none' href = {% url 'welcome' %}> Ecoffee</a>
-         </div>
-         <ul class="nav-list">
-            <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
-            <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-            {% if user.is_authenticated %}
-            <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-            <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
-            {% endif %}
-         </ul>
+    <div class="brand-section">
+      <div class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Ecoffee Logo" style="width:50px; height:50px;">
+        <a style="color: inherit; text-decoration: none" href="{% url 'welcome' %}">Ecoffee</a>
       </div>
-<div class="stats-section">
-            {% if user.is_authenticated %}
-            <div class="stat-item">
-                <div class="stat-title">Cups saved by you</div>
-                <div class="stat-value">{{ personal_cups_saved }}</div>
-            </div>
-            {% endif %}
-            <div class="user-menu">
-                {% if user.is_authenticated %}
-                <div class="date-time">
-                    <div class="stat-value">{{ user.username }}</div>
-                    <div class="stat-title">Last active: 2h ago</div>
-                </div>
-                {% endif %}
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Settings</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
-                </div>
-            </div>
+      <ul class="nav-list">
+        {% if user.is_authenticated %}
+          <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+          <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  
+    <div class="stats-section">
+      {% if user.is_authenticated %}
+        <div class="stat-item">
+          <div class="stat-title">Cups saved by you</div>
+          {% if personal_cups_saved != None %}
+            <div class="stat-value">{{ personal_cups_saved }}</div>
+          {% else %}
+            <div class="stat-value">0</div>
+          {% endif %}
         </div>
-   </header>
-<main>{%  block content %}{% endblock content %}</main>
+        <div>
+          <div class="date-time">
+            <div class="stat-value">{{ user.username }}</div>
+            <div class="stat-title">{{ user.customuser.last_active_date_time|timesince }} ago</div>
+          </div>
+        </div>
+        <div class="profile-pic user-menu">
+          <img src="{{ user.customuser.profile_image.url }}" alt="Profile">
+        </div>
+        <div class="user-menu">
+          <div class="dropdown-menu" id="dropdown">
+            <a href="{% url 'settings' %}" class="dropdown-item">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="{% url 'logout' %}" class="dropdown-item">Log Out</a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </header>
+  <main>{% block content %}{% endblock content %}</main>
+  
 
 

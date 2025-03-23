@@ -1,6 +1,6 @@
 {% load static %}
 {% include 'header.html' %}
-<!DOCTYPE html>
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -269,11 +269,19 @@
         </style>
     </head>
     <body>
-
         <div class="wrapper">
-            <form action="" method="POST">
+            <h1 class="logo"><img style="height: 50px;width: 50px" alt="EcoffeeLogo" src="{% static 'images/logo.png' %}"> Ecoffee</h1>
+
+            {% if messages %}
+            <div class="messages" style="color: red; font-size: 14px; text-align: left; margin-bottom: 10px;">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
-                <h1 class = "logo"><img style = 'height: 50px;width: 50px'alt = "EcoffeeLogo" src = {% static 'images/logo.png' %}> Ecoffee</h1>
                 <div class="input-box">
                     <input type="text" name="username" placeholder="Username" required>
                     <img class="i" src="{% static 'images/user-solid-24.png' %}" alt="User Icon">
