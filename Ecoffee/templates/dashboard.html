@@ -155,21 +155,23 @@
         <div class="dashboard-grid">
             <div class="cards-grid">
                 <div class="card-single">
-                    <div class="card-head">Purchases</div>
-                    <p>In January you have saved</p>
+                    <div class="card-head">All time cups saved</div>
                     <h2 class="counter stat-number" data-target="{{ coffees_saved }}">{{ coffees_saved }} cups</h2>
-                    <small>2% more than average</small>
                 </div>
 
                 <div class="card-single">
                     <div class="card-head">{{ most_popular_shop.shop_name }}</div>
-                    <p>Number of all-time visits</p>
+                    <p>Your number one coffee shop</p>
                     {%if most_visited_shop.visit_amounts != None %}
                         <h2 class="counter stat-number" data-target="{{ most_popular_shop.number_of_visits }}">{{ most_visited_shop.visit_amounts }}</h2>
                     {% else %}
-                        <h4>You havent saved a coffee</h4>
+                        <h4>Save a coffee to reveal!</h4>
                     {% endif %}
-                    <img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name }}.jpeg" width="60" alt="{{ most_popular_shop.shop_name }}">
+                    {%if most_visited_shop.visit_amounts != None %}
+                        <span class="card-chart"><img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name}}.jpeg"></span>
+                    {% else %}
+                        <span class="card-chart"><img src="{% static 'images/no-visits.png' %}"></span> 
+                    {% endif %}
                 </div>
                 <div class="card-single">
                     <div class="card-head">Money Saved</div>

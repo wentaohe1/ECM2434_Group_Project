@@ -78,12 +78,16 @@
       {% if user.is_authenticated %}
         <div class="stat-item">
             <div class="stat-title">Cups saved by you</div>
-            <div class="stat-value">{{ personal_cups_saved }}</div>
+            {% if personal_cups_saved != None %}
+              <div class="stat-value">{{ personal_cups_saved }}</div>
+            {% else %}
+              <div class="stat-value">0</div>
+            {% endif %}
         </div>
       <div>
         <div class="date-time">
           <div class="stat-value">{{ user.username }}</div>
-          <div class="stat-title">Last active: 2h ago</div>
+          <div class="stat-title">{{ user.customuser.last_active_date_time|timesince }} ago</div>
         </div>
       </div>
     </div>
