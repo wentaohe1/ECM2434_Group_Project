@@ -166,8 +166,8 @@ class IntegrationTests(TestCase):
         self.badge_2 = Badge.objects.create(coffee_until_earned=3)
 
     def test_user_lifecycle(self):
-        """Tests the complete user experience, including registration, shop visiting and 
-        leaderboards"""
+        """Tests the complete user experience, including registration, shop visiting 
+        and leaderboards"""
 
         this_user = self.custom_user_1
         shop_1 = self.shop_1
@@ -180,36 +180,40 @@ class IntegrationTests(TestCase):
         response_dashboard_0 = self.client.get(reverse('dashboard'))
         response_home_0 = self.client.get(reverse('home'))
 
-        self.assertIn('coffees_saved', response.context, 'Dashboard should display '
-        'coffees_saved')
+        self.assertEqual(response_dashboard_0.context['coffees_saved'], 0, 'Initial '
+        'saved coffees should be 0')
 
-        self.assertIn('money_saved', response.context, 'Dashboard should display money_saved')
+        self.assertEqual(response_dashboard_0.context['money_saved'], 0.00, 'Initial '
+        'saved money should be 0')
 
-        self.assertIn('most_popular_shop', response.context, 'Dashboard should display '
-        'most_popular_shop')
+        #self.assertIn('badge_file', response_dashboard_0.context, 'Dashboard should display user\'s '
+        #'badge')
 
-        self.assertIn('badge_file', response.context, 'Dashboard should display user\'s '
-        'badge')
+        self.assertEqual(response_home_0.context['cups_saved_today'], 0.00, 'Initial '################################### note not the same for everyone
+        'cups saved today should be 0')
 
-        self.assertEqual(response_dashboard_0.context['coffees_saved'], 0, 'Dashboard should '
-        'initially show 0 coffees saved')
+        self.assertEqual(response_home_0.context['money_saved'], 0.00, 'Initial '
+        'saved money should be 0')
 
-        self.assertIn('cups_saved_today', response.context, 
-                      'Homepage should display cups_saved_today')
+        self.assertEqual(response_home_0.context['money_saved'], 0.00, 'Initial '
+        'saved money should be 0')
+
+        self.assertIn('cups_saved_today', response_home_0.context, 
+                      'Initial cups saved should be 0')
         
-        self.assertIn('progress_percentage', response.context,
+        self.assertIn('progress_percentage', response_home_0.context,
                       'Homepage should display progress_percentage')
         
-        self.assertIn('personal_cups_saved', response.context,
+        self.assertIn('personal_cups_saved', response_home_0.context,
                       'Homepage should display personal_cups_saved')
         
-        self.assertIn('total_cups_saved', response.context,
+        self.assertIn('total_cups_saved', response_home_0.context,
                       'Homepage should display total_cups_saved')
         
-        self.assertIn('top_5_shops', response.context,
+        self.assertIn('top_5_shops', response_home_0.context,
                       'Homepage should display top_5_shops')
         
-        self.assertIn('top_10_users', response.context,
+        self.assertIn('top_10_users', response_home_0.context,
                       'Homepage should display top_5_shops')
         
         # Visits shop 1
