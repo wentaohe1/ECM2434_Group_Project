@@ -25,7 +25,7 @@ def home(request):
         else:
             user_badge = ''  # prevent crashing from empty database
     else:
-        personal_cups_saved = ''  # set as default values if not logged in
+        personal_cups_saved = 0  # set default as 0 instead of empty string
         user_badge = ''
     # Calculate progress percentage
     progress_percentage = (cups_saved_today / daily_goal) * \
@@ -82,6 +82,7 @@ def dashboard_view(request):
 
     return render(request, 'dashboard.html', {
         "coffees_saved": coffees_saved,
+        "personal_cups_saved": coffees_saved,  # Add personal_cups_saved to match the template variable
         "money_saved": str(round(int(coffees_saved)*0.2, 2)),
         "badge_file": user_badge,
         "most_popular_shop": Shop.objects.order_by('-number_of_visits').first(),
@@ -114,6 +115,7 @@ def welcome(request):
         try:
             personal_cups_saved = request.user.customuser.cups_saved
         except:
+            # If there's an exception, personal_cups_saved remains 0
             pass
     
     return render(request, 'welcome.html', {
