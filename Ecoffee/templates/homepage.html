@@ -274,8 +274,13 @@
             <h3 class="metric-title">Progress</h3>
             <h4 class="metric-procent">{{ total_cups_saved }} cups saved today</h4>
             <div class="progress-bar">
-                <div class="progress-fill" style="width: {{ total_cups_saved|default:0 }}%;">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('progressFill').style.width = '{{ total_cups_saved|default:0 }}%';
+                });
+            </script>
         </div>
         <div class="leaderboard-container">
             <section class="table-leaderboard">
@@ -320,11 +325,15 @@
                                 </td>
                                 <td>
                                     <div class="badge-container">
-                                        {% if custom_user.badge_id != None %}
+                                        {% if custom_user.default_badge_id != None %}
                                             <img src="{% static 'images/'|add:custom_user.default_badge_id.badge_image %}" 
+                                                 alt="{{ custom_user.default_badge_id.coffee_until_earned }} Badge" 
+                                                 style="width: 30px; height: 30px;">
+                                        {% else %}
+                                            <img src="{% static 'images/defaultbadge.png' %}" 
+                                                 alt="Default Badge" 
+                                                 style="width: 30px; height: 30px;">
                                         {% endif %}
-                                        alt="Default Badge" 
-                                        style="width: 30px; height: 30px;">
                                     </div>
                                 </td>
                             </tr>

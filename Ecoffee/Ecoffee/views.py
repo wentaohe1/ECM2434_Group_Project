@@ -109,8 +109,16 @@ def get_next_badge(request_user):
 
 
 def welcome(request):
-    return render(request, 'welcome.html')
-# (sprint2) Ensure users without a badge get a default badge
+    personal_cups_saved = 0
+    if request.user.is_authenticated:
+        try:
+            personal_cups_saved = request.user.customuser.cups_saved
+        except:
+            pass
+    
+    return render(request, 'welcome.html', {
+        'personal_cups_saved': personal_cups_saved
+    })
 
 
 def calculate_percentage_above_average(request_user):
@@ -128,10 +136,15 @@ def calculate_percentage_above_average(request_user):
 
 #settings view
 def settings_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+        
     user = request.user.customuser
+    personal_cups_saved = user.cups_saved
+    
     if request.method == 'POST':
         picture_form = ProfileImageForm(instance=user)
-        user_form=ChangeUserDetailsForm(instance=request.user)
+        user_form = ChangeUserDetailsForm(instance=request.user)
         if 'picture_form_submit' in request.POST:
             picture_form = ProfileImageForm(request.POST, request.FILES, instance=user)
             if picture_form.is_valid():
@@ -139,23 +152,37 @@ def settings_view(request):
                 return redirect('settings')
             else:
                 context={
-                    'picture_form':picture_form,
-                    'user_form':user_form
+                    'picture_form': picture_form,
+                    'user_form': user_form,
+                    'personal_cups_saved': personal_cups_saved
                 }
-                return render(request,'settings.html',context)
+                return render(request, 'settings.html', context)
         elif 'user_form_submit' in request.POST:
-            user_form=ChangeUserDetailsForm(request.POST,instance=request.user)
+            user_form = ChangeUserDetailsForm(request.POST, instance=request.user)
             if user_form.is_valid():
                 user_form.save()
                 return redirect('login')
             else:
                 print("Form errors:", user_form.errors)
                 context={
-                    'picture_form':picture_form,
-                    'user_form':user_form
+                    'picture_form': picture_form,
+                    'user_form': user_form,
+                    'personal_cups_saved': personal_cups_saved
                 }
-                return render(request,'settings.html',context)
+                return render(request, 'settings.html', context)
+        else:
+            # Handle any other POST cases that don't match expected patterns
+            context = {
+                'user_form': user_form,
+                'picture_form': picture_form,
+                'personal_cups_saved': personal_cups_saved
+            }
+            return render(request, 'settings.html', context)
     else:
-        context = {'user_form':ChangeUserDetailsForm(instance=request.user),'picture_form':ProfileImageForm(instance=user)}
-        return render(request,'settings.html', {})
+        context = {
+            'user_form': ChangeUserDetailsForm(instance=request.user),
+            'picture_form': ProfileImageForm(instance=user),
+            'personal_cups_saved': personal_cups_saved
+        }
+        return render(request, 'settings.html', context)
 
