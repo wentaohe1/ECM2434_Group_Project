@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Added a render.yaml file for a last ditch attempt" />
+    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Added a render.yaml file for a last ditch attempt">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -158,15 +161,7 @@
       <workItem from="1739790174564" duration="1932000" />
       <workItem from="1739807606773" duration="72210000" />
       <workItem from="1740406961502" duration="6038000" />
-      <workItem from="1742739642914" duration="35426000" />
-    </task>
-    <task id="LOCAL-00001" summary="first draft of the welcome page and a new media file for images">
-      <option name="closed" value="true" />
-      <created>1739891112179</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1739891112179</updated>
+      <workItem from="1742739642914" duration="36190000" />
     </task>
     <task id="LOCAL-00002" summary="added a login option to the page, illmake it look nice later, images are buggy">
       <option name="closed" value="true" />
@@ -536,7 +531,31 @@
       <option name="project" value="LOCAL" />
       <updated>1742830877457</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742831060777</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1742831060777</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742831276759</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1742831276759</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742831527514</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1742831527518</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
