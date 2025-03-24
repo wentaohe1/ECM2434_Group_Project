@@ -5,6 +5,7 @@ from django.utils.timezone import now
 from datetime import timedelta
 from django.utils.timezone import now
 from EcoffeeBase.models import Shop, CustomUser, UserShop, Badge, UserBadge
+from EcoffeeBase.forms import ProfileImageForm
 from EcoffeeBase.views import log_visit
 
 
@@ -317,29 +318,38 @@ class ViewsTests(TestCase):
                          Shop.objects.order_by('-number_of_visits').first(), 
                          'Dashboard should display the correct most visited shop')
 
-    def test_home_displays_correct_personal_data(self):
-        """Tests the home page displays correct user stats"""
+    def test_home_displays_correct_data(self):
+        """Tests the home page displays correct stats"""
 
-        # Logs in so user statistics can be tested
-        self.client.login(username='user_1', password='password_1')
-        response = self.client.get(reverse('home'))
+        # Tests user stats logged out and access to home
+        response_unauthenticated = self.client.get(reverse('home'))
 
-        self.assertEqual(response.status_code, 200,
+        self.assertEqual(response_authenticated.status_code, 200,
                          'Homepage access request should be accepted')
         
-        self.assertTemplateUsed(response, 'homepage.html', 
+        self.assertTemplateUsed(response_authenticated, 'homepage.html', 
                                 'User should be redirected to the homepage')
+
+        self.assertIn('personal_cups_saved', response_unauthenticated.context,
+                      'Homepage should display personal_cups_saved')
+
+        self.assertEqual(response_unauthenticated.context['personal_cups_saved'], '',
+                      'personal_cups_saved should be \'\' if not logged in')
+
+        # Logs in to test other stats
+        self.client.login(username='user_1', password='password_1')
+        response_authenticated = self.client.get(reverse('home'))
         
-        self.assertIn('cups_saved_today', response.context, 
+        self.assertEqual(response_authenticated.context['personal_cups_saved'], 0, 
+                         'Initial personal saved cups should be 0')
+        
+        self.assertIn('cups_saved_today', response_authenticated.context, 
                       'Homepage should display cups_saved_today')
         
-        self.assertIn('progress_percentage', response.context,
+        self.assertIn('progress_percentage', response_authenticated.context,
                       'Homepage should display progress_percentage')
         
-        self.assertIn('personal_cups_saved', response.context,
-                      'Homepage should display personal_cups_saved')
-        
-        self.assertIn('total_cups_saved', response.context,
+        self.assertIn('total_cups_saved', response_authenticated.context,
                       'Homepage should display total_cups_saved')
         
     def test_home_displays_correct_leaderboard_data(self):
@@ -369,3 +379,5 @@ class ViewsTests(TestCase):
             self.assertGreaterEqual(shop_leaderboard[i].number_of_visits, 
                                     shop_leaderboard[i+1].number_of_visits,
                                     'SHop leaderboard should correctly rank by saved cups')
+            
+    # to test qr, database safety, only 1 scan per day
