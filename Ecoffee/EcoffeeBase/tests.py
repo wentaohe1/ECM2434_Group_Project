@@ -1,9 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-from django.utils.timezone import now
-from datetime import timedelta
-from django.utils.timezone import now
+from django.utils.timezone import now, timedelta
 from EcoffeeBase.models import Shop, CustomUser, UserShop, Badge, UserBadge
 from EcoffeeBase.forms import ProfileImageForm
 from EcoffeeBase.views import log_visit
@@ -144,17 +142,25 @@ class TestDataBase(TestCase):
     def test_user_cannot_revisit_shop_same_day(self):
 
         self.shop.refresh_from_db()
+        self.user.refresh_from_db()
         this_shop = self.shop
+        this_user = self.user
         try:
             this_user_shop = UserShop.objects.get(
                 user=self.custom_user, shop_id=self.shop)
         except UserShop.DoesNotExist:
             print("UserShop instance should be created for the user - shop pair")
 
-        # Simulates 2 visits
-        this_user_shop.visit_amounts += 1
+        # Logs 2 visits
+        self.client.post(reverse('log_visit'), {
+            'username': this_user.username, 
+            'shop_id': this_shop.shop_id
+        })
         this_user_shop.save()
-        this_user_shop.visit_amounts += 1
+        self.client.post(reverse('log_visit'), {
+            'username': this_user.username, 
+            'shop_id': this_shop.shop_id
+        })
         this_user_shop.save()
 
         this_user_shop.refresh_from_db()
@@ -193,6 +199,9 @@ class TestDataBaseMultipleObjects(TestCase):
     def test_multiple_users_can_visit_shop(self):
         """Tests that multiple user visits to the same shop are logged"""
 
+        self.shop_1.refresh_from_db()
+        self.custom_user_1.refresh_from_db()
+        self.custom_user_2.refresh_from_db()
         this_shop = self.shop_1
         this_user_1 = self.custom_user_1
         this_user_2 = self.custom_user_2
@@ -250,7 +259,7 @@ class TestDataBaseMultipleObjects(TestCase):
         self.assertEqual(this_user.cups_saved, 2, 
                          'Cups saved should update to reflect visits to multiple shops')
         
-        self.assertEqual(this_user.most_recent_shop_id, this_shop_2.shop_id, 
+        self.assertEqual(this_user.most_recent_shop_id, this_shop_2, 
                          'Most recent shop ID should reflect users\' most recently visited shop')
         
         self.assertEqual((user_shop_1.visit_amounts, user_shop_2.visit_amounts),(1, 1), 

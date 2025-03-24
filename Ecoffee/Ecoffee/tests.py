@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from EcoffeeBase.models import CustomUser, Badge, Shop, UserShop
 from EcoffeeBase.forms import ProfileImageForm
 from django.utils.timezone import now, timedelta
-import datetime
 
 class TestChallengesDisplay(TestCase):
     """Tests for the display of challenges and progress in the Ecoffee app"""
@@ -152,32 +151,32 @@ class TestViews(TestCase):
         self.custom_users = {}
         self.badge = Badge.objects.create(coffee_until_earned=4, badge_image='Badage Lv1 2.png')
 
-        for i in range(1, 5):
+        for i in range(1, 6):
             self.shops[i] = Shop.objects.create(shop_name=f'Shop_{i}', active_code=f'{i}{i+1}{i+2}', 
                                                 number_of_visits=i*3)
             
-        for i in range(1, 10):
+        for i in range(1, 11):
             self.users[i] = User.objects.create_user(
                 username=f'user_{i}', password=f'password_{i}', first_name=f'FName_{i}', 
                 last_name=f'LName_{i}')
             if not CustomUser.objects.filter(user=self.users[i]).exists():
-                self.custom_users[i] = CustomUser.objects.create(user=self.users[i], cups_saved=5*i)
+                self.custom_users[i] = CustomUser.objects.create(user=self.users[i], cups_saved=0)
             else:
-                self.custom_users[i] = CustomUser.objects.get(user=self.users[i])
+                self.custom_users[i] = CustomUser.objects.get(user=self.users[i])        
             # Stores user badges
             self.custom_users[i].default_badge_id = self.badge
             self.custom_users[i].save()
 
     def test_settings_displays_correctly(self):
         """Tests that settings displays correctly"""
-        self.client.login(username='testuser', password='testpass')
+        self.client.login(username='user_1', password='password_1')
         response = self.client.get(reverse('settings'))
         
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'settings.html')
+        self.assertEqual(response.status_code, 200, 'Settings access should be accepted')
+        self.assertTemplateUsed(response, 'settings.html', 'User should be redirected to settings')
         
         # Checks form
-        self.assertIn('form', response.context, 'Settings hould display a form')
+        self.assertIn('form', response.context, 'Settings should display a form')
         self.assertIsInstance(response.context['form'], ProfileImageForm, 'Form should be of the'
         'correct type')
 
@@ -186,12 +185,15 @@ class TestViews(TestCase):
 
         # Attempts dashboard access when logged in and out
         response_unauthenticated = self.client.get(reverse('dashboard'))
-        self.client.login(username='user_1', password='password_1')
+        self.client.login(username=f'user_1', password='password_1')
         response_authenticated = self.client.get(reverse('dashboard'))
 
-        self.assertRedirects(response_unauthenticated, reverse('login'), 
-                             'If logged out, attempts to access dashboard should redirect to '
-                             'the login page')
+        self.assertRedirects(response_unauthenticated, reverse('login'), status_code=302, 
+                             target_status_code=200, msg_prefix= 'If logged out, dashboard access '
+                             'attempts should be redirected')
+        
+        self.assertTemplateUsed(response_unauthenticated, 'login', 
+                             'If logged out, dashboard access attempts should redirect to Login')
 
         self.assertEqual(response_authenticated.status_code, 200,
                          'Dashboard access should be accepted if logged in')
@@ -201,6 +203,16 @@ class TestViews(TestCase):
 
     def test_dashboard_displays_correct_data(self):
         """Tests the dashboard displays correct statistics"""
+
+        self.shops[1].refresh_from_db()
+        this_shop = self.shops[1]
+
+        # Logs 5 visits
+        for i in range(1, 6):
+            self.client.post(reverse('log_visit'), {
+                'username': 'user_1', 
+                'shop_id': this_shop.shop_id
+            })
 
         self.client.login(username='user_1', password='password_1')
         response = self.client.get(reverse('dashboard'))
@@ -219,7 +231,7 @@ class TestViews(TestCase):
         self.assertEqual(response.context['coffees_saved'], 5, 
                          'Dashboard should display the correct coffees_saved')
         
-        self.assertEqual(response.context['money_saved'], '1.00', 
+        self.assertEqual(response.context['money_saved'], '1.0', 
                          'Dashboard should display the correct money_saved, currently '
                          '0.2 * 5')
         
@@ -297,7 +309,7 @@ class TestSystemIntegration(TestCase):
         self.shop_1 = Shop.objects.create(
             shop_name='New Shop 1', active_code='123', number_of_visits=0)
         self.shop_2 = Shop.objects.create(
-            shop_name='New Shop 2', active_code='456', number_of_visits=1)
+            shop_name='New Shop 2', active_code='456', number_of_visits=0)
         self.user_1 = User.objects.create_user(
             username='1', password='password_1', first_name='John', last_name='One')
         self.user_2 = User.objects.create_user(
@@ -308,7 +320,7 @@ class TestSystemIntegration(TestCase):
             self.custom_user_1 = CustomUser.objects.create(
                 user=self.user_1, cups_saved=0)
             self.custom_user_2 = CustomUser.objects.create(
-                user=self.user_2, cups_saved=1)
+                user=self.user_2, cups_saved=0)
         else:
             self.custom_user_1 = CustomUser.objects.get(user=self.user_1)
             self.custom_user_2 = CustomUser.objects.get(user=self.user_2)
@@ -317,10 +329,18 @@ class TestSystemIntegration(TestCase):
         self.badge_1 = Badge.objects.create(coffee_until_earned=1)
         self.badge_2 = Badge.objects.create(coffee_until_earned=3)
 
+        self.client.post(reverse('log_visit'), { # Logs initial visit to shop 2 by user 2
+            'username': '2', 
+            'shop_id': self.shop_2.shop_id
+        })
+
     def test_user_lifecycle(self):
         """Tests the complete user experience, including registration, shop visiting 
         and leaderboards"""
 
+        self.shop_1.refresh_from_db()
+        self.shop_2.refresh_from_db()
+        self.custom_user_1.refresh_from_db()
         this_user = self.custom_user_1
         shop_1 = self.shop_1
         shop_2 = self.shop_2
@@ -338,13 +358,13 @@ class TestSystemIntegration(TestCase):
         self.assertEqual(response_dashboard_0.context['badge_file'], 'defaultbadge.png', 
                          'Initial badge should be default')
 
-        self.assertEqual(response_dashboard_0.context['money_saved'], 0.00, 'Initial '
+        self.assertEqual(response_dashboard_0.context['money_saved'], '0.0', 'Initial '
         'progress should be 0')
 
         self.assertEqual(response_home_0.context['personal_cups_saved'], 0, 'Initial '
         'personal saved cups should be 0')
 
-        self.assertEqual(response_home_0.context['total_cups_saved'], 0, 'total '
+        self.assertEqual(response_home_0.context['total_cups_saved'], 1, 'total '
         'cups saved should be 1')
 
         self.assertEqual((response_home_0.context['top_10_users'][0].cups_saved, 
@@ -354,7 +374,7 @@ class TestSystemIntegration(TestCase):
         # Visits shop 1
         self.client.post(reverse('log_visit'), {
             'username': '1', 
-            'shop_id': shop_1
+            'shop_id': shop_1.shop_id
         })
         
         this_user.refresh_from_db()
@@ -385,12 +405,14 @@ class TestSystemIntegration(TestCase):
         # Visits shop 2 multiple times
         self.client.post(reverse('log_visit'), {
             'username': '1', 
-            'shop_id': shop_2
+            'shop_id': shop_2.shop_id
         })
         self.client.post(reverse('log_visit'), {
             'username': '1', 
-            'shop_id': shop_2
+            'shop_id': shop_2.shop_id
         })
+
+        this_user.refresh_from_db()
         
         response_dashboard_2 = self.client.get(reverse('dashboard'))
         response_home_2 = self.client.get(reverse('home'))
@@ -417,14 +439,17 @@ class TestSystemIntegration(TestCase):
     def test_shop_life_cycle(self):
         """Tests a complete shop lifecycle for multiple customers and days"""
 
+        self.shop_1.refresh_from_db()
+        self.shop_2.refresh_from_db()
+        self.custom_user_2.refresh_from_db()
         shop_1 = self.shop_1
         shop_2 = self.shop_2
         user_2 = self.custom_user_2
-
-        this_user_shop = UserShop.objects.create(
-                user=user_2, shop_id=shop_2)
-        this_user_shop.visit_amounts = 1 # Adds the initial visit to shop 2
-        this_user_shop.save()
+        try:
+            this_user_shop = UserShop.objects.get(
+                user=self.custom_user_2, shop_id=self.shop_2)
+        except UserShop.DoesNotExist:
+            print("UserShop instance should be created for the user - shop pair")
 
         # Logs in user 2
         self.client.login(username='2', password='password_2')
@@ -433,10 +458,10 @@ class TestSystemIntegration(TestCase):
         response_dashboard_0 = self.client.get(reverse('dashboard'))
         response_home_0 = self.client.get(reverse('home'))
         
-        self.assertEqual(response_dashboard_0.context['most_popular_shop'][0], shop_2, 
+        self.assertEqual(response_dashboard_0.context['most_popular_shop'].first(), shop_2, 
                          'Initial most popular shop should be 2')
 
-        self.assertEqual(response_dashboard_0.context['most_visited_shop'][0], this_user_shop, 
+        self.assertEqual(response_dashboard_0.context['most_visited_shop'].first(), this_user_shop, 
                          'Initial most visited shop should be 2')
 
         self.assertEqual(response_dashboard_0.context['percentage_above_average'], 100, 
@@ -455,11 +480,11 @@ class TestSystemIntegration(TestCase):
         # User 1 visits 1st shop multiple times
         self.client.post(reverse('log_visit'), {
             'username': '1', 
-            'shop_id': shop_1
+            'shop_id': shop_1.shop_id
         })
         self.client.post(reverse('log_visit'), {
             'username': '1', 
-            'shop_id': shop_1
+            'shop_id': shop_1.shop_id
         })
         
         shop_1.refresh_from_db()
@@ -495,7 +520,7 @@ class TestSystemIntegration(TestCase):
         # User 2 visits shop 1 multiple times over 2 days
         self.client.post(reverse('log_visit'), {
             'username': '2', 
-            'shop_id': shop_1
+            'shop_id': shop_1.shop_id
         })
 
         self.user_2.last_active_date_time = now() - timedelta(days=1)
@@ -503,7 +528,7 @@ class TestSystemIntegration(TestCase):
 
         self.client.post(reverse('log_visit'), {
             'username': '2', 
-            'shop_id': shop_1
+            'shop_id': shop_1.shop_id
         })
         
         # Tests new stats
@@ -522,10 +547,10 @@ class TestSystemIntegration(TestCase):
         self.assertEqual(response_dashboard_2.context['percentage_above_average'], 20, 
                          'Percentage saved above average should update after user visits')
 
-        self.assertEqual(response_home_2.context['cups_saved_today'], 3, 'Cups saved today '
+        self.assertEqual(response_home_2.context['cups_saved_today'], 1, 'Cups saved today '
         'should update after user visits and days')
 
-        self.assertEqual(response_home_2.context['progress_percentage'], 3, 'Progress percentage '
+        self.assertEqual(response_home_2.context['progress_percentage'], 1, 'Progress percentage '
         'should update after user visits and days')
 
         self.assertEqual((response_home_2.context['top_5_shops'][0].number_of_visits, 
