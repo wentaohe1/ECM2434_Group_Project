@@ -3,7 +3,7 @@ from EcoffeeBase.models import *
 from django.utils.timezone import now
 from django.db.models import Sum
 from django.templatetags.static import static
-from EcoffeeBase.forms import ProfileImageForm
+from EcoffeeBase.forms import ProfileImageForm,ChangeUserDetailsForm
 
 
 def home(request):
@@ -130,12 +130,32 @@ def calculate_percentage_above_average(request_user):
 def settings_view(request):
     user = request.user.customuser
     if request.method == 'POST':
-        form = ProfileImageForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('settings')
+        picture_form = ProfileImageForm(instance=user)
+        user_form=ChangeUserDetailsForm(instance=request.user)
+        if 'picture_form_submit' in request.POST:
+            picture_form = ProfileImageForm(request.POST, request.FILES, instance=user)
+            if picture_form.is_valid():
+                picture_form.save()
+                return redirect('settings')
+            else:
+                context={
+                    'picture_form':picture_form,
+                    'user_form':user_form
+                }
+                return render(request,'settings.html',context)
+        elif 'user_form_submit' in request.POST:
+            user_form=ChangeUserDetailsForm(request.POST,instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                return redirect('login')
+            else:
+                print("Form errors:", user_form.errors)
+                context={
+                    'picture_form':picture_form,
+                    'user_form':user_form
+                }
+                return render(request,'settings.html',context)
     else:
-        form = ProfileImageForm(instance=user)
-
-    return render(request, 'settings.html', {'form': form})
+        context = {'user_form':ChangeUserDetailsForm(instance=request.user),'picture_form':ProfileImageForm(instance=user)}
+        return render(request,'settings.html', {})
 

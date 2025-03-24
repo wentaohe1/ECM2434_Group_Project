@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Fixed Render Settings">
+    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Added a render.yaml file for a last ditch attempt">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/render.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/render.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,10 +105,11 @@
       <recent name="C:\Users\alexd\PycharmProjects\ECM2434_Group_Project\images" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\alexd\PycharmProjects\ECM2434_Group_Project\Ecoffee" />
+      <recent name="C:\Users\alexd\PycharmProjects\ECM2434_Group_Project" />
       <recent name="C:\Users\alexd\PycharmProjects\ECM2434_Group_Project\Ecoffee\static" />
       <recent name="C:\Users\alexd\PycharmProjects\ECM2434_Group_Project\Ecoffee\media\banner-images" />
       <recent name="C:\Users\alexd\PycharmProjects\ECM2434_Group_Project\Ecoffee\static\images" />
-      <recent name="C:\Users\alexd\PycharmProjects\ECM2434_Group_Project\images" />
     </key>
   </component>
   <component name="RunManager">
@@ -117,6 +120,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="Ecoffee.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -158,71 +162,7 @@
       <workItem from="1739790174564" duration="1932000" />
       <workItem from="1739807606773" duration="72210000" />
       <workItem from="1740406961502" duration="6038000" />
-      <workItem from="1742739642914" duration="7012000" />
-    </task>
-    <task id="LOCAL-00001" summary="first draft of the welcome page and a new media file for images">
-      <option name="closed" value="true" />
-      <created>1739891112179</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1739891112179</updated>
-    </task>
-    <task id="LOCAL-00002" summary="added a login option to the page, illmake it look nice later, images are buggy">
-      <option name="closed" value="true" />
-      <created>1739893647865</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1739893647865</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Made it look slightly nicer, reorganised file structure of images, added a header.html file for the welcome page to include">
-      <option name="closed" value="true" />
-      <created>1740245664622</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1740245664622</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Applied universal header.html for all pages that need it.  Made Welcome the default page.">
-      <option name="closed" value="true" />
-      <created>1740319432854</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1740319432854</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Universal header changed, welcome login section slightly changed.">
-      <option name="closed" value="true" />
-      <created>1740394457249</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1740394457249</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Universal header changed, welcome login section slightly changed.">
-      <option name="closed" value="true" />
-      <created>1740396519898</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1740396519898</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Universal header changed, welcome login section slightly changed.">
-      <option name="closed" value="true" />
-      <created>1740406181132</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1740406181132</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Universal header changed, welcome login section slightly changed.">
-      <option name="closed" value="true" />
-      <created>1740406659224</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1740406659224</updated>
+      <workItem from="1742739642914" duration="39463000" />
     </task>
     <task id="LOCAL-00009" summary="Fixed a missing div tag">
       <option name="closed" value="true" />
@@ -296,7 +236,327 @@
       <option name="project" value="LOCAL" />
       <updated>1742747624308</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Fixed Render Settings replaced gunicorn with daphne">
+      <option name="closed" value="true" />
+      <created>1742748612251</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1742748612251</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Fixed Render Settings replaced gunicorn with daphne">
+      <option name="closed" value="true" />
+      <created>1742749325444</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1742749325444</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Fixed Render Settings replaced gunicorn with daphne">
+      <option name="closed" value="true" />
+      <created>1742750510424</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1742750510424</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Fixed Render Settings replaced gunicorn with daphne">
+      <option name="closed" value="true" />
+      <created>1742752176014</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1742752176014</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Fixed Render Settings replaced gunicorn with daphne">
+      <option name="closed" value="true" />
+      <created>1742755410940</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1742755410940</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Fixed Render Settings replaced gunicorn with daphne">
+      <option name="closed" value="true" />
+      <created>1742756094906</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1742756094906</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Moved Images file for deployment">
+      <option name="closed" value="true" />
+      <created>1742756514454</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1742756514454</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Moved Images file for deployment">
+      <option name="closed" value="true" />
+      <created>1742811128888</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1742811128888</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Changed static settings for deployment">
+      <option name="closed" value="true" />
+      <created>1742812190663</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1742812190663</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Changed static settings for deployment">
+      <option name="closed" value="true" />
+      <created>1742812296355</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1742812296355</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Changed static settings for deployment">
+      <option name="closed" value="true" />
+      <created>1742813353843</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1742813353843</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Changed static settings for deployment">
+      <option name="closed" value="true" />
+      <created>1742814121843</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1742814121843</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Changed static settings for deployment">
+      <option name="closed" value="true" />
+      <created>1742815629195</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1742815629195</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Changed static settings for deployment">
+      <option name="closed" value="true" />
+      <created>1742816578028</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1742816578028</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Changed even more Procfile">
+      <option name="closed" value="true" />
+      <created>1742817638628</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1742817638628</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Changed even more Procfile, and post_render.sh">
+      <option name="closed" value="true" />
+      <created>1742818774295</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1742818774295</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Changed even more Procfile, and post_render.sh, slowly losing my mind">
+      <option name="closed" value="true" />
+      <created>1742821415340</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1742821415340</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Adjusted welcome.html images for deployment compatability">
+      <option name="closed" value="true" />
+      <created>1742822627052</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1742822627053</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Adjusted welcome.html images for deployment compatability">
+      <option name="closed" value="true" />
+      <created>1742823822492</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1742823822492</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Adjusted welcome.html images for deployment compatability">
+      <option name="closed" value="true" />
+      <created>1742825913906</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1742825913906</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Adjusted welcome.html images for deployment compatability">
+      <option name="closed" value="true" />
+      <created>1742827242343</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1742827242343</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Adjusted welcome.html images for deployment compatability">
+      <option name="closed" value="true" />
+      <created>1742828516391</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1742828516391</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Adjusted welcome.html images for deployment compatability">
+      <option name="closed" value="true" />
+      <created>1742828855088</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1742828855088</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742829037870</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1742829037870</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742829473486</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1742829473486</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742829959977</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1742829959977</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742830336732</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1742830336732</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742830541466</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1742830541466</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742830721442</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1742830721442</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742830877457</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1742830877457</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742831060777</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1742831060777</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742831276759</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1742831276759</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742831527514</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1742831527518</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742831840665</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1742831840665</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742832398988</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1742832398988</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742833033015</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1742833033015</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742833333592</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1742833333592</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742833414573</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1742833414573</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742833512424</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1742833512424</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742834061608</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1742834061608</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -314,6 +574,14 @@
     <MESSAGE value="made migrations? still working on getting it deployed" />
     <MESSAGE value="Fixed Procfile" />
     <MESSAGE value="Fixed Render Settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Render Settings" />
+    <MESSAGE value="Fixed Render Settings replaced gunicorn with daphne" />
+    <MESSAGE value="Moved Images file for deployment" />
+    <MESSAGE value="Changed static settings for deployment" />
+    <MESSAGE value="Changed even more Procfile" />
+    <MESSAGE value="Changed even more Procfile, and post_render.sh" />
+    <MESSAGE value="Changed even more Procfile, and post_render.sh, slowly losing my mind" />
+    <MESSAGE value="Adjusted welcome.html images for deployment compatability" />
+    <MESSAGE value="Added a render.yaml file for a last ditch attempt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a render.yaml file for a last ditch attempt" />
   </component>
 </project>

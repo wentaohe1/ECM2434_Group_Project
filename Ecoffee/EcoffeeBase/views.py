@@ -8,7 +8,8 @@ from django.views.decorators.http import require_POST
 from EcoffeeBase.models import Shop, CustomUser, UserShop, Badge, UserBadge
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-from .forms import ProfileImageForm
+from .forms import ProfileImageForm,ChangeUserDetailsForm
+ 
 
 def index(request):
     return HttpResponse("Hello, world. You're at the Ecoffee index.")
@@ -138,15 +139,3 @@ def get_next_badge(request_user):
 def welcome(request):
     return render(request, 'welcome.html')
 # Ensure users without a badge get a default badge
-
-def settings_view(request):
-    user = request.user.customuser
-    if request.method == 'POST':
-        form = ProfileImageForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('settings')
-    else:
-        form = ProfileImageForm(instance=user)
-
-    return render(request, 'settings.html', {'form': form})

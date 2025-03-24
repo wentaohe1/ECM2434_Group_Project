@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+from distutils.sysconfig import BASE_EXEC_PREFIX
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this line
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -79,7 +81,7 @@ TEMPLATES = [
 ]
 
 
-PORT = os.getenv("PORT", "8000")  # Default to 8000 if not set
+PORT = os.getenv("PORT",8000)  # Default to 8000 if not set
 ALLOWED_HOSTS = ["ecm2434-group-project.onrender.com", "localhost", "127.0.0.1"]
 WSGI_APPLICATION = 'Ecoffee.wsgi.application'
 
@@ -130,11 +132,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [ 
-    os.path.join(BASE_DIR, "static"),
-]
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
