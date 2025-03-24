@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: your-app-name  # Replace with your app's name on Render
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: daphne Ecoffee.asgi:application --port $PORT --bind 0.0.0.0
+    staticPublishPath: ./staticfiles
