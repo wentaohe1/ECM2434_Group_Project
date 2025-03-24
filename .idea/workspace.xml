@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Changed static settings for deployment">
+    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Changed even more Procfile">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -160,7 +160,7 @@
       <workItem from="1739790174564" duration="1932000" />
       <workItem from="1739807606773" duration="72210000" />
       <workItem from="1740406961502" duration="6038000" />
-      <workItem from="1742739642914" duration="23004000" />
+      <workItem from="1742739642914" duration="24008000" />
     </task>
     <task id="LOCAL-00001" summary="first draft of the welcome page and a new media file for images">
       <option name="closed" value="true" />
@@ -410,7 +410,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742816578028</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Changed even more Procfile">
+      <option name="closed" value="true" />
+      <created>1742817638628</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1742817638628</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -431,6 +439,7 @@
     <MESSAGE value="Fixed Render Settings replaced gunicorn with daphne" />
     <MESSAGE value="Moved Images file for deployment" />
     <MESSAGE value="Changed static settings for deployment" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed static settings for deployment" />
+    <MESSAGE value="Changed even more Procfile" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed even more Procfile" />
   </component>
 </project>
