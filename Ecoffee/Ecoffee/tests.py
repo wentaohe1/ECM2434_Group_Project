@@ -139,3 +139,107 @@ class ChallengesDisplayTests(TestCase):
         self.assertEqual(top_users[0], custom_user2)
         self.assertEqual(top_users[1], self.custom_user)
         self.assertEqual(top_users[2], custom_user3)
+
+class IntegrationTests(TestCase):
+
+    def setUp(self):
+
+        # Multiple shops
+        self.shop_1 = Shop.objects.create(
+            shop_name='New Shop 1', active_code='123', number_of_visits=0)
+        self.shop_2 = Shop.objects.create(
+            shop_name='New Shop 2', active_code='456', number_of_visits=1)
+        self.user_1 = User.objects.create_user(
+            username='1', password='password_1', first_name='John', last_name='One')
+        
+        if (not CustomUser.objects.filter(user=self.user_1).exists()
+            ) or (not CustomUser.objects.filter(user=self.user_2).exists()):
+            self.custom_user_1 = CustomUser.objects.create(
+                user=self.user_1, cups_saved=0)
+            self.custom_user_2 = CustomUser.objects.create(
+                user=self.user_2, cups_saved=1)
+        else:
+            self.custom_user_1 = CustomUser.objects.get(user=self.user_1)
+            self.custom_user_2 = CustomUser.objects.get(user=self.user_2)
+
+        self.badge_1 = Badge.objects.create(coffee_until_earned=1)
+        self.badge_2 = Badge.objects.create(coffee_until_earned=3)
+
+    def test_user_lifecycle(self):
+        """Tests the complete user experience, including registration, shop visiting and 
+        leaderboards"""
+
+        this_user = self.custom_user_1
+        shop_1 = self.shop_1
+        shop_2 = self.shop_2
+        
+        # Logs in
+        self.client.login(username='1', password='password_1')
+        
+        # Tests Initial dashboard and home stats
+        response_dashboard_0 = self.client.get(reverse('dashboard'))
+        response_home_0 = self.client.get(reverse('home'))
+
+        self.assertIn('coffees_saved', response.context, 'Dashboard should display '
+        'coffees_saved')
+
+        self.assertIn('money_saved', response.context, 'Dashboard should display money_saved')
+
+        self.assertIn('most_popular_shop', response.context, 'Dashboard should display '
+        'most_popular_shop')
+
+        self.assertIn('badge_file', response.context, 'Dashboard should display user\'s '
+        'badge')
+
+        self.assertEqual(response_dashboard_0.context['coffees_saved'], 0, 'Dashboard should '
+        'initially show 0 coffees saved')
+
+        self.assertIn('cups_saved_today', response.context, 
+                      'Homepage should display cups_saved_today')
+        
+        self.assertIn('progress_percentage', response.context,
+                      'Homepage should display progress_percentage')
+        
+        self.assertIn('personal_cups_saved', response.context,
+                      'Homepage should display personal_cups_saved')
+        
+        self.assertIn('total_cups_saved', response.context,
+                      'Homepage should display total_cups_saved')
+        
+        self.assertIn('top_5_shops', response.context,
+                      'Homepage should display top_5_shops')
+        
+        self.assertIn('top_10_users', response.context,
+                      'Homepage should display top_5_shops')
+        
+        # Visits shop 1
+        self.client.post(reverse('log_visit'), {
+            'username': '1', 
+            'shop_id': shop_1.shop_id
+        })
+        # Update user stats
+
+        # Tests new stats
+        response_dashboard_1 = self.client.get(reverse('dashboard'))
+        response_home_1 = self.client.get(reverse('home'))
+
+        self.assertEqual(response_dashboard_1.context['coffees_saved'], 1'Dashboard should '
+        'update coffees saved one visit')
+        self.assertIn('Badage Lv1 2.png', response_dashboard_1.context['badge_file'])
+        
+        # Visits shop 2 multiple times
+        self.client.post(reverse('log_visit'), {
+            'username': '1', 
+            'shop_id': shop_2.shop_id
+        })
+        self.client.post(reverse('log_visit'), {
+            'username': '1', 
+            'shop_id': shop_2.shop_id
+        })
+        
+        response = self.client.get(reverse('dashboard'))
+        self.assertEqual(response.context['coffees_saved'], 3)
+        self.assertIn('badge2.png', response.context['badge_file'])
+
+    def test_shop_life_cycle(self):
+        """Tests a complete shop lifecycle with multiple customers and days"""
