@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Adjusted welcome.html images for deployment compatability">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" afterDir="false" />
-    </list>
+    <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Added a render.yaml file for a last ditch attempt" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -161,7 +158,7 @@
       <workItem from="1739790174564" duration="1932000" />
       <workItem from="1739807606773" duration="72210000" />
       <workItem from="1740406961502" duration="6038000" />
-      <workItem from="1742739642914" duration="33249000" />
+      <workItem from="1742739642914" duration="33736000" />
     </task>
     <task id="LOCAL-00001" summary="first draft of the welcome page and a new media file for images">
       <option name="closed" value="true" />
@@ -483,7 +480,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742828855088</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742829037870</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1742829037870</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -508,6 +513,7 @@
     <MESSAGE value="Changed even more Procfile, and post_render.sh" />
     <MESSAGE value="Changed even more Procfile, and post_render.sh, slowly losing my mind" />
     <MESSAGE value="Adjusted welcome.html images for deployment compatability" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adjusted welcome.html images for deployment compatability" />
+    <MESSAGE value="Added a render.yaml file for a last ditch attempt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a render.yaml file for a last ditch attempt" />
   </component>
 </project>
