@@ -1,1 +1,1 @@
-web: daphne Ecoffee.asgi:application --port 8000 --bind 0.0.0.0
+web: daphne Ecoffee.asgi:application --port $PORT --bind 0.0.0.0
