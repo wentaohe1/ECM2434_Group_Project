@@ -4,6 +4,7 @@ from django.utils.timezone import now
 from django.db.models import Sum
 from django.templatetags.static import static
 from EcoffeeBase.forms import ProfileImageForm,ChangeUserDetailsForm
+from django.contrib import messages
 
 
 def home(request):
@@ -151,8 +152,12 @@ def settings_view(request):
             picture_form = ProfileImageForm(request.POST, request.FILES, instance=user)
             if picture_form.is_valid():
                 picture_form.save()
+                messages.success(request, "Profile picture updated successfully!")
                 return redirect('settings')
             else:
+                for field, errors in picture_form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"{field}: {error}")
                 context={
                     'picture_form': picture_form,
                     'user_form': user_form,
@@ -162,9 +167,25 @@ def settings_view(request):
         elif 'user_form_submit' in request.POST:
             user_form = ChangeUserDetailsForm(request.POST, instance=request.user)
             if user_form.is_valid():
+                # Check if password is being updated
+                password_changed = 'password' in user_form.cleaned_data and user_form.cleaned_data['password']
+                
+                # Save the form
                 user_form.save()
-                return redirect('login')
+                
+                messages.success(request, "User details updated successfully!")
+                
+                # If password was changed, we need to update the session to keep the user logged in
+                if password_changed:
+                    from django.contrib.auth import update_session_auth_hash
+                    update_session_auth_hash(request, request.user)
+                    messages.success(request, "Password updated successfully. You'll remain logged in.")
+                
+                return redirect('settings')
             else:
+                for field, errors in user_form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"{field}: {error}")
                 print("Form errors:", user_form.errors)
                 context={
                     'picture_form': picture_form,
