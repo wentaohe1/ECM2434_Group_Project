@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Added a render.yaml file for a last ditch attempt">
-      <change beforePath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/render.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/render.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,15 +161,7 @@
       <workItem from="1739790174564" duration="1932000" />
       <workItem from="1739807606773" duration="72210000" />
       <workItem from="1740406961502" duration="6038000" />
-      <workItem from="1742739642914" duration="36658000" />
-    </task>
-    <task id="LOCAL-00003" summary="Made it look slightly nicer, reorganised file structure of images, added a header.html file for the welcome page to include">
-      <option name="closed" value="true" />
-      <created>1740245664622</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1740245664622</updated>
+      <workItem from="1742739642914" duration="37360000" />
     </task>
     <task id="LOCAL-00004" summary="Applied universal header.html for all pages that need it.  Made Welcome the default page.">
       <option name="closed" value="true" />
@@ -554,7 +547,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742831840665</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742832398988</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1742832398988</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
