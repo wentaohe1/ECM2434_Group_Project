@@ -133,7 +133,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'Ecoffee/staticfiles')
+STATIC_ROOT = os.path.join(Path(__file__).resolve().parent, '/staticfiles')
 
 
 STATICFILES_DIRS = [
