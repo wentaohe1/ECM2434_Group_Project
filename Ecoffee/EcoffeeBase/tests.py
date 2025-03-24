@@ -9,7 +9,7 @@ from EcoffeeBase.forms import ProfileImageForm
 from EcoffeeBase.views import log_visit
 
 
-class DataBaseTests(TestCase):
+class TestDataBase(TestCase):
 
     def setUp(self):
         '''Sets up a DB with test objects and a simulated POST request'''
@@ -141,7 +141,32 @@ class DataBaseTests(TestCase):
         })
         self.assertEqual(response.status_code, 404)
 
-class DataBaseMultipleObjectsTests(TestCase):
+    def test_user_cannot_revisit_shop_same_day(self):
+
+        self.shop.refresh_from_db()
+        this_shop = self.shop
+        try:
+            this_user_shop = UserShop.objects.get(
+                user=self.custom_user, shop_id=self.shop)
+        except UserShop.DoesNotExist:
+            print("UserShop instance should be created for the user - shop pair")
+
+        # Simulates 2 visits
+        this_user_shop.visit_amounts += 1
+        this_user_shop.save()
+        this_user_shop.visit_amounts += 1
+        this_user_shop.save()
+
+        this_user_shop.refresh_from_db()
+        this_shop.refresh_from_db()
+
+        self.assertEqual(this_user_shop.visit_amounts, 1, "User shop should not log multiple visits "
+        "in a day")
+
+        self.assertEqual(this_shop.number_of_visits, 1, "Shop's visit total should not reflect multiple "
+        "daily same-user visits")
+
+class TestDataBaseMultipleObjects(TestCase):
 
     def setUp(self):
         '''Sets up a DB with test objects'''
@@ -231,153 +256,3 @@ class DataBaseMultipleObjectsTests(TestCase):
         self.assertEqual((user_shop_1.visit_amounts, user_shop_2.visit_amounts),(1, 1), 
                          'Visiting multiple shops should increase each User Shop\'s visit count '
                          'for that user')
-
-class ViewsTests(TestCase):
-
-    def setUp(self):
-        '''Sets up a DB with test objects'''
-
-        # Creates sufficient objects to populate leaderboards
-        self.shops = {}
-        self.users = {}
-        self.custom_users = {}
-        self.badge = Badge.objects.create(coffee_until_earned=4, badge_image='Badage Lv1 2.png')
-
-        for i in range(1, 5):
-            self.shops[i] = Shop.objects.create(shop_name=f'Shop_{i}', active_code=f'{i}{i+1}{i+2}', 
-                                                number_of_visits=i*3)
-            
-        for i in range(1, 10):
-            self.users[i] = User.objects.create_user(
-                username=f'user_{i}', password=f'password_{i}', first_name=f'FName_{i}', 
-                last_name=f'LName_{i}')
-            if not CustomUser.objects.filter(user=self.users[i]).exists():
-                self.custom_users[i] = CustomUser.objects.create(user=self.users[i], cups_saved=5*i)
-            else:
-                self.custom_users[i] = CustomUser.objects.get(user=self.users[i])
-            # Stores user badges
-            self.custom_users[i].default_badge_id = self.badge
-            self.custom_users[i].save()
-
-    def test_settings_displays_correctly(self):
-        """Tests that settings displays correctly"""
-        self.client.login(username='testuser', password='testpass')
-        response = self.client.get(reverse('settings'))
-        
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'settings.html')
-        
-        # Checks form
-        self.assertIn('form', response.context, 'Settings hould display a form')
-        self.assertIsInstance(response.context['form'], ProfileImageForm, 'Form should be of the'
-        'correct type')
-
-    def test_dashboard_accessible_if_authenticated(self):
-        """Tests that dashboard is only accessible when logged in"""
-
-        # Attempts dashboard access when logged in and out
-        response_unauthenticated = self.client.get(reverse('dashboard'))
-        self.client.login(username='user_1', password='password_1')
-        response_authenticated = self.client.get(reverse('dashboard'))
-
-        self.assertRedirects(response_unauthenticated, reverse('login'), 
-                             'If logged out, attempts to access dashboard should redirect to '
-                             'the login page')
-
-        self.assertEqual(response_authenticated.status_code, 200,
-                         'Dashboard access should be accepted if logged in')
-        
-        self.assertTemplateUsed(response_authenticated, 'dashboard.html', 
-                                'User should be redirected to the dashboard')
-
-    def test_dashboard_displays_correct_data(self):
-        """Tests the dashboard displays correct statistics"""
-
-        self.client.login(username='user_1', password='password_1')
-        response = self.client.get(reverse('dashboard'))
-
-        self.assertIn('coffees_saved', response.context, 'Dashboard should display '
-        'coffees_saved')
-
-        self.assertIn('money_saved', response.context, 'Dashboard should display money_saved')
-
-        self.assertIn('most_popular_shop', response.context, 'Dashboard should display '
-        'most_popular_shop')
-
-        self.assertIn('badge_file', response.context, 'Dashboard should display user\'s '
-        'badge')
-        
-        self.assertEqual(response.context['coffees_saved'], 5, 
-                         'Dashboard should display the correct coffees_saved')
-        
-        self.assertEqual(response.context['money_saved'], '1.00', 
-                         'Dashboard should display the correct money_saved, currently '
-                         '0.2 * 5')
-        
-        self.assertEqual(response.context['most_popular_shop'], 
-                         Shop.objects.order_by('-number_of_visits').first(), 
-                         'Dashboard should display the correct most visited shop')
-
-    def test_home_displays_correct_data(self):
-        """Tests the home page displays correct stats"""
-
-        # Tests user stats logged out and access to home
-        response_unauthenticated = self.client.get(reverse('home'))
-
-        self.assertEqual(response_authenticated.status_code, 200,
-                         'Homepage access request should be accepted')
-        
-        self.assertTemplateUsed(response_authenticated, 'homepage.html', 
-                                'User should be redirected to the homepage')
-
-        self.assertIn('personal_cups_saved', response_unauthenticated.context,
-                      'Homepage should display personal_cups_saved')
-
-        self.assertEqual(response_unauthenticated.context['personal_cups_saved'], '',
-                      'personal_cups_saved should be \'\' if not logged in')
-
-        # Logs in to test other stats
-        self.client.login(username='user_1', password='password_1')
-        response_authenticated = self.client.get(reverse('home'))
-        
-        self.assertEqual(response_authenticated.context['personal_cups_saved'], 0, 
-                         'Initial personal saved cups should be 0')
-        
-        self.assertIn('cups_saved_today', response_authenticated.context, 
-                      'Homepage should display cups_saved_today')
-        
-        self.assertIn('progress_percentage', response_authenticated.context,
-                      'Homepage should display progress_percentage')
-        
-        self.assertIn('total_cups_saved', response_authenticated.context,
-                      'Homepage should display total_cups_saved')
-        
-    def test_home_displays_correct_leaderboard_data(self):
-        """Tests the home page displays correct leaderboard stats"""
-
-        response = self.client.get(reverse('home'))
-
-        self.assertIn('top_5_shops', response.context,
-                      'Homepage should display top_5_shops')
-        
-        self.assertIn('top_10_users', response.context,
-                      'Homepage should display top_10_users')
-
-        user_leaderboard = response.context['top_10_users']
-        shop_leaderboard = response.context['top_5_shops']
-
-        self.assertEqual(len(user_leaderboard), 10, 'Users leaderboard should have size 10')
-
-        for i in range(len(user_leaderboard) - 1):
-            self.assertGreaterEqual(user_leaderboard[i].cups_saved, 
-                                    user_leaderboard[i+1].cups_saved, 
-                                    'User leaderboard should correctly rank by saved cups')
-
-        self.assertEqual(len(shop_leaderboard), 5, 'Shop leaderboard should have size 5')
-
-        for i in range(len(shop_leaderboard) - 1):
-            self.assertGreaterEqual(shop_leaderboard[i].number_of_visits, 
-                                    shop_leaderboard[i+1].number_of_visits,
-                                    'SHop leaderboard should correctly rank by saved cups')
-            
-    # to test qr, database safety, only 1 scan per day

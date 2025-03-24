@@ -1,11 +1,12 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
-from EcoffeeBase.models import CustomUser, Badge, Shop
-from django.utils.timezone import now
+from EcoffeeBase.models import CustomUser, Badge, Shop, UserShop
+from EcoffeeBase.forms import ProfileImageForm
+from django.utils.timezone import now, timedelta
 import datetime
 
-class ChallengesDisplayTests(TestCase):
+class TestChallengesDisplay(TestCase):
     """Tests for the display of challenges and progress in the Ecoffee app"""
     
     def setUp(self):
@@ -140,17 +141,167 @@ class ChallengesDisplayTests(TestCase):
         self.assertEqual(top_users[1], self.custom_user)
         self.assertEqual(top_users[2], custom_user3)
 
-class IntegrationTests(TestCase):
+class TestViews(TestCase):
+
+    def setUp(self):
+        '''Sets up a DB with test objects'''
+
+        # Creates sufficient objects to populate leaderboards
+        self.shops = {}
+        self.users = {}
+        self.custom_users = {}
+        self.badge = Badge.objects.create(coffee_until_earned=4, badge_image='Badage Lv1 2.png')
+
+        for i in range(1, 5):
+            self.shops[i] = Shop.objects.create(shop_name=f'Shop_{i}', active_code=f'{i}{i+1}{i+2}', 
+                                                number_of_visits=i*3)
+            
+        for i in range(1, 10):
+            self.users[i] = User.objects.create_user(
+                username=f'user_{i}', password=f'password_{i}', first_name=f'FName_{i}', 
+                last_name=f'LName_{i}')
+            if not CustomUser.objects.filter(user=self.users[i]).exists():
+                self.custom_users[i] = CustomUser.objects.create(user=self.users[i], cups_saved=5*i)
+            else:
+                self.custom_users[i] = CustomUser.objects.get(user=self.users[i])
+            # Stores user badges
+            self.custom_users[i].default_badge_id = self.badge
+            self.custom_users[i].save()
+
+    def test_settings_displays_correctly(self):
+        """Tests that settings displays correctly"""
+        self.client.login(username='testuser', password='testpass')
+        response = self.client.get(reverse('settings'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'settings.html')
+        
+        # Checks form
+        self.assertIn('form', response.context, 'Settings hould display a form')
+        self.assertIsInstance(response.context['form'], ProfileImageForm, 'Form should be of the'
+        'correct type')
+
+    def test_dashboard_accessible_if_authenticated(self):
+        """Tests that dashboard is only accessible when logged in"""
+
+        # Attempts dashboard access when logged in and out
+        response_unauthenticated = self.client.get(reverse('dashboard'))
+        self.client.login(username='user_1', password='password_1')
+        response_authenticated = self.client.get(reverse('dashboard'))
+
+        self.assertRedirects(response_unauthenticated, reverse('login'), 
+                             'If logged out, attempts to access dashboard should redirect to '
+                             'the login page')
+
+        self.assertEqual(response_authenticated.status_code, 200,
+                         'Dashboard access should be accepted if logged in')
+        
+        self.assertTemplateUsed(response_authenticated, 'dashboard.html', 
+                                'User should be redirected to the dashboard')
+
+    def test_dashboard_displays_correct_data(self):
+        """Tests the dashboard displays correct statistics"""
+
+        self.client.login(username='user_1', password='password_1')
+        response = self.client.get(reverse('dashboard'))
+
+        self.assertIn('coffees_saved', response.context, 'Dashboard should display '
+        'coffees_saved')
+
+        self.assertIn('money_saved', response.context, 'Dashboard should display money_saved')
+
+        self.assertIn('most_popular_shop', response.context, 'Dashboard should display '
+        'most_popular_shop')
+
+        self.assertIn('badge_file', response.context, 'Dashboard should display user\'s '
+        'badge')
+        
+        self.assertEqual(response.context['coffees_saved'], 5, 
+                         'Dashboard should display the correct coffees_saved')
+        
+        self.assertEqual(response.context['money_saved'], '1.00', 
+                         'Dashboard should display the correct money_saved, currently '
+                         '0.2 * 5')
+        
+        self.assertEqual(response.context['most_popular_shop'], 
+                         Shop.objects.order_by('-number_of_visits').first(), 
+                         'Dashboard should display the correct most visited shop')
+
+    def test_home_displays_correct_data(self):
+        """Tests the home page displays correct stats"""
+
+        # Tests user stats logged out and access to home
+        response_unauthenticated = self.client.get(reverse('home'))
+
+        self.assertEqual(response_unauthenticated.status_code, 200,
+                         'Homepage access request should be accepted')
+        
+        self.assertTemplateUsed(response_unauthenticated, 'homepage.html', 
+                                'User should be redirected to the homepage')
+
+        self.assertIn('personal_cups_saved', response_unauthenticated.context,
+                      'Homepage should display personal_cups_saved')
+
+        self.assertEqual(response_unauthenticated.context['personal_cups_saved'], '',
+                      'personal_cups_saved should be \'\' if not logged in')
+
+        # Logs in to test other stats
+        self.client.login(username='user_1', password='password_1')
+        response_authenticated = self.client.get(reverse('home'))
+        
+        self.assertEqual(response_authenticated.context['personal_cups_saved'], 0, 
+                         'Initial personal saved cups should be 0')
+        
+        self.assertIn('cups_saved_today', response_authenticated.context, 
+                      'Homepage should display cups_saved_today')
+        
+        self.assertIn('progress_percentage', response_authenticated.context,
+                      'Homepage should display progress_percentage')
+        
+        self.assertIn('total_cups_saved', response_authenticated.context,
+                      'Homepage should display total_cups_saved')
+        
+    def test_home_displays_correct_leaderboard_data(self):
+        """Tests the home page displays correct leaderboard stats"""
+
+        response = self.client.get(reverse('home'))
+
+        self.assertIn('top_5_shops', response.context,
+                      'Homepage should display top_5_shops')
+        
+        self.assertIn('top_10_users', response.context,
+                      'Homepage should display top_10_users')
+
+        user_leaderboard = response.context['top_10_users']
+        shop_leaderboard = response.context['top_5_shops']
+
+        self.assertEqual(len(user_leaderboard), 10, 'Users leaderboard should have size 10')
+
+        for i in range(len(user_leaderboard) - 1):
+            self.assertGreaterEqual(user_leaderboard[i].cups_saved, 
+                                    user_leaderboard[i+1].cups_saved, 
+                                    'User leaderboard should correctly rank by saved cups')
+
+        self.assertEqual(len(shop_leaderboard), 5, 'Shop leaderboard should have size 5')
+
+        for i in range(len(shop_leaderboard) - 1):
+            self.assertGreaterEqual(shop_leaderboard[i].number_of_visits, 
+                                    shop_leaderboard[i+1].number_of_visits,
+                                    'Shop leaderboard should correctly rank by saved cups')
+
+class TestSystemIntegration(TestCase):
 
     def setUp(self):
 
-        # Multiple shops
+        # Multiple shops and users
         self.shop_1 = Shop.objects.create(
             shop_name='New Shop 1', active_code='123', number_of_visits=0)
         self.shop_2 = Shop.objects.create(
             shop_name='New Shop 2', active_code='456', number_of_visits=1)
         self.user_1 = User.objects.create_user(
             username='1', password='password_1', first_name='John', last_name='One')
+        self.user_2 = User.objects.create_user(
+            username='2', password='password_1', first_name='Jane', last_name='Two')
         
         if (not CustomUser.objects.filter(user=self.user_1).exists()
             ) or (not CustomUser.objects.filter(user=self.user_2).exists()):
@@ -162,6 +313,7 @@ class IntegrationTests(TestCase):
             self.custom_user_1 = CustomUser.objects.get(user=self.user_1)
             self.custom_user_2 = CustomUser.objects.get(user=self.user_2)
 
+        # Creates badges
         self.badge_1 = Badge.objects.create(coffee_until_earned=1)
         self.badge_2 = Badge.objects.create(coffee_until_earned=3)
 
@@ -173,7 +325,7 @@ class IntegrationTests(TestCase):
         shop_1 = self.shop_1
         shop_2 = self.shop_2
         
-        # Logs in
+        # Logs in user 1
         self.client.login(username='1', password='password_1')
         
         # Tests Initial dashboard and home stats
@@ -183,67 +335,203 @@ class IntegrationTests(TestCase):
         self.assertEqual(response_dashboard_0.context['coffees_saved'], 0, 'Initial '
         'saved coffees should be 0')
 
+        self.assertEqual(response_dashboard_0.context['badge_file'], 'defaultbadge.png', 
+                         'Initial badge should be default')
+
         self.assertEqual(response_dashboard_0.context['money_saved'], 0.00, 'Initial '
-        'saved money should be 0')
+        'progress should be 0')
 
-        #self.assertIn('badge_file', response_dashboard_0.context, 'Dashboard should display user\'s '
-        #'badge')
+        self.assertEqual(response_home_0.context['personal_cups_saved'], 0, 'Initial '
+        'personal saved cups should be 0')
 
-        self.assertEqual(response_home_0.context['cups_saved_today'], 0.00, 'Initial '################################### note not the same for everyone
-        'cups saved today should be 0')
+        self.assertEqual(response_home_0.context['total_cups_saved'], 0, 'total '
+        'cups saved should be 1')
 
-        self.assertEqual(response_home_0.context['money_saved'], 0.00, 'Initial '
-        'saved money should be 0')
-
-        self.assertEqual(response_home_0.context['money_saved'], 0.00, 'Initial '
-        'saved money should be 0')
-
-        self.assertIn('cups_saved_today', response_home_0.context, 
-                      'Initial cups saved should be 0')
-        
-        self.assertIn('progress_percentage', response_home_0.context,
-                      'Homepage should display progress_percentage')
-        
-        self.assertIn('personal_cups_saved', response_home_0.context,
-                      'Homepage should display personal_cups_saved')
-        
-        self.assertIn('total_cups_saved', response_home_0.context,
-                      'Homepage should display total_cups_saved')
-        
-        self.assertIn('top_5_shops', response_home_0.context,
-                      'Homepage should display top_5_shops')
-        
-        self.assertIn('top_10_users', response_home_0.context,
-                      'Homepage should display top_5_shops')
+        self.assertEqual((response_home_0.context['top_10_users'][0].cups_saved, 
+                          response_home_0.context['top_10_users'][1].cups_saved), (1,0), 
+                         'Leaderboard should show correct rankings and cups')
         
         # Visits shop 1
         self.client.post(reverse('log_visit'), {
             'username': '1', 
-            'shop_id': shop_1.shop_id
+            'shop_id': shop_1
         })
-        # Update user stats
+        
+        this_user.refresh_from_db()
 
         # Tests new stats
         response_dashboard_1 = self.client.get(reverse('dashboard'))
         response_home_1 = self.client.get(reverse('home'))
 
-        self.assertEqual(response_dashboard_1.context['coffees_saved'], 1'Dashboard should '
-        'update coffees saved one visit')
-        self.assertIn('Badage Lv1 2.png', response_dashboard_1.context['badge_file'])
+        self.assertEqual(response_dashboard_1.context['coffees_saved'], 1, 'Dashboard should '
+        'update coffees saved after visit')
+
+        self.assertEqual(response_dashboard_1.context['badge_file'], 'Badage Lv1 2.png', 
+                         'Dashboard should update user\'s badge')
+
+        self.assertEqual(response_dashboard_1.context['money_saved'], 1, 'Progress should '
+        'update to 1 after visit')
+
+        self.assertEqual(response_home_1.context['personal_cups_saved'], 1, 'Personal '
+        'cups saved should be updated after visit')
+
+        self.assertEqual(response_home_1.context['total_cups_saved'], 2, 'total '
+        'cups saved should be 2 after visit')
+
+        self.assertEqual((response_home_1.context['top_10_users'][0].cups_saved, 
+                          response_home_1.context['top_10_users'][1].cups_saved), (1,1), 
+                         'Leaderboard should show correct rankings and cups')
         
         # Visits shop 2 multiple times
         self.client.post(reverse('log_visit'), {
             'username': '1', 
-            'shop_id': shop_2.shop_id
+            'shop_id': shop_2
         })
         self.client.post(reverse('log_visit'), {
             'username': '1', 
-            'shop_id': shop_2.shop_id
+            'shop_id': shop_2
         })
         
-        response = self.client.get(reverse('dashboard'))
-        self.assertEqual(response.context['coffees_saved'], 3)
-        self.assertIn('badge2.png', response.context['badge_file'])
+        response_dashboard_2 = self.client.get(reverse('dashboard'))
+        response_home_2 = self.client.get(reverse('home'))
+
+        self.assertEqual(response_dashboard_2.context['coffees_saved'], 3, 'Dashboard should '
+        'update coffees saved after multiple visits')
+
+        self.assertEqual(response_dashboard_2.context['badge_file'], 'Badage Lv2 2.png', 
+                         'Dashboard should update user\'s badge')
+
+        self.assertEqual(response_dashboard_2.context['money_saved'], 3, 'Progress should '
+        'update after multiple visits')
+
+        self.assertEqual(response_home_2.context['personal_cups_saved'], 3, 'Personal '
+        'cups saved should be updated after multiple visits')
+
+        self.assertEqual(response_home_2.context['total_cups_saved'], 4, 'total '
+        'cups saved should be 4 after multiple visits')
+
+        self.assertEqual((response_home_2.context['top_10_users'][0].cups_saved, 
+                          response_home_2.context['top_10_users'][1].cups_saved), (3,1), 
+                         'Leaderboard should show correct rankings and cups')
 
     def test_shop_life_cycle(self):
-        """Tests a complete shop lifecycle with multiple customers and days"""
+        """Tests a complete shop lifecycle for multiple customers and days"""
+
+        shop_1 = self.shop_1
+        shop_2 = self.shop_2
+        user_2 = self.custom_user_2
+
+        this_user_shop = UserShop.objects.create(
+                user=user_2, shop_id=shop_2)
+        this_user_shop.visit_amounts = 1 # Adds the initial visit to shop 2
+        this_user_shop.save()
+
+        # Logs in user 2
+        self.client.login(username='2', password='password_2')
+        
+        # Tests Initial dashboard and home stats
+        response_dashboard_0 = self.client.get(reverse('dashboard'))
+        response_home_0 = self.client.get(reverse('home'))
+        
+        self.assertEqual(response_dashboard_0.context['most_popular_shop'][0], shop_2, 
+                         'Initial most popular shop should be 2')
+
+        self.assertEqual(response_dashboard_0.context['most_visited_shop'][0], this_user_shop, 
+                         'Initial most visited shop should be 2')
+
+        self.assertEqual(response_dashboard_0.context['percentage_above_average'], 100, 
+                         'Percentage saved above average should be 100')
+
+        self.assertEqual(response_home_0.context['cups_saved_today'], 0, 'Initial '
+        'cups saved today should be 0')
+
+        self.assertEqual(response_home_0.context['progress_percentage'], 0, 'Initial '
+        'progress percentage should be 0')
+
+        self.assertEqual((response_home_0.context['top_5_shops'][0].number_of_visits, 
+                          response_home_0.context['top_5_shops'][1].number_of_visits), (1,0), 
+                         'Leaderboard should show correct rankings and visits')
+        
+        # User 1 visits 1st shop multiple times
+        self.client.post(reverse('log_visit'), {
+            'username': '1', 
+            'shop_id': shop_1
+        })
+        self.client.post(reverse('log_visit'), {
+            'username': '1', 
+            'shop_id': shop_1
+        })
+        
+        shop_1.refresh_from_db()
+        user_2.refresh_from_db()
+
+        # Tests new stats
+        response_dashboard_1 = self.client.get(reverse('dashboard'))
+        response_home_1 = self.client.get(reverse('home'))
+
+        self.assertEqual(response_dashboard_1.context['most_popular_shop'][0], shop_1, 'most '
+        'popular shop should update after other users\' visit')
+
+        self.assertEqual(response_dashboard_1.context['most_visited_shop'][0], this_user_shop, 
+                         'most visited shop should remain 2 after other users\' visits')
+
+        self.assertEqual(response_dashboard_1.context['percentage_above_average'], 50, 
+                         'Percentage saved above average should update after other users\' visits')
+
+        self.assertEqual(response_home_1.context['cups_saved_today'], 2, 'Cups saved today '
+        'should update after other users\' visits')
+
+        self.assertEqual(response_home_1.context['progress_percentage'], 2, 'Progress percentage '
+        'should update after other users\' visits')
+
+        self.assertEqual((response_home_1.context['top_5_shops'][0].number_of_visits, 
+                          response_home_1.context['top_5_shops'][1].number_of_visits), (2,1), 
+                         'Leaderboard should show correct rankings and visits')
+        
+        self.assertEqual((response_home_1.context['top_10_users'][0].cups_saved, 
+                          response_home_1.context['top_10_users'][1].cups_saved), (2,1), 
+                         'Leaderboard should show correct rankings and cups')
+        
+        # User 2 visits shop 1 multiple times over 2 days
+        self.client.post(reverse('log_visit'), {
+            'username': '2', 
+            'shop_id': shop_1
+        })
+
+        self.user_2.last_active_date_time = now() - timedelta(days=1)
+        self.user_2.save()
+
+        self.client.post(reverse('log_visit'), {
+            'username': '2', 
+            'shop_id': shop_1
+        })
+        
+        # Tests new stats
+        response_dashboard_2 = self.client.get(reverse('dashboard'))
+        response_home_2 = self.client.get(reverse('home'))
+
+        shop_2.refresh_from_db()
+        user_2.refresh_from_db()
+
+        self.assertEqual(response_dashboard_2.context['most_popular_shop'][0], shop_1, 'most '
+        'popular shop should remain 1 after user visits')
+
+        self.assertNotEqual(response_dashboard_2.context['most_visited_shop'][0], this_user_shop, 
+                         'most visited shop should update after other users\' visits')
+
+        self.assertEqual(response_dashboard_2.context['percentage_above_average'], 20, 
+                         'Percentage saved above average should update after user visits')
+
+        self.assertEqual(response_home_2.context['cups_saved_today'], 3, 'Cups saved today '
+        'should update after user visits and days')
+
+        self.assertEqual(response_home_2.context['progress_percentage'], 3, 'Progress percentage '
+        'should update after user visits and days')
+
+        self.assertEqual((response_home_2.context['top_5_shops'][0].number_of_visits, 
+                          response_home_2.context['top_5_shops'][1].number_of_visits), (4,1), 
+                         'Leaderboard should show correct rankings and visits')
+        
+        self.assertEqual((response_home_2.context['top_10_users'][0].cups_saved, 
+                          response_home_2.context['top_10_users'][1].cups_saved), (3,2), 
+                         'Leaderboard should show correct rankings and cups')
