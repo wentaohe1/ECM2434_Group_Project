@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98a5d239-337b-47c8-8ace-213dfad54d27" name="Changes" comment="Added a render.yaml file for a last ditch attempt">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ecoffee/Ecoffee/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -161,15 +160,7 @@
       <workItem from="1739790174564" duration="1932000" />
       <workItem from="1739807606773" duration="72210000" />
       <workItem from="1740406961502" duration="6038000" />
-      <workItem from="1742739642914" duration="36190000" />
-    </task>
-    <task id="LOCAL-00002" summary="added a login option to the page, illmake it look nice later, images are buggy">
-      <option name="closed" value="true" />
-      <created>1739893647865</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1739893647865</updated>
+      <workItem from="1742739642914" duration="36658000" />
     </task>
     <task id="LOCAL-00003" summary="Made it look slightly nicer, reorganised file structure of images, added a header.html file for the welcome page to include">
       <option name="closed" value="true" />
@@ -555,7 +546,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742831527518</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Added a render.yaml file for a last ditch attempt">
+      <option name="closed" value="true" />
+      <created>1742831840665</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1742831840665</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
