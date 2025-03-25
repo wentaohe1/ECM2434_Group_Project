@@ -4,6 +4,7 @@ from django.utils.timezone import now
 from django.db.models import Sum
 from django.templatetags.static import static
 from EcoffeeBase.forms import ProfileImageForm,ChangeUserDetailsForm
+from django.contrib import messages
 
 
 def home(request):
@@ -25,7 +26,7 @@ def home(request):
         else:
             user_badge = ''  # prevent crashing from empty database
     else:
-        personal_cups_saved = ''  # set as default values if not logged in
+        personal_cups_saved = 0  # set default as 0 instead of empty string
         user_badge = ''
     # Calculate progress percentage
     progress_percentage = (cups_saved_today / daily_goal) * \
@@ -82,6 +83,7 @@ def dashboard_view(request):
 
     return render(request, 'dashboard.html', {
         "coffees_saved": coffees_saved,
+        "personal_cups_saved": coffees_saved,  # Add personal_cups_saved to match the template variable
         "money_saved": str(round(int(coffees_saved)*0.2, 2)),
         "badge_file": user_badge,
         "most_popular_shop": Shop.objects.order_by('-number_of_visits').first(),
@@ -109,8 +111,17 @@ def get_next_badge(request_user):
 
 
 def welcome(request):
-    return render(request, 'welcome.html')
-# (sprint2) Ensure users without a badge get a default badge
+    personal_cups_saved = 0
+    if request.user.is_authenticated:
+        try:
+            personal_cups_saved = request.user.customuser.cups_saved
+        except:
+            # If there's an exception, personal_cups_saved remains 0
+            pass
+    
+    return render(request, 'welcome.html', {
+        'personal_cups_saved': personal_cups_saved
+    })
 
 
 def calculate_percentage_above_average(request_user):
@@ -128,34 +139,73 @@ def calculate_percentage_above_average(request_user):
 
 #settings view
 def settings_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+        
     user = request.user.customuser
+    personal_cups_saved = user.cups_saved
+    
     if request.method == 'POST':
         picture_form = ProfileImageForm(instance=user)
-        user_form=ChangeUserDetailsForm(instance=request.user)
+        user_form = ChangeUserDetailsForm(instance=request.user)
         if 'picture_form_submit' in request.POST:
             picture_form = ProfileImageForm(request.POST, request.FILES, instance=user)
             if picture_form.is_valid():
                 picture_form.save()
+                messages.success(request, "Profile picture updated successfully!")
                 return redirect('settings')
             else:
+                for field, errors in picture_form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"{field}: {error}")
                 context={
-                    'picture_form':picture_form,
-                    'user_form':user_form
+                    'picture_form': picture_form,
+                    'user_form': user_form,
+                    'personal_cups_saved': personal_cups_saved
                 }
-                return render(request,'settings.html',context)
+                return render(request, 'settings.html', context)
         elif 'user_form_submit' in request.POST:
-            user_form=ChangeUserDetailsForm(request.POST,instance=request.user)
+            user_form = ChangeUserDetailsForm(request.POST, instance=request.user)
             if user_form.is_valid():
+                # Check if password is being updated
+                password_changed = 'password' in user_form.cleaned_data and user_form.cleaned_data['password']
+                
+                # Save the form
                 user_form.save()
-                return redirect('login')
+                
+                messages.success(request, "User details updated successfully!")
+                
+                # If password was changed, we need to update the session to keep the user logged in
+                if password_changed:
+                    from django.contrib.auth import update_session_auth_hash
+                    update_session_auth_hash(request, request.user)
+                    messages.success(request, "Password updated successfully. You'll remain logged in.")
+                
+                return redirect('settings')
             else:
+                for field, errors in user_form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"{field}: {error}")
                 print("Form errors:", user_form.errors)
                 context={
-                    'picture_form':picture_form,
-                    'user_form':user_form
+                    'picture_form': picture_form,
+                    'user_form': user_form,
+                    'personal_cups_saved': personal_cups_saved
                 }
-                return render(request,'settings.html',context)
+                return render(request, 'settings.html', context)
+        else:
+            # Handle any other POST cases that don't match expected patterns
+            context = {
+                'user_form': user_form,
+                'picture_form': picture_form,
+                'personal_cups_saved': personal_cups_saved
+            }
+            return render(request, 'settings.html', context)
     else:
-        context = {'user_form':ChangeUserDetailsForm(instance=request.user),'picture_form':ProfileImageForm(instance=user)}
-        return render(request,'settings.html', {})
+        context = {
+            'user_form': ChangeUserDetailsForm(instance=request.user),
+            'picture_form': ProfileImageForm(instance=user),
+            'personal_cups_saved': personal_cups_saved
+        }
+        return render(request, 'settings.html', context)
 

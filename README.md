@@ -1,6 +1,4 @@
 # Ecoffee - Sustainability Gamification Platform
-
-## Overview
 Ecoffee is a web application designed to promote sustainability by incentivizing the use of reusable coffee cups. The platform gamifies environmentally friendly behavior by tracking coffee shop visits, rewarding users with badges, and maintaining user streaks. Key features include:
 
 - QR code scanning for logging visits to partner coffee shops
@@ -8,8 +6,25 @@ Ecoffee is a web application designed to promote sustainability by incentivizing
 - User dashboard to track progress and impact
 - Leaderboards to encourage community participation
 - GDPR compliant user data management
+- Email verification for enhanced security
+- Shop owner management interface
+- Daily goals and progress tracking
 
 The app aims to reduce single-use cup waste by creating a fun, engaging platform that motivates users to bring their own cups to participating coffee shops.
+
+## Project Structure
+```
+Ecoffee/
+├── Ecoffee/              # Main project configuration
+├── EcoffeeBase/          # Core models and base functionality
+├── login_system/         # User authentication and registration
+├── qr_codes/             # QR code scanning and visit logging
+├── add_to_database/      # Shop and badge management
+├── templates/            # HTML templates
+├── static/               # Static files (CSS, JS, images)
+├── media/                # User-uploaded content
+└── manage.py             # Django management script
+```
 
 ## Setup
 
@@ -24,7 +39,7 @@ The app aims to reduce single-use cup waste by creating a fun, engaging platform
 1. **Clone the repository**
 ```bash
 git clone https://github.com/wentaohe1/ECM2434_Group_Project.git
-cd ECM2434_Group_Project
+cd ECM2434_Group_Project/Ecoffee
 ```
 
 2. **Create and activate a virtual environment**
@@ -67,14 +82,23 @@ python manage.py runserver
 ### Setting Up Test Data
 
 1. To add test data to the database, including badges and shops:
+   - Log in as a shop owner
    - Navigate to http://127.0.0.1:8000/add_data/add_new_data
+   - Add shops with unique active codes
+   - Create badges with different coffee cup thresholds
 
 2. To simulate a shop visit using a QR code:
    - Visit http://127.0.0.1:8000/code/?code=YOUR_ACTIVE_CODE
    - Replace YOUR_ACTIVE_CODE with an active code you created for a shop
+   - Note: User must be logged in and email verified to log visits
 
 ## Testing
-The project includes tests for all core functionalities:
+The project includes comprehensive tests for all core functionalities:
+- Functional testing of all features (login, challenge completion, rewards)
+- Edge case testing (invalid inputs, error handling)
+- User acceptance testing
+- Automated tests for core functionality
+- GDPR compliance testing
 
 ```bash
 # Run all tests
@@ -84,9 +108,7 @@ python manage.py test
 python manage.py test login_system
 python manage.py test EcoffeeBase
 python manage.py test qr_codes
-
-# Test GDPR compliance features
-python manage.py test gdpr_tests
+python manage.py test add_to_database
 ```
 
 ## Contributing

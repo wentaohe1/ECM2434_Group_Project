@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
-from distutils.sysconfig import BASE_EXEC_PREFIX
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -81,6 +80,9 @@ TEMPLATES = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://ecm2434-group-project.onrender.com",
+]
 
 PORT = os.getenv("PORT",8000)  # Default to 8000 if not set
 ALLOWED_HOSTS = ["ecm2434-group-project.onrender.com", "localhost", "127.0.0.1"]
@@ -151,10 +153,13 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER ='ecoffeepta@gmail.com'
+EMAIL_HOST_USER = 'ecoffeepta@gmail.com'
+# For development/testing purposes, we'll use the console backend instead
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EMAIL_HOST_PASSWORD = 'ask luke'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Same as EMAIL_HOST_USER
+# Comment out these settings when using console backend
+# EMAIL_HOST_PASSWORD = 'ask luke'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 #media
 MEDIA_URL = '/media/'
