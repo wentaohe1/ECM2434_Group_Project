@@ -8,8 +8,8 @@ from django.views.decorators.http import require_POST
 from EcoffeeBase.models import Shop, CustomUser, UserShop, Badge, UserBadge
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-from .forms import ProfileImageForm,ChangeUserDetailsForm
- 
+from .forms import ProfileImageForm, ChangeUserDetailsForm
+
 
 def index(request):
     return HttpResponse("Hello, world. You're at the Ecoffee index.")

@@ -28,7 +28,7 @@ class TestDataBase(TestCase):
 
         # Simulates recieving a POST request
         self.request = self.client.post(reverse('log_visit'), {
-                                        'username': self.custom_user.user.username, 
+                                        'username': self.custom_user.user.username,
                                         'shop_id': self.shop.shop_id})
 
     def test_shop_registers_visit(self):
@@ -114,7 +114,7 @@ class TestDataBase(TestCase):
         self.assertEqual(this_user.default_badge_id, badge_2,
                          'The User\'s default badge should reference the earned badge with the '
                          'highest coffee requirement')
-    
+
     def test_response_returns_error_if_nonexistent_user(self):
         """Tests attempting to log a visit for a non-existent user raises 404"""
 
@@ -122,7 +122,7 @@ class TestDataBase(TestCase):
         this_shop = self.shop
 
         response = self.client.post(reverse('log_visit'), {
-            'username': 'wrong_name', 
+            'username': 'wrong_name',
             'shop_id': this_shop
         })
         self.assertEqual(response.status_code, 404)
@@ -134,7 +134,7 @@ class TestDataBase(TestCase):
         this_username = self.custom_user.user.username
 
         response = self.client.post(reverse('log_visit'), {
-            'username': this_username, 
+            'username': this_username,
             'shop_id': 3
         })
         self.assertEqual(response.status_code, 404)
@@ -153,12 +153,12 @@ class TestDataBase(TestCase):
 
         # Logs 2 visits
         self.client.post(reverse('log_visit'), {
-            'username': this_user.username, 
+            'username': this_user.username,
             'shop_id': this_shop.shop_id
         })
         this_user_shop.save()
         self.client.post(reverse('log_visit'), {
-            'username': this_user.username, 
+            'username': this_user.username,
             'shop_id': this_shop.shop_id
         })
         this_user_shop.save()
@@ -167,7 +167,7 @@ class TestDataBase(TestCase):
         this_shop.refresh_from_db()
 
         self.assertEqual(this_user_shop.visit_amounts, 1, "User shop should not log multiple visits "
-        "in a day")
+                         "in a day")
 
 
 class TestDataBaseMultipleObjects(TestCase):
@@ -203,14 +203,14 @@ class TestDataBaseMultipleObjects(TestCase):
         this_shop = self.shop_1
         this_user_1 = self.custom_user_1
         this_user_2 = self.custom_user_2
-        
+
         # Logs visits
         self.client.post(reverse('log_visit'), {
-            'username': this_user_1.user.username, 
+            'username': this_user_1.user.username,
             'shop_id': this_shop.shop_id
         })
         self.client.post(reverse('log_visit'), {
-            'username': this_user_2.user.username, 
+            'username': this_user_2.user.username,
             'shop_id': this_shop.shop_id
         })
 
@@ -219,11 +219,11 @@ class TestDataBaseMultipleObjects(TestCase):
         this_user_2.refresh_from_db()
         user_1_shop = UserShop.objects.get(user=this_user_1, shop_id=this_shop)
         user_2_shop = UserShop.objects.get(user=this_user_2, shop_id=this_shop)
-        
-        self.assertEqual(this_shop.number_of_visits, 2, 
+
+        self.assertEqual(this_shop.number_of_visits, 2,
                          'Shop vist count should increment for visits by different users')
-        
-        self.assertEqual((this_user_1.cups_saved, this_user_2.cups_saved), (1, 1), 
+
+        self.assertEqual((this_user_1.cups_saved, this_user_2.cups_saved), (1, 1),
                          'Cups saved should update for all users of one shop')
 
         self.assertEqual((user_1_shop.visit_amounts, user_2_shop.visit_amounts), (1, 1),
@@ -231,35 +231,35 @@ class TestDataBaseMultipleObjects(TestCase):
 
     def test_user_can_visit_multiple_shops(self):
         """Tests that multiple shops log visits by the same user"""
-        
+
         this_shop_1 = self.shop_1
         this_shop_2 = self.shop_2
         this_user = self.custom_user_2
 
         self.client.post(reverse('log_visit'), {
-            'username': this_user.user.username, 
+            'username': this_user.user.username,
             'shop_id': this_shop_1.shop_id
         })
         self.client.post(reverse('log_visit'), {
-            'username': this_user.user.username, 
+            'username': this_user.user.username,
             'shop_id': this_shop_2.shop_id
         })
-        
+
         this_shop_1.refresh_from_db()
         this_shop_2.refresh_from_db()
         this_user.refresh_from_db()
         user_shop_1 = UserShop.objects.get(user=this_user, shop_id=this_shop_2)
         user_shop_2 = UserShop.objects.get(user=this_user, shop_id=this_shop_2)
-        
-        self.assertEqual((this_shop_1.number_of_visits, this_shop_2.number_of_visits), (1, 1), 
+
+        self.assertEqual((this_shop_1.number_of_visits, this_shop_2.number_of_visits), (1, 1),
                          'All shops visited by a single user should log the user\'s visit')
-        
-        self.assertEqual(this_user.cups_saved, 2, 
+
+        self.assertEqual(this_user.cups_saved, 2,
                          'Cups saved should update to reflect visits to multiple shops')
-        
-        self.assertEqual(this_user.most_recent_shop_id, this_shop_2, 
+
+        self.assertEqual(this_user.most_recent_shop_id, this_shop_2,
                          'Most recent shop ID should reflect users\' most recently visited shop')
-        
-        self.assertEqual((user_shop_1.visit_amounts, user_shop_2.visit_amounts),(1, 1), 
+
+        self.assertEqual((user_shop_1.visit_amounts, user_shop_2.visit_amounts), (1, 1),
                          'Visiting multiple shops should increase each User Shop\'s visit count '
                          'for that user')

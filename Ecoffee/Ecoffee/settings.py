@@ -28,8 +28,6 @@ SECRET_KEY = (
 DEBUG = True
 
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -84,8 +82,9 @@ CSRF_TRUSTED_ORIGINS = [
     "https://ecm2434-group-project.onrender.com",
 ]
 
-PORT = os.getenv("PORT",8000)  # Default to 8000 if not set
-ALLOWED_HOSTS = ["ecm2434-group-project.onrender.com", "localhost", "127.0.0.1"]
+PORT = os.getenv("PORT", 8000)  # Default to 8000 if not set
+ALLOWED_HOSTS = ["ecm2434-group-project.onrender.com",
+                 "localhost", "127.0.0.1"]
 WSGI_APPLICATION = 'Ecoffee.wsgi.application'
 
 
@@ -137,7 +136,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 STATICFILES_DIRS = [
@@ -160,7 +159,6 @@ EMAIL_HOST_USER = 'ecoffeepta@gmail.com'
 EMAIL_HOST_PASSWORD = 'mrehsrutazfjtnlg'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-#media
+# media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-

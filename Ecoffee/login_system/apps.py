@@ -7,5 +7,3 @@ class LoginSystemConfig(AppConfig):
 
     def ready(self):
         import login_system.signals
-
-

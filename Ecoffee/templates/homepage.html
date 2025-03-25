@@ -354,7 +354,7 @@
                                 <td>
                                     <div class="rank-wrapper">
                                         <span class="rank-number">{{ forloop.counter }}</span>
-                                        <img class="profile-img" src="{% static 'images/logos/' %}{{ shop.shop_name}}.jpeg" alt="profile picture" />
+                                        <img class="profile-img" src="{{ shop.logo.url }}" alt="profile picture" />
                                     </div>
                                 </td> 
                                 <td>

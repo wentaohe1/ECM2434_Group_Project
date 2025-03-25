@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
-from EcoffeeBase.models import Shop,CustomUser
+from EcoffeeBase.models import Shop, CustomUser
 from .form import *
 import qrcode
 from io import BytesIO
@@ -11,6 +11,15 @@ import os
 from django.conf import settings
 from django.http import HttpResponseForbidden
 from functools import wraps
+from django.contrib.auth.decorators import user_passes_test
+
+
+def admin_required(view_func):
+    return user_passes_test(lambda u: u.is_active and u.is_staff)(view_func)
+
+
+'''Prevents any users who are not a verified shop owner from accessing a page'''
+
 
 def shop_owner_required(view_func):
     @wraps(view_func)
@@ -22,7 +31,11 @@ def shop_owner_required(view_func):
         return view_func(request, *args, **kwargs)
     return _wrapped_view
 
-@shop_owner_required
+
+'''Allows someone to make a shop with a valid active code and non repeat name'''
+
+
+@admin_required
 def add_shop(request):
     if request.method == 'POST':
         form = ShopForm(request.POST)
@@ -45,6 +58,9 @@ def add_shop(request):
     return render(request, 'add_shop.html', {'form': ShopForm()})
 
 
+'''A shop owner page, where an owner can view their statistics'''
+
+
 @shop_owner_required
 def shop_owner(request, shop_id):
     current_shop = Shop.objects.get(shop_id=shop_id)
@@ -56,17 +72,19 @@ def shop_owner(request, shop_id):
     })
 
 
+'''The page to allow shop owners to upload their'''
+
+
 @shop_owner_required
-def upload_logo(request,shop_id):
-    shop=Shop.objects.get(shop_id=shop_id)
+def upload_logo(request, shop_id):
+    shop = Shop.objects.get(shop_id=shop_id)
     if request.method == 'POST':
         logo_form = LogoForm(request.POST, request.FILES, instance=shop)
         if logo_form.is_valid():
             logo_form.save()
             return redirect('home')
         else:
-            context={'logo_form':logo_form}
-            return render(request,'upload_logo.html',context)
+            context = {'logo_form': logo_form}
+            return render(request, 'upload_logo.html', context)
     else:
-        return render(request,'upload_logo.html', {'current_shop': shop})
-
+        return render(request, 'upload_logo.html', {'current_shop': shop})

@@ -33,12 +33,11 @@ class Shop(models.Model):
         default=0
     )
     active_code = models.CharField(max_length=255)
-    qr_code = models.TextField(blank=True)  
+    qr_code = models.TextField(blank=True)
     logo = models.ImageField(
         upload_to='shop_logos',
         default='shop_logos/default.png'
     )
-
 
     def __str__(self):
         return self.shop_name
@@ -59,7 +58,7 @@ class Badge(models.Model):
     )
     # store link instead of actual image
     badge_image = models.CharField(max_length=255, default='defaultbadge.png')
-    
+
     def __str__(self):
         return str(self.coffee_until_earned)
 
@@ -83,8 +82,9 @@ class CustomUser(models.Model):
     logs a new visit.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_email_verified=models.BooleanField(default=False)
-    email_verification_token=models.CharField(max_length=64, blank=True, null=True)
+    is_email_verified = models.BooleanField(default=False)
+    email_verification_token = models.CharField(
+        max_length=64, blank=True, null=True)
     cups_saved = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)]
@@ -123,6 +123,7 @@ class UserShop(models.Model):
     visit_amounts = models.IntegerField(
         validators=[MinValueValidator(0)]
     )
+
     def __str__(self):
         return self.shop_id.shop_name+' ('+self.user.user.username+') visits'
 
@@ -165,9 +166,10 @@ class UserBadge(models.Model):
                 fields=["user", "badge_id"], name="unique_user_badge")
         ]
 
+
 class ShopUser(models.Model):
     shop_id = models.ForeignKey(Shop, on_delete=models.CASCADE)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     def __str__(self):
         return f"{self.shop_id.shop_name} Owner"
-    

@@ -9,4 +9,3 @@ admin.site.register(Badge)
 admin.site.register(ShopUser)
 admin.site.register(UserShop)
 admin.site.register(UserBadge)
-

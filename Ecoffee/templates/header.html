@@ -76,6 +76,10 @@
           <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
           <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
         {% endif %}
+
+        {% if user.shopuser %}
+          <li class="nav-item"><a href="{% url 'shop_owner' shop_id=user.shopuser.shop_id.shop_id %}">Shop settings</a></li>
+        {% endif %}
       </ul>
     </div>
   

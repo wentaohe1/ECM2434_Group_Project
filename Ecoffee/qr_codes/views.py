@@ -21,7 +21,7 @@ def receive_code(request):
                 user.most_recent_shop_id = shop
                 user.last_active_date_time = now()
                 time = now()
-                create_new_user_shop(shop,user)
+                create_new_user_shop(shop, user)
                 streak_day_difference = time.date() - user.streak_start_day
                 if streak_day_difference.days == user.streak:
                     user.streak += 1
@@ -50,19 +50,21 @@ def check_badge_progress(relevant_user):
     for badge in Badge.objects.order_by("coffee_until_earned"):
         if relevant_user.cups_saved >= badge.coffee_until_earned:
             relevant_user.default_badge_id = badge
-            user_badge= UserBadge.objects.filter(user=relevant_user, badge_id=badge).first()
+            user_badge = UserBadge.objects.filter(
+                user=relevant_user, badge_id=badge).first()
             if not user_badge:
                 current_date_time = timezone.now()
                 user_badge = UserBadge(user=relevant_user, badge_id=badge,
-                              date_time_obtained=current_date_time)
+                                       date_time_obtained=current_date_time)
                 user_badge.save()
 
 
-def create_new_user_shop(shop,request_custom_user):
-    user_shop=UserShop.objects.filter(shop_id=shop,user=request_custom_user).first()
+def create_new_user_shop(shop, request_custom_user):
+    user_shop = UserShop.objects.filter(
+        shop_id=shop, user=request_custom_user).first()
     if user_shop:
-        user_shop.visit_amounts+=1
+        user_shop.visit_amounts += 1
     else:
-        user_shop=UserShop.objects.create(user=request_custom_user,shop_id=shop,visit_amounts=1)
+        user_shop = UserShop.objects.create(
+            user=request_custom_user, shop_id=shop, visit_amounts=1)
     user_shop.save()
-
