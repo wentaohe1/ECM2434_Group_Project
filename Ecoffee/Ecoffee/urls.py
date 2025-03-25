@@ -19,6 +19,7 @@ from django.urls import include, path
 from . import views, settings
 from Ecoffee.views import dashboard_view, settings_view
 from django.conf.urls.static import static
+from .views import delete_user
 
 
 urlpatterns = [
@@ -35,4 +36,5 @@ urlpatterns = [
     path('dashboard/settings/', settings_view, name='settings'),
     path('home/settings/', settings_view, name='settings'),
     path('welcome/settings/', settings_view, name='settings'),
+    path('delete_user/', delete_user, name='delete_user'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

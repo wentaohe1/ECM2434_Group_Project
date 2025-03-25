@@ -158,8 +158,8 @@ EMAIL_HOST_USER = 'ecoffeepta@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Comment out these settings when using console backend
-# EMAIL_HOST_PASSWORD = 'ask luke'
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = 'mrehsrutazfjtnlg'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 #media
 MEDIA_URL = '/media/'

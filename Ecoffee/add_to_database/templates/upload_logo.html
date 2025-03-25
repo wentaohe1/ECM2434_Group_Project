@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}Upload Logo - {{ current_shop.shop_name }}{% endblock %}
+
+{% block content %}
+<div class="card,card-container" style="max-width: 1000px; margin: 50px auto; padding: 7rem;">
+    <h2 style="font-size: 1.8rem; text-align: center; margin-bottom: 2rem;">
+        Upload Shop Logo
+    </h2>
+    {% if error %}
+    <div class="error-message" style="text-align: center; margin-bottom: 1rem;">
+        {{ error }}
+    </div>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-fields" style="display: grid; gap: 1.5rem;">
+            <input type="file" name="logo" accept="image/png, image/jpeg" 
+                   class="file-input" style="width: 100%;">
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <button type="submit" class="primary-btn">Upload Logo</button>
+        </div>
+    </form>
+    <div style="text-align: center; margin-top: 1.5rem;">
+        <a href="{% url 'shop_owner' shop_id=current_shop.shop_id %}" 
+           class="primary-btn" 
+           style="display: inline-block; background: #000000;">
+           Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

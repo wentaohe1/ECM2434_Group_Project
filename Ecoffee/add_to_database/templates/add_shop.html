@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}Create New Shop{% endblock %}
+
+{% block content %}
+<div class="card-container,card" style="max-width: 1000px; margin: 50px auto; padding: 7rem;">
+    <h2 style="font-size: 1.8rem; text-align: center; margin-bottom: 2rem;">
+        New Shop Registration
+    </h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-fields" style="display: grid; gap: 1.5rem;">
+            <div class="form-group" style="display: grid; gap: 0.5rem;">
+                <label style="font-weight: 600; color: #2c3e50;">Shop Name</label>
+                <input type="text" name="shop_name" required
+                       style="padding: 0.8rem; border: 2px solid #ddd; 
+                              border-radius: 8px; width: 100%;">
+            </div>
+            <div class="form-group" style="display: grid; gap: 0.5rem;">
+                <label style="font-weight: 600; color: #2c3e50;">Activation Code</label>
+                <input type="text" name="active_code" required
+                       style="padding: 0.8rem; border: 2px solid #ddd;
+                              border-radius: 8px; width: 100%;">
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <button type="submit" class="primary-btn">Create Shop</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

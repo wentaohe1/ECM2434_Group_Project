@@ -33,6 +33,13 @@ class Shop(models.Model):
         default=0
     )
     active_code = models.CharField(max_length=255)
+    qr_code = models.TextField(blank=True)  
+    logo = models.ImageField(
+        upload_to='shop_logos',
+        default='shop_logos/default.png'
+    )
+
+
     def __str__(self):
         return self.shop_name
 

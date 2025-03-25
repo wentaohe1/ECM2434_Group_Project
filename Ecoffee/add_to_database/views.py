@@ -1,50 +1,72 @@
 from django.shortcuts import render, redirect
-from EcoffeeBase.models import *
+from django.http import HttpResponse
+from django.core.files.storage import default_storage
+from EcoffeeBase.models import Shop,CustomUser
 from .form import *
+import qrcode
+from io import BytesIO
+import base64
+from datetime import datetime
+import os
+from django.conf import settings
 from django.http import HttpResponseForbidden
+from functools import wraps
 
-def shop_user_required(view_func):
-    def _wrapped_view(request,*args,**kwargs):
-        if not ShopUser.objects.filter(user=request.user):
-            return HttpResponseForbidden("Only shop owners can access this page.")
-        return view_func(request,*args,**kwargs)
+def shop_owner_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        try:
+            shop_user = ShopUser.objects.get(user=request.user)
+        except ShopUser.DoesNotExist:
+            return HttpResponseForbidden("You do not have permission to access this page.")
+        return view_func(request, *args, **kwargs)
     return _wrapped_view
 
-
-@shop_user_required
-def add_new_data(request):
+@shop_owner_required
+def add_shop(request):
     if request.method == 'POST':
-        shop_form = ShopForm()
-        badge_form = BadgeForm()
-        # Two forms on the page, need to check which one has data
+        form = ShopForm(request.POST)
+        if form.is_valid():
+            new_shop = form.save()
+            qr = qrcode.QRCode(
+                version=1,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(str(new_shop.active_code))
+            img = qr.make_image()
+            buffer = BytesIO()
+            img.save(buffer, format="PNG")
+            new_shop.qr_code = base64.b64encode(buffer.getvalue()).decode()
+            new_shop.save()
+            return redirect('shop_owner', shop_id=new_shop.shop_id)
+        else:
+            return render(request, 'add_shop.html', {'form': form})
+    return render(request, 'add_shop.html', {'form': ShopForm()})
 
-        if 'shop_form_submit' in request.POST:
-            shop_form = ShopForm(request.POST)
-            if shop_form.is_valid():
-                active_code = shop_form.cleaned_data['active_code']
-                shop=ShopUser.objects.get(user=request.user).shop_id
-                shop.active_code=active_code
-                shop.save()
-                # redirect to home if the form is valid
-                return redirect('home')
-            else:
-                context = {
-                    'shop_form': shop_form,
-                    'badge_form': badge_form
-                }
-                # stay on page if the form is invalid
-                return render(request, 'add_new_data.html', context)
-        elif 'badge_form_submit' in request.POST:
-            badge_form = BadgeForm(request.POST)
-            if badge_form.is_valid():
-                badge_form.save()
-                return redirect('home')
-            else:
-                context = {
-                    'shop_form': shop_form,
-                    'badge_form': badge_form
-                }
-                return render(request, 'add_new_data.html', context)
+
+@shop_owner_required
+def shop_owner(request, shop_id):
+    current_shop = Shop.objects.get(shop_id=shop_id)
+    top_shops = Shop.objects.order_by('-number_of_visits')[:10]
+    return render(request, 'shop_owner.html', {
+        'current_shop': current_shop,
+        'top_shops': top_shops,
+        'qr_image': current_shop.qr_code
+    })
+
+
+@shop_owner_required
+def upload_logo(request,shop_id):
+    shop=Shop.objects.get(shop_id=shop_id)
+    if request.method == 'POST':
+        logo_form = LogoForm(request.POST, request.FILES, instance=shop)
+        if logo_form.is_valid():
+            logo_form.save()
+            return redirect('home')
+        else:
+            context={'logo_form':logo_form}
+            return render(request,'upload_logo.html',context)
     else:
-        context = {'badge_form': BadgeForm(), 'shop_form': ShopForm()}
-        return render(request, 'add_new_data.html', context)
+        return render(request,'upload_logo.html', {'current_shop': shop})
+

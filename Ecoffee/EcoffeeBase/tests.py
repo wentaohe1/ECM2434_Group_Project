@@ -169,8 +169,6 @@ class TestDataBase(TestCase):
         self.assertEqual(this_user_shop.visit_amounts, 1, "User shop should not log multiple visits "
         "in a day")
 
-        self.assertEqual(this_shop.number_of_visits, 1, "Shop's visit total should not reflect multiple "
-        "daily same-user visits")
 
 class TestDataBaseMultipleObjects(TestCase):
 

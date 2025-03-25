@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Ecoffee{% endblock %}</title>
+    <style>
+    /* === Base Styles === */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #f0f5f3;
+        min-height: 100vh;
+    }
+
+    /* === Navigation Styles === */
+    .top-nav {
+        width: 100%;
+        height: 80px;
+        background: #a6f3b5;
+        padding: 15px 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        z-index: 1000;
+    }
+
+    .brand-section {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+    }
+
+    /* Logo positioning */
+    .logo {
+        font-size: 26px;
+        font-weight: 700;
+        color: #2c3e50;
+        letter-spacing: 1.5px;
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        flex-shrink: 0;
+        padding-right:10%;
+    }
+
+    .logo::before {
+        content: "☕";
+        margin-right: 10px;
+        font-size: 32px;
+    }
+
+    .dashboard-container {
+        margin-top: 130px; 
+        padding: 30px 5%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3em;
+    }
+
+    .card-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: auto;
+    }
+
+    .card {
+        text-align: center;
+        background: white;
+        padding: 7rem;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+    }
+
+    .stat-item {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin: 1rem 0;
+    }
+
+    .primary-btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background: black;
+        color: white;
+        border-radius: 40px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    .qr-code {
+        width: 200px;
+        height: 200px;
+        margin: 20px auto;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        display: block;
+    }
+
+    /* === Main Content Layout === */
+    .dashboard-container {
+        margin-top: 130px;
+        padding: 30px 5%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3em;
+    }
+
+    /* === Card Styles === */
+    .card {
+        background: white;
+        padding: 1.5rem;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 2px;
+    }
+
+    /* === Responsive Design === */
+    @media (max-width: 768px) {
+        .dashboard-container {
+            grid-template-columns: 1fr;
+            margin-top: 110px;
+            padding: 15px;
+        }
+        
+        .top-nav {
+            height: auto;
+            padding: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            order: -1;
+            width: 100%;
+            justify-content: flex-end;
+            margin: 15px 0 0;
+        }
+    }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="brand-section">
+            <h1>{% block page_title %}{% endblock %}</h1>
+        </div>
+        <div class="logo">Ecoffee System</div>
+    </nav>
+    
+    <div class="dashboard-container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

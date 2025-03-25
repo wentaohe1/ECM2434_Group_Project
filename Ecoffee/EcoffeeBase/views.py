@@ -9,8 +9,7 @@ from EcoffeeBase.models import Shop, CustomUser, UserShop, Badge, UserBadge
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from .forms import ProfileImageForm,ChangeUserDetailsForm
-from django.db.models import Avg
-
+ 
 
 def index(request):
     return HttpResponse("Hello, world. You're at the Ecoffee index.")
@@ -73,17 +72,13 @@ def home(request):
         total=Sum('number_of_visits'))['total'] or 0
     # Set a daily goal
     daily_goal = 100
-    
-    personal_cups_saved = 0
-    if request.user.is_authenticated:
-        request_user = CustomUser.objects.get(user=request.user)
-        personal_cups_saved = request_user.cups_saved
-        
+    request_user = CustomUser.objects.get(user=request.user)
+    personal_cups_saved = request_user.cups_saved
     # Calculate progress percentage
     progress_percentage = (cups_saved_today / daily_goal) * \
         100 if daily_goal else 0
     progress_percentage = min(
-        progress_percentage, 100)  # Ensure it doesn't exceed 100%
+        progress_percentage, 100)  # Ensure it doesn’t exceed 100%
     # Function to determine user badge path
     top_10_users = CustomUser.objects.all().order_by(
         '-cups_saved')[:10]  # top 10 users ordered in descending order
@@ -102,23 +97,7 @@ def home(request):
 def dashboard_view(request):
     if request.user.is_authenticated:
         request_user = CustomUser.objects.get(user=request.user)
-        personal_cups_saved = request_user.cups_saved
-        
-        # Calculate money saved based on cups saved (£0.20 per cup)
-        money_saved = round(personal_cups_saved * 0.2, 2)
-        
-        # Calculate average cups saved by all users for percentage comparison
-        avg_cups = CustomUser.objects.exclude(user=request.user).aggregate(avg=Avg('cups_saved'))['avg'] or 0
-        
-        # Calculate percentage difference from average
-        if avg_cups > 0:
-            percentage_diff = round(((personal_cups_saved - avg_cups) / avg_cups) * 100, 1)
-            negative = percentage_diff < 0
-            percentage_above_average = abs(percentage_diff)
-        else:
-            percentage_above_average = 100
-            negative = False
-        
+        coffees_saved = request_user.cups_saved
         if request_user.default_badge_id != None:
             user_badge = 'images/' + \
                 str(request_user.default_badge_id.badge_image)
@@ -128,58 +107,35 @@ def dashboard_view(request):
             next_badge = ''
         if next_badge != None and user_badge != '':
             coffees_to_next_badge = int(
-                next_badge.coffee_until_earned)-int(request_user.cups_saved)
-            progress = round((request_user.cups_saved / 
-                             int(next_badge.coffee_until_earned))*100)
+                next_badge.coffee_until_earned)-int(request_user.default_badge_id.coffee_until_earned)
+            progress = round(coffees_to_next_badge /
+                             int(next_badge.coffee_until_earned)*100)
         else:
             coffees_to_next_badge = 1000000000
             progress = 100
-            
-        # Get user badges for display
-        user_badges = UserBadge.objects.filter(user=request_user, date_time_obtained__isnull=False).order_by('-badge_id__coffee_until_earned')[:3]
+
     else:
         return redirect("login")
 
     return render(request, 'dashboard.html', {
-        "personal_cups_saved": personal_cups_saved,
-        "money_saved": money_saved,
-        "percentage_above_average": percentage_above_average,
-        "negative": negative,
+        "coffees_saved": coffees_saved,
+        "money_saved": str(round(int(coffees_saved)*0.2, 2)),
         "badge_file": str(user_badge),
         "most_popular_shop": Shop.objects.order_by('-number_of_visits').first(),
-        "most_visited_shop": UserShop.objects.filter(user=request_user).order_by('-visit_amounts').first(),
         "progress": progress,
-        "coffees_to_next_badge": coffees_to_next_badge,
-        "top_three_badges": user_badges
+        "coffees_to_next_badge": coffees_to_next_badge
     })
 
 
 def get_next_badge(request_user):
-    current_badge = request_user.default_badge_id
-    if not current_badge:
-        # If user has no badge yet, return the first badge
-        return Badge.objects.order_by('coffee_until_earned').first()
-        
+    current_badge = request_user.defaultBadgeId
     ordered_badges = Badge.objects.order_by('coffee_until_earned')
 
     for badge in ordered_badges:
-        if badge.coffee_until_earned > current_badge.coffee_until_earned:
+        if badge.coffee_until_earned > current_badge.coffeeUntilEarned:
             return badge
-    
-    # If no next badge found, return None
-    return None
 
 
 def welcome(request):
-    personal_cups_saved = 0
-    if request.user.is_authenticated:
-        try:
-            request_user = CustomUser.objects.get(user=request.user)
-            personal_cups_saved = request_user.cups_saved
-        except:
-            pass
-    
-    return render(request, 'welcome.html', {
-        'personal_cups_saved': personal_cups_saved
-    })
+    return render(request, 'welcome.html')
 # Ensure users without a badge get a default badge

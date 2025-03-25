@@ -15,7 +15,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Poppins', sans-serif;
-            background-color: #E9FCED;
+            background-color: #E9FCED; 
          }
          .about-section {
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
@@ -23,10 +23,10 @@
             background-color: #D2F9DA;
             border-radius: 10px;
             height: auto !important;
-            width: 90%;
+            width: 90%; 
             margin: 50px auto;
             text-align: center;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', sans-serif;  
          }
          .banner {
             width: 90%;
@@ -68,11 +68,11 @@
             z-index: 2;
             width: 90%;
          }
-        @keyframes changeImage {
-            0%, 100% { background-image: url("{% static 'banner-images/plantation1.jpg' %}"); }
-            33% { background-image: url("{% static 'banner-images/plantation2.jpg' %}"); }
-            66% { background-image: url("{% static 'banner-images/plantation3.jpg' %}"); }
-        }
+         @keyframes changeImage {
+            0%, 100% { background-image: url('../static/banner-images/plantation1.jpg'); }
+            33% { background-image: url('../static/banner-images/plantation2.jpg'); }
+            66% { background-image: url('../static/banner-images/plantation3.jpg'); }
+         }
          * {
             margin: 0;
             padding: 0;
@@ -163,12 +163,12 @@
          .about-container {
             padding-top: 100px;
             max-width: 60vw;
-            margin: 30px auto;
+            margin: 30px auto; 
             color: #FF746C;
          }
          .micro-label {
-            background-color: #E9FCED;
-            display: inline-block;
+            background-color: #E9FCED; 
+            display: inline-block; 
             padding: 10px;
             margin-bottom: 1rem;
             border-radius: 10px;
@@ -176,7 +176,7 @@
          }
          .headline {
             font-size: 4rem;
-            font-weight: 900;
+            font-weight: 900; 
             margin-bottom: .5rem;
          }
          .sub-text {
@@ -214,7 +214,7 @@
          }
          .banner.info {
             font-weight: bold;
-            background-color: #E9FCED;
+            background-color: #E9FCED; 
             margin:4rem auto;
             padding:2rem;
             border-radius:12px;
@@ -249,7 +249,7 @@
          }
         @media (max-width: 640px) {
          .about-section {
-            padding: 2rem 1rem;
+            padding: 2rem 1rem; 
             margin-top: 20px;
          }
 
@@ -311,8 +311,8 @@
    </head>
    <body style="padding-top: 75px;">
       <div class="banner slides">
-        <img id="banner-image" src="{% static 'banner-images/plantation1.jpg' %}" alt="Banner">
-        <div class="banner-text">Welcome to Ecoffee</div>
+         <img id="banner-image" src="../static/banner-images/plantation1.jpg" alt="Banner">
+         <div class="banner-text">Welcome to Ecoffee</div>
       </div>
       <section class="about-section">
             <div class="about-container pop">
@@ -329,8 +329,8 @@
 
                <!-- sub text-->
                <p class="sub-text">
-                  Ecoffee turns your daily brew into measurable climate action — track your coffee consumption,
-                  cut waste with a reusable cup, and join a community competing to save the planet (and money)
+                  Ecoffee turns your daily brew into measurable climate action — track your coffee consumption, 
+                  cut waste with a reusable cup, and join a community competing to save the planet (and money) 
                   one cup at a time.
                </p>
                <!--three steps-->
@@ -350,25 +350,25 @@
             <div class="banner info">
                <span class="info-heading">Disposable coffee cups annually in the UK by the Numbers:</span><br>
                <span class="counter stat-number" data-target=" 2500000000">0 </span><br>
-               <span class="banner-subtext">That's around 7 million cups per day - but only 1% of these get recycled.</span>
+               <span class="banner-subtext">That's around 7 million cups per day - but only 1% of these get recycled.</span> 
             </div>
       </section>
    </body>
-<script>
-    let images = [
-        "{% static 'banner-images/plantation1.jpg' %}",
-        "{% static 'banner-images/plantation2.jpg' %}",
-        "{% static 'banner-images/plantation3.jpg' %}"
-    ];
+   <script>
+      let images = [
+          "../static/banner-images/plantation1.jpg",
+          "../static/banner-images/plantation2.jpg",
+          "../static/banner-images/plantation3.jpg"
+      ];
 
-    let index = 0;
-    const bannerImage = document.getElementById("banner-image");
+      let index = 0;
+      const bannerImage = document.getElementById("banner-image");
 
-    function changeImage() {
-        index = (index + 1) % images.length;
-        bannerImage.src = images[index];
-    }
+      function changeImage() {
+          index = (index + 1) % images.length;
+          bannerImage.src = images[index];
+      }
 
-    setInterval(changeImage, 8000);
-</script>
+      setInterval(changeImage, 8000);
+   </script>
 </html>

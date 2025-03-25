@@ -72,10 +72,12 @@
           <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
           <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li>
         {% else %}
-          <li class="nav-item"><a href="{% url 'home' %}">Home</a></li>
-          <li class="nav-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
           <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
         {% endif %}
+        {% if user.shopuser %}
+          <li class="nav-item"><a href="{% url 'shop_owner' shop_id=user.shopuser.shop_id.shop_id %}" ">Shop Settings</a></li>
+        {% endif %}
+
       </ul>
     </div>
   

@@ -9,30 +9,30 @@
         <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
         <style>
             * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        /* main processes */
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
             .main-content {
-                margin-top: 100px;
                 padding: 30px 5%;
+                padding-bottom: 0;
+                background-color: #E9FCED;
+                min-height: 100vh; 
             }
             .settings-container {
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
                 background-color: #D2F9DA;
+                max-width: 30vw; 
                 width: 100%;
-                max-width: 60vw; 
-                margin: 50px auto;
+                margin: 50px auto 0 auto;
                 border-radius: 10px;
-                height:auto;
+                height: auto;    
                 font-family: 'Inter', sans-serif; 
             }
             .heading {
                 border-radius: 10px;
-            }
-            .heading{
                 padding-top: 10px;
                 padding-left: 20px;
                 padding-bottom: 5px;
@@ -42,19 +42,19 @@
                 gap: 15px;
             }
             .bx {
-                font-size:32px;
+                font-size: 32px;
             }
             .settings-content {
-                display: flex;   
-                justify-content: center;
-                justify-content: center; 
-                align-items: center;     
-                gap: 2rem;               
-                flex-wrap: wrap;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                /* Reduced gap for less overall height */
+                gap: 1rem;
             }
+            /* Smaller profile picture */
             .profile-picture-img {
-                width: 25vw;
-                height: 25vw;
+                width: 15vw;  /* Reduced from 25vw */
+                height: 15vw; /* Reduced from 25vw */
                 border-radius: 50%;
                 overflow: hidden;
             }
@@ -63,36 +63,19 @@
                 height: 100%;
                 object-fit: cover;
             }
-            .user-settings {
-                
-            }
-            input[type="text"], input[type="password"], input[type="email"] {
-                width: 430px;
+
+
+            input[type="text"],input[type="email"] {
+                width: 300px;        
                 height: 30px;
                 border-radius: 10px;
                 font-size: 20px;
                 padding-left: 5px;
                 background-color: #E9FCED;
-                border: 1px solid #A3D9AA;
-                transition: all 0.3s ease;
+                color: black;       
             }
-            
-            input[type="text"]:disabled, input[type="password"]:disabled, input[type="email"]:disabled {
-                background-color: #D2F9DA;
-                border: 1px solid transparent;
-                color: #666;
-                cursor: not-allowed;
-            }
-            
-            input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
-                outline: none;
-                box-shadow: 0 0 5px rgba(0, 150, 0, 0.3);
-                border-color: #4CAF50;
-            }
-            
-            #edit-button.save-mode {
-                background-color: #4CAF50;
-                color: white;
+            input[type="text"]::placeholder {
+                color: black;
             }
             .input-box {
                 margin-bottom: 20px;
@@ -101,20 +84,23 @@
                 margin-bottom: 5px;
                 font-size: 16px;
             }
-            #edit-button {
-                display: block;
-                width: 200px;
-                padding: 12px;
-                margin: 10px auto;
-                cursor: pointer;
-                background-color: #E9FCED;
-                border-radius: 10px;
-                text-align: center;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-                font-weight: bold;
-                text-align: center;
-                border: none;
+            #user-submit-button, #delete-button {
+                font-family: Arial, Helvetica, sans-serif;
                 font-size: 16px;
+                width: 120px;
+                height: 40px;
+                border-radius: 10px;
+                background-color: #E9FCED;
+                cursor: pointer;
+                font-weight: bold;
+                display: flex;       
+                align-items: center;
+                justify-content: center;
+            }
+            #delete-button {
+                background-color: #FF746C;
+                margin-bottom: 10px;
+                width: 140px;
             }
             label {
                 display: block;
@@ -122,7 +108,7 @@
                 padding: 12px;
                 margin: 10px auto;
                 cursor: pointer;
-                background-color: #E9FCED; 
+                background-color: #E9FCED;
                 border-radius: 10px;
                 text-align: center;
                 box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
@@ -146,60 +132,30 @@
                 text-align: center;
                 box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
                 font-weight: bold;
-                text-align: center;
                 border: none;
                 font-size: 16px;
             }
-
-                /* Initially hide the Save button */
             #save-btn {
                 display: none;
             }
-
-            /* Messages styles */
-            .messages-container {
-                margin: 10px auto;
-                padding: 5px 20px;
-                width: 90%;
+            .button-group {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
             }
-
-            .message-item {
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 10px;
-                text-align: center;
-                animation: fadeOut 5s forwards;
+            input {  
+                border: 0.8px solid #999; 
+                box-shadow: none;
             }
-
-            .success {
-                background-color: #d4edda;
-                color: #155724;
-                border: 1px solid #c3e6cb;
-            }
-
-            .error {
-                background-color: #f8d7da;
-                color: #721c24;
-                border: 1px solid #f5c6cb;
-            }
-            
-            .password-hint {
-                font-size: 12px;
-                color: #666;
-                margin-top: 5px;
-                display: block;
-                font-style: italic;
-            }
-
-            @keyframes fadeOut {
-                0% { opacity: 1; }
-                70% { opacity: 1; }
-                100% { opacity: 0; visibility: hidden; }
+            #user-submit-button, #delete-button {
+                border: none;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
             }
 
             @media (max-width: 768px) {
                 .settings-container {
                     width: 95%;
+                    max-width: none;
                 }
                 .profile-picture-img {
                     width: 100px;
@@ -215,68 +171,58 @@
         </style>
     </head>
     <body style="padding-top: 50px;">
-        <!--so for settings page we need
-        to be able to change your username
-        you email
-        your password
-        your profile picture?-->
-        <div class="settings-container">
-            <div class="heading">
-                <h1>Settings</h1>
-                <i class='bx bxs-cog' ></i>
-            </div>
-            
-            <!-- Messages section -->
-            {% if messages %}
-            <div class="messages-container">
-                {% for message in messages %}
-                <div class="message-item {% if message.tags %}{{ message.tags }}{% endif %}">
-                    {{ message }}
+        <main class="main-content">
+            <div class="settings-container">
+                <div class="heading">
+                    <h1>Settings</h1>
+                    <i class='bx bxs-cog'></i>
                 </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            
-            <div class="settings-content">
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="picture_form_submit" value="1">
-                    <div class="profile-picture">
-                        <div class="profile-picture-img">
-                            <img src="{{ request.user.customuser.profile_image.url }}" id="profpic" alt="Profile picture" />
-                        </div>
-                        <input type="file" id="id_profile_image" name="profile_image" accept="image/*" />
-                        <!-- Both buttons in the same place -->
-                        <label for="id_profile_image" id="update-btn" class="update-btn">Update image</label>
-                        <button type="submit" id="save-btn" style="display: none;">Save</button>
-                    </div>
-                </form>                
-                
-                <div class="user-settings">
-                    <form method="POST" id="user-details-form">
+                <div class="settings-content">
+                    <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <input type="hidden" name="user_form_submit" value="1">
-                        <div class="input-box">
-                            <h2>Username</h2>
-                            <input type="text" name="username" value="{{ user.username }}" id="username-input" 
-                                   placeholder="Enter your username" disabled>
+                        <div class="profile-picture">
+                            <div class="profile-picture-img">
+                                <img src="{{ request.user.customuser.profile_image.url }}" id="profpic" alt="Profile picture" />
+                            </div>
+                            <input type="file" id="id_profile_image" name="profile_image" accept="image/*" />
+                            <label for="id_profile_image" id="update-btn" class="update-btn">Update image</label>
+                            <button type="submit" id="save-btn" style="display: none;" name='picture_form_submit'>Save</button>
                         </div>
-                        <div class="input-box">
-                            <h2>Email</h2>
-                            <input type="email" name="email" value="{{ user.email }}" id="email-input" 
-                                   placeholder="Enter your email" disabled>
+                    </form>                
+                    <div class="user-settings">
+                        <form action="{% url 'settings' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="input-box">
+                                <h2>Username</h2>
+                                <input type="text" placeholder="{{ user.username }}" id="username-input" name="username">
+                            </div>
+                            <div class="input-box">
+                                <h2>Email</h2>
+                                <input type="email" placeholder="email" id="email-input" name="email">
+                            </div>
+                            <div class="input-box">
+                                <h2>Password</h2>
+                                <input type="text" placeholder="********" id="password-input" name="password">
+                            </div>
+                            <div class="button-group">
+                                <button type="submit" id='user-submit-button' name='user_form_submit'>Edit</button>
+                            </div>
+                            
+                        </form>
+
+
+                        <div class="button-group">
+                            <form action="{% url 'delete_user' %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" id="delete-button" onclick="return confirm('Are you sure you want to delete this item?');">
+                                    Delete Account
+                                </button>
+                            </form>
                         </div>
-                        <div class="input-box">
-                            <h2>Password</h2>
-                            <input type="password" name="password" placeholder="Enter new password to change" id="password-input" disabled>
-                            <small class="password-hint">Leave blank to keep current password</small>
-                        </div>
-                      
-                        <button type="button" id="edit-button" style="margin-bottom: 20px;">Edit</button>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const profilePic = document.getElementById('profpic');
@@ -284,37 +230,17 @@
                 const updateBtn  = document.getElementById('update-btn');
                 const saveBtn    = document.getElementById('save-btn');
 
-                console.log("Checking inputFile:", inputFile);
-
                 if (!inputFile) {
-                    console.error("ERROR: File input element not found!");
+                    console.error("input file not found");
                 } else {
-                    console.log("Adding event listener to:", inputFile);
-
                     inputFile.addEventListener('change', () => {
-                        console.log('File selected:', inputFile.files);
-
                         if (inputFile.files.length) {
                             profilePic.src = URL.createObjectURL(inputFile.files[0]);
-
-                            // Hide "Update Image" and show "Save" in the same position
+                            // Hide "Update image" and show "Save"
                             updateBtn.style.display = 'none';
                             saveBtn.style.display = 'block';
-
-                            console.log("Preview updated, Update button hidden, Save button visible.");
                         }
                     });
-                }
-                
-                // Handle messages
-                const messages = document.querySelectorAll('.message-item');
-                if (messages.length > 0) {
-                    // Remove messages after 5 seconds
-                    setTimeout(() => {
-                        messages.forEach(message => {
-                            message.style.display = 'none';
-                        });
-                    }, 5000);
                 }
             });
         </script>
