@@ -254,8 +254,8 @@ class TestViews(TestCase):
         self.assertIn('personal_cups_saved', response_unauthenticated.context,
                       'Homepage should display personal_cups_saved')
 
-        self.assertEqual(response_unauthenticated.context['personal_cups_saved'], '',
-                      'personal_cups_saved should be \'\' if not logged in')
+        self.assertEqual(response_unauthenticated.context['personal_cups_saved'], 0,
+                      'personal_cups_saved should be 0 if not logged in')
 
         # Logs in to test other stats
         self.client.login(username='user_1', password='password_1')
