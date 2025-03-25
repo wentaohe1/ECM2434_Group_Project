@@ -11,6 +11,7 @@ Ecoffee is a web application designed to promote sustainability by incentivizing
 - Daily goals and progress tracking
 
 The app aims to reduce single-use cup waste by creating a fun, engaging platform that motivates users to bring their own cups to participating coffee shops.
+Ecoffee website link: https://ecm2434-group-project.onrender.com/home/
 
 ## Project Structure
 ```
