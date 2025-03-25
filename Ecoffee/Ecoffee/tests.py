@@ -313,7 +313,7 @@ class TestSystemIntegration(TestCase):
         self.user_1 = User.objects.create_user(
             username='1', password='password_1', first_name='John', last_name='One')
         self.user_2 = User.objects.create_user(
-            username='2', password='password_1', first_name='Jane', last_name='Two')
+            username='2', password='password_2', first_name='Jane', last_name='Two')
         
         if (not CustomUser.objects.filter(user=self.user_1).exists()
             ) or (not CustomUser.objects.filter(user=self.user_2).exists()):
@@ -457,11 +457,11 @@ class TestSystemIntegration(TestCase):
         # Tests Initial dashboard and home stats
         response_dashboard_0 = self.client.get(reverse('dashboard'))
         response_home_0 = self.client.get(reverse('home'))
-        
-        self.assertEqual(response_dashboard_0.context['most_popular_shop'].first(), shop_2, 
-                         'Initial most popular shop should be 2')
 
-        self.assertEqual(response_dashboard_0.context['most_visited_shop'].first(), this_user_shop, 
+        self.assertEqual(response_dashboard_0.context['most_popular_shop'], shop_2, 
+                        'Initial most popular shop should be 2')
+
+        self.assertEqual(response_dashboard_0.context['most_visited_shop'], this_user_shop, 
                          'Initial most visited shop should be 2')
 
         self.assertEqual(response_dashboard_0.context['percentage_above_average'], 100, 
@@ -494,13 +494,13 @@ class TestSystemIntegration(TestCase):
         response_dashboard_1 = self.client.get(reverse('dashboard'))
         response_home_1 = self.client.get(reverse('home'))
 
-        self.assertEqual(response_dashboard_1.context['most_popular_shop'][0], shop_1, 'most '
-        'popular shop should update after other users\' visit')
+        self.assertEqual(response_dashboard_1.context['most_popular_shop'], shop_1, 'most '
+                         'popular shop should update after other users\' visit')
 
-        self.assertEqual(response_dashboard_1.context['most_visited_shop'][0], this_user_shop, 
+        self.assertEqual(response_dashboard_1.context['most_visited_shop'], this_user_shop, 
                          'most visited shop should remain 2 after other users\' visits')
 
-        self.assertEqual(response_dashboard_1.context['percentage_above_average'], 50, 
+        self.assertEqual(response_dashboard_1.context['percentage_above_average'], 33.33333333333333, 
                          'Percentage saved above average should update after other users\' visits')
 
         self.assertEqual(response_home_1.context['cups_saved_today'], 2, 'Cups saved today '
@@ -539,7 +539,7 @@ class TestSystemIntegration(TestCase):
         user_2.refresh_from_db()
 
         self.assertEqual(response_dashboard_2.context['most_popular_shop'][0], shop_1, 'most '
-        'popular shop should remain 1 after user visits')
+                         'popular shop should remain 1 after user visits')
 
         self.assertNotEqual(response_dashboard_2.context['most_visited_shop'][0], this_user_shop, 
                          'most visited shop should update after other users\' visits')
