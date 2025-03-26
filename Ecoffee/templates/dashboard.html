@@ -190,7 +190,7 @@
                     <div class="card-head">Your number one coffee shop</div>
                     {%if most_visited_shop.visit_amounts != None %}
                         <p>{{ most_popular_shop.shop_name }}</p>
-                        <h2 class="counter stat-number" data-target="{{ most_popular_shop.number_of_visits }}">{{ most_visited_shop.visit_amounts }}</h2>
+                        <h2 class="counter stat-number" data-target="{{ most_visited_shop.visit_amounts }}">{{ most_visited_shop.visit_amounts }}</h2>
                     {% else %}
                         <p>Save a coffee to reveal!</p>
                     {% endif %}
