@@ -195,7 +195,7 @@
                         <p>Save a coffee to reveal!</p>
                     {% endif %}
                     {%if most_visited_shop.visit_amounts != None %}
-                        <span class="card-chart"><img src="{% static 'images/logos/' %}{{ most_popular_shop.shop_name}}.jpeg"></span>
+                        <span class="card-chart"><img src="{{ most_popular_shop.logo.url }}"></span>
                     {% else %}
                         <span class="card-chart"><img src="{% static 'images/no-visits.png' %}"></span> 
                     {% endif %}
