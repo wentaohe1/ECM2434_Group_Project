@@ -41,12 +41,13 @@ def add_shop(request):
         form = ShopForm(request.POST)
         if form.is_valid():
             new_shop = form.save()
+            qr_url = f"http://127.0.0.1:8000/code/?code={new_shop.active_code}"
             qr = qrcode.QRCode(
                 version=1,
                 box_size=10,
                 border=4,
             )
-            qr.add_data(str(new_shop.active_code))
+            qr.add_data(qr_url)
             img = qr.make_image()
             buffer = BytesIO()
             img.save(buffer, format="PNG")
