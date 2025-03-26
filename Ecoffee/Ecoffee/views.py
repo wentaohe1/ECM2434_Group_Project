@@ -81,6 +81,12 @@ def dashboard_view(request):
             # very large number (unachievable)
             coffees_to_next_badge = 1000000000
             progress = 100
+            if user_badge=='defaultbadge.png':
+                progress=0
+                coffees_to_next_badge=Badge.objects.order_by('coffee_until_earned').first().coffee_until_earned
+
+
+
 
     else:
         return redirect("login")  # if logged out, send to login page
