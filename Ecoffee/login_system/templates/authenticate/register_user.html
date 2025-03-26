@@ -120,6 +120,22 @@
             color: black;
         }
 
+        .checkbox {
+             width: 100%;
+             height: 50px;
+             margin: 20px 0;
+             color: black;
+             position: relative;
+         }
+ 
+         .terms a {
+         color: black;
+     }
+ 
+         .checkbox label {
+             cursor: pointer;
+         }
+
         .i {
             position: absolute;
             right: 10px;
@@ -240,6 +256,11 @@
                 <img class="i" src="{% static 'images/lock-alt-solid-24.png' %}" alt="Lock Icon">
             </div>
 
+            <div class="checkbox">
+                <input type="checkbox" id="terms" name="termsAndConditions" value="agreed" checked required>
+                <label for="termsAndConditions">I agree to the <a href="{% static 'Terms and Conditions.pdf' %}" target="_blank">terms and conditions</a></label>
+            </div>
+            
             <button type="submit" class="btn">Register</button>
         </form>
         <div class="register-link">
@@ -254,6 +275,7 @@
             const usernameField = document.getElementById("username");
             const passwordError = document.getElementById("passwordError");
             const confirmPasswordError = document.getElementById("confirmPasswordError");
+            const termsField = document.getElementById("terms");
 
             passwordField.addEventListener("input", validatePassword);
             confirmPasswordField.addEventListener("input", validateConfirmPassword);
