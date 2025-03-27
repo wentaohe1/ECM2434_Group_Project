@@ -26,7 +26,7 @@ def receive_code(request):
                 if streak_day_difference.days == user.streak:
                     user.streak += 1
                 elif streak_day_difference.days >= user.streak:
-                    user.streak = time.date()
+                    user.streak = 0
                 user.save()
                 shop.save()  # saves after everything is confirmed okay, changes will rollback (by default after a request has returned) if not
                 return redirect('home')

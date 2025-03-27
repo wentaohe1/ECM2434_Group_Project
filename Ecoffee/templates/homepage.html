@@ -272,7 +272,7 @@
         <!-- process bar -->
         <div class="progress-section">
             <h3 class="metric-title">Progress</h3>
-            <h4 class="metric-procent">{{ total_cups_saved }} cups saved today</h4>
+            <h4 class="metric-procent">{{ total_cups_saved }} cups saved by our active users</h4>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: {{ total_cups_saved|default:0 }}%;">
             </div>
@@ -368,7 +368,7 @@
                                     {% endif %}
                                 </td>  
                                 <td>{{ shop.number_of_visits }}</td> 
-                                <td>University of Exeter</td> 
+                                <td>{{ shop.location }}</td> 
                             </tr>
                             {% empty %}
                             <tr>

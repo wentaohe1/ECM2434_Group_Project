@@ -83,7 +83,11 @@ def dashboard_view(request):
             progress = 100
             if user_badge=='defaultbadge.png':
                 progress=0
-                coffees_to_next_badge=Badge.objects.order_by('coffee_until_earned').first().coffee_until_earned
+                try:
+                    coffees_to_next_badge=Badge.objects.order_by('coffee_until_earned').first().coffee_until_earned
+                except AttributeError:
+                    progress=100
+                    coffees_to_next_badge=1000000000
 
 
 

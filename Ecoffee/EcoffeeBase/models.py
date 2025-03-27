@@ -26,6 +26,7 @@ class Shop(models.Model):
     active_code: The current active code of the shop. It helps to check which shop did a user visited. It is extracted
     from the qr code. It is created in the shop account.
     """
+    location=models.CharField(max_length=255,default='Unknown')
     shop_id = models.AutoField(primary_key=True)
     shop_name = models.CharField(max_length=255, unique=True)
     number_of_visits = models.IntegerField(
